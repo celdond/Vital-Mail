@@ -1,0 +1,21 @@
+{
+  "name": "star-api",
+  "version": "1.0.0",
+  "description": "\u0016A Web API for the STAR Desktop Application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/celdond/STAR-API.git"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.1.1"
+  }
+}
