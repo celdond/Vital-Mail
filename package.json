@@ -2,16 +2,23 @@
   "name": "star-api",
   "version": "1.0.0",
   "description": "\u0016A Web API for the STAR Desktop Application.",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand --coverage",
+    "build": "npx tsc",
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/celdond/STAR-API.git"
   },
   "dependencies": {
+    "@types/jest": "^29.5.1",
+    "@types/supertest": "^2.0.12",
     "express": "^4.18.2",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
