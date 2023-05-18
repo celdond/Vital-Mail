@@ -1,0 +1,47 @@
+#
+# Schemas
+#
+
+openapi: '3.0.3'
+
+info:
+  description: API for the STAR application
+  version: 1.0.0
+  title: STAR API
+
+servers:
+  - url: http://localhost:3010
+
+paths:
+  /steam:
+        get:
+          description: Receive Nothing
+          responses:
+            200:
+              description: Steam Response
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/steamData'
+            default:
+              description: Unexpected Error
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    error:
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+    
+    steamData:
+      type: object
