@@ -1,5 +1,5 @@
-# STAR-API
-A Web API for the STAR Desktop Application.
+# Essential-Mail
+An Email platform with third-party integration capabilities.
 
 # NOTICE
 This version of Essential Mail is currently in-development.
