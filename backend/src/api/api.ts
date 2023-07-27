@@ -1,7 +1,6 @@
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
+import { login } from '../db/db';
 
 export default function registerAPIRoutes(app: Express) {
-    app.get("/steam", (req: Request, res: Response) => {
-        res.send(JSON.stringify({}));
-    });
+    app.get("/login", login);
 }
