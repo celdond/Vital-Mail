@@ -2,33 +2,40 @@
 # Schemas
 #
 
-openapi: '3.0.3'
+openapi: "3.0.3"
 
 info:
   description: API for the Essential Mail Application
   version: 1.0.0
-  title: STAR API
+  title: Essential Mail Backend
 
 servers:
   - url: http://localhost:3010
 
 paths:
-  /steam:
-        get:
-          description: Receive Nothing
-          responses:
-            200:
-              description: Steam Response
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/steamData'
-            default:
-              description: Unexpected Error
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/error'
+  /login:
+    post:
+      description: Login
+      requestBody:
+        description: Login Credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/credentials"
+      responses:
+        200:
+          description: Login Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
 components:
   schemas:
@@ -42,6 +49,28 @@ components:
       required:
         - code
         - message
-    
-    steamData:
+
+    credentials:
       type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+        token:
+          type: string
+        email:
+          type: string
+      required:
+        - name
+        - token
+        - email
