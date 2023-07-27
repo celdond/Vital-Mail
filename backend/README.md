@@ -1,12 +1,16 @@
-# Essential-Mail
-An Email platform with third-party integration capabilities.
+# Essential Mail Backend
 
-# NOTICE
-This version of Essential Mail is currently in-development.
+## Installation and Option
+Ensure Node.js is installed before continuing.
 
-The fully functional and tested legacy edition is in a private repository.
+Install package dependencies:
 
-If, for any reason, access to the legacy edition is required, please contact
-me at celdond@gmail.com.
+```npm install```
 
-Inquiries will be responded to as soon as possible.
+Compile the server:
+
+```npx tsc```
+
+Run it using:
+
+```node .```
