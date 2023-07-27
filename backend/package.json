@@ -1,7 +1,7 @@
 {
-  "name": "star-api",
+  "name": "essential-mail",
   "version": "1.0.0",
-  "description": "\u0016A Web API for the STAR Desktop Application.",
+  "description": "\u0016An Email platform with third-party integration capabilities.",
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --runInBand --coverage",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/celdond/STAR-API.git"
+    "url": "git+https://github.com/celdond/Essential-Mail.git"
   },
   "dependencies": {
     "cors": "^2.8.5",
