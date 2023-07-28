@@ -36,6 +36,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+  
+  /register:
+    post:
+      description: New Account
+    
+      responses:
+        200:
+          description: Account Created
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
 components:
   schemas:
