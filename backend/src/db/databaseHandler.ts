@@ -3,13 +3,14 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import secrets from "../secrets/secret.json";
+import { postgres_variables } from "../config/processVariables";
 
 const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
+  host: postgres_variables.POSTGRES_HOST,
   port: 5432,
-  database: process.env.POSTGRES_DB,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
+  database: postgres_variables.POSTGRES_DB,
+  user: postgres_variables.POSTGRES_USER,
+  password: postgres_variables.POSTGRES_PASSWORD,
 });
 
 export async function login(req: Request, res: Response) {
