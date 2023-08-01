@@ -5,15 +5,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { callServer } from '../components/lib/apiCom';
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
 	const router = useRouter();
-	const [user, setUser] = useState('');
+	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 
 	async function submitLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
-		const loginInfo = {};
+		const loginInfo = {email: email, password: passcode};
 		callServer('/login', 'POST', loginInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -23,10 +23,10 @@ const Home: NextPage = () => {
 			})
 			.then((json) => {
 				localStorage.setItem(
-					`essentialMailToken/${user}`,
+					`essentialMailToken/${email}`,
 					JSON.stringify(json),
 				);
-				router.push(`/mail`);
+				router.push(`/mail/home`);
 			})
 			.catch((err) => {
 				alert(`Error logging in, please try again.`);
@@ -41,8 +41,8 @@ const Home: NextPage = () => {
 					<Form.Control
 						type="email"
 						placeholder="Email"
-						value={user}
-						onChange={(e) => setUser(e.target.value)}
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 					/>
 				</Form.Group>
 				<Form.Group className="mb-3" controlId="formBasicPassword">
@@ -60,4 +60,4 @@ const Home: NextPage = () => {
 	);
 };
 
-export default Home;
+export default Login;
