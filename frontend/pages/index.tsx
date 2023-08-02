@@ -10,10 +10,8 @@ const Login: NextPage = () => {
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 
-	async function submitLogin(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-
-		const loginInfo = {email: email, password: passcode};
+	async function submitLogin() {
+		const loginInfo = { email: email, password: passcode };
 		callServer('/login', 'POST', loginInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -35,7 +33,7 @@ const Login: NextPage = () => {
 
 	return (
 		<Container>
-			<Form onSubmit={submitLogin}>
+			<Form>
 				<Form.Group>
 					<Form.Label>Email Address</Form.Label>
 					<Form.Control
@@ -55,7 +53,9 @@ const Login: NextPage = () => {
 					/>
 				</Form.Group>
 			</Form>
-			<Button type="submit">Submit</Button>
+			<Button variant="primary" type="submit" onClick={submitLogin}>
+				Submit
+			</Button>
 		</Container>
 	);
 };
