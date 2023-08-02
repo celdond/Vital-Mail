@@ -1,4 +1,4 @@
 
-CREATE DATABASE wishlist;
+CREATE DATABASE email;
 
-\connect wishlist
+\connect email

@@ -1,7 +1,9 @@
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
+import { login } from '../db/databaseHandler';
 
 export default function registerAPIRoutes(app: Express) {
-    app.get("/steam", (req: Request, res: Response) => {
-        res.send(JSON.stringify({}));
-    });
+    app.post("/login", login);
+    app.post("/register", (req, res) => {
+        console.log("reached\n");
+    })
 }

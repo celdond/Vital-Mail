@@ -1,4 +1,4 @@
 
-DELETE FROM steam;
+DELETE FROM usermail;
 
-INSERT INTO steam(gameId, title) VALUES ('1313140', 'Cult of the Lamb');
+INSERT INTO usermail(username, email, credword) VALUES ('Abby', 'Abigail@essmail.com', '$2a$10$dReGvO.BCuPiYfwMY722C.gQHQugLjGJJ8YlzthxJoNlo3yWtfGWS');
