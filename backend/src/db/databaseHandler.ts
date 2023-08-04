@@ -41,3 +41,35 @@ export async function login(req: Request, res: Response) {
     res.status(401).send("Invalid Login Information");
   }
 }
+
+export async function register(req: Request, res: Response) {
+  const { username, email, password } = req.body;
+  if (username.length > 0) {
+    res.status(400).send("No Username Entered.");
+  } else if (email.length > 0) {
+    res.status(400).send("No Email Entered.");
+  } else if (email.password > 0) {
+    res.status(400).send("No Password Entered.");
+  }
+
+  const search = `SELECT *
+    FROM usermail WHERE email = $1`;
+  const registerSearch = {
+    text: search,
+    values: [email],
+  };
+  const queryLogin = await pool.query(registerSearch);
+  if (queryLogin.rows[0]) {
+    res.status(403).send("Email Taken");
+  } else {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
+    const registerInsert = {
+      text: entry,
+      values: [username, email, hashedPassword],
+    };
+    const queryLogin = await pool.query(registerInsert);
+    console.log(queryLogin);
+    res.status(200);
+  }
+}
