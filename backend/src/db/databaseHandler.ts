@@ -44,22 +44,25 @@ export async function login(req: Request, res: Response) {
 
 export async function register(req: Request, res: Response) {
   const { username, email, password } = req.body;
-  if (username.length > 0) {
+  if (username.length == 0) {
     res.status(400).send("No Username Entered.");
-  } else if (email.length > 0) {
+    return;
+  } else if (email.length == 0) {
     res.status(400).send("No Email Entered.");
-  } else if (email.password > 0) {
+    return;
+  } else if (email.password == 0) {
     res.status(400).send("No Password Entered.");
+    return;
   }
 
-  const search = `SELECT *
+  const search = `SELECT username, email, credword
     FROM usermail WHERE email = $1`;
   const registerSearch = {
     text: search,
     values: [email],
   };
-  const queryLogin = await pool.query(registerSearch);
-  if (queryLogin.rows[0]) {
+  const query = await pool.query(registerSearch);
+  if (query.rows[0]) {
     res.status(403).send("Email Taken");
   } else {
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -70,6 +73,6 @@ export async function register(req: Request, res: Response) {
     };
     const queryLogin = await pool.query(registerInsert);
     console.log(queryLogin);
-    res.status(200);
+    res.status(200).send("Success");
   }
 }
