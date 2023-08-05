@@ -22,7 +22,7 @@ const Login: NextPage = () => {
 			})
 			.then((json) => {
 				localStorage.setItem(
-					`essentialMailToken/${email}`,
+					`essentialMailToken`,
 					JSON.stringify(json),
 				);
 				router.push(`/mail/home`);
