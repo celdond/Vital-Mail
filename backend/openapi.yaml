@@ -40,7 +40,13 @@ paths:
   /register:
     post:
       description: New Account
-    
+      requestBody:
+        description: Register Credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/registerInfo"
       responses:
         200:
           description: Account Created
@@ -63,6 +69,20 @@ components:
       required:
         - code
         - message
+
+    registerInfo:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - email
+        - password
 
     credentials:
       type: object

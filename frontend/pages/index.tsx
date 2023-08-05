@@ -1,6 +1,7 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import { Button, Container, Form } from 'react-bootstrap';
+import Link from 'next/link';
+import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { callServer } from '../components/lib/apiCom';
@@ -20,10 +21,7 @@ const Login: NextPage = () => {
 				return response.json();
 			})
 			.then((json) => {
-				localStorage.setItem(
-					`essentialMailToken/${email}`,
-					JSON.stringify(json),
-				);
+				localStorage.setItem(`essentialMailToken`, JSON.stringify(json));
 				router.push(`/mail/home`);
 			})
 			.catch((err) => {
@@ -33,29 +31,34 @@ const Login: NextPage = () => {
 
 	return (
 		<Container>
-			<Form>
-				<Form.Group>
-					<Form.Label>Email Address</Form.Label>
-					<Form.Control
-						type="email"
-						placeholder="Email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="formBasicPassword">
-					<Form.Label>Password</Form.Label>
-					<Form.Control
-						type="password"
-						placeholder="Password"
-						value={passcode}
-						onChange={(e) => setCode(e.target.value)}
-					/>
-				</Form.Group>
-			</Form>
-			<Button variant="primary" type="submit" onClick={submitLogin}>
-				Submit
-			</Button>
+				<Form>
+					<Form.Group>
+						<Form.Label>Email Address</Form.Label>
+						<Form.Control
+							type="email"
+							placeholder="Email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="formBasicPassword">
+						<Form.Label>Password</Form.Label>
+						<Form.Control
+							type="password"
+							placeholder="Password"
+							value={passcode}
+							onChange={(e) => setCode(e.target.value)}
+						/>
+					</Form.Group>
+				</Form>
+				<Col>
+					<Button variant="primary" type="submit" onClick={submitLogin}>
+						Submit
+					</Button>
+					<div>
+						<Link href="/register">Register a new account</Link>
+					</div>
+				</Col>
 		</Container>
 	);
 };

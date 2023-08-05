@@ -1,8 +1,7 @@
-import type { NextPage } from 'next';
-import { Button, Container } from 'react-bootstrap';
+import HomePage from '../../components/homePage';
 
-const Home: NextPage = () => {
-	return <Container>Hello!</Container>;
+function Home () {
+    return (<HomePage />);
 };
 
 export default Home;
