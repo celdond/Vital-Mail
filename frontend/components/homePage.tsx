@@ -15,7 +15,7 @@ const HomePage: NextPage = () => {
 	};
 
 	return (
-		<Container>
+		<Container fluid>
 			<Navbar>
 				<Dropdown>
 					<Dropdown.Toggle variant="success" id="dropdown-basic">
