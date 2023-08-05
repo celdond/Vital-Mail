@@ -71,8 +71,11 @@ export async function register(req: Request, res: Response) {
       text: entry,
       values: [username, email, hashedPassword],
     };
-    const queryLogin = await pool.query(registerInsert);
-    console.log(queryLogin);
-    res.status(200).send("Success");
+    try {
+      const queryLogin = await pool.query(registerInsert);
+      res.status(200).send("Success");
+    } catch {
+      res.status(500).send("Failure to Create Account, Please Try Again Later.");
+    }
   }
 }

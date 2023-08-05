@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import Link from 'next/link'
 import { Button, Container, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -56,6 +57,7 @@ const Login: NextPage = () => {
 			<Button variant="primary" type="submit" onClick={submitLogin}>
 				Submit
 			</Button>
+			<Link href="/register">Register a new account</Link>
 		</Container>
 	);
 };

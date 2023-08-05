@@ -7,6 +7,7 @@ import { callServer } from '../components/lib/apiCom';
 
 const Register: NextPage = () => {
 	const router = useRouter();
+	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 	const [confirmcode, setConfirm] = useState('');
@@ -15,7 +16,7 @@ const Register: NextPage = () => {
 		if (passcode != confirmcode) {
 			alert('Passwords do not match.');
 		}
-		const registerInfo = { email: email, password: passcode };
+		const registerInfo = { username: name, email: email, password: passcode };
 		callServer('/register', 'POST', registerInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -25,7 +26,7 @@ const Register: NextPage = () => {
 				return;
 			})
 			.catch((err) => {
-				alert(`Error logging in, please try again.`);
+				alert(`Error registering, please try again.\n${err}`);
 			});
 	}
 
@@ -33,10 +34,19 @@ const Register: NextPage = () => {
 		<Container>
 			<Form>
 				<Form.Group>
-					<Form.Label>Email Address</Form.Label>
+					<Form.Label>Name</Form.Label>
+					<Form.Control
+						type="name"
+						placeholder="Username"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+				</Form.Group>
+				<Form.Group>
+					<Form.Label>Account Name</Form.Label>
 					<Form.Control
 						type="email"
-						placeholder="Email"
+						placeholder="Account Name"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
