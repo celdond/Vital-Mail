@@ -1,9 +1,13 @@
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
+
+interface CheckRequest extends Request {
+  usermail?: string;
+}
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -13,16 +17,23 @@ const pool = new Pool({
   password: postgres_variables.POSTGRES_PASSWORD,
 });
 
-export function check(req: Request, res: Response, next: Function) {
+export function check(req: CheckRequest, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
   if (auth) {
     const token = auth.split(" ")[1];
-    jwt.verify(token, secrets.secretToken, (err) => {
+    jwt.verify(token, secrets.secretToken, (err, usermail) => {
       if (err) {
         return res.sendStatus(403);
       }
-      next();
+      if (typeof(usermail) == 'string') {
+        req.usermail = usermail;
+        next();
+      } else {
+        return res.sendStatus(400);
+      }
     });
+  } else {
+    return res.sendStatus(401);
   }
 }
 
