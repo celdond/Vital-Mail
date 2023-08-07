@@ -102,3 +102,18 @@ export async function register(req: Request, res: Response) {
     }
   }
 }
+
+export async function accessBoxes(usermail: string) {
+  const search = 'SELECT * FROM mailbox WHERE email = $1';
+  const query = {
+    text: search,
+    values: [usermail],
+  };
+
+  const { rows } = await pool.query(query);
+  const mailboxes = [];
+  for (const row of rows) {
+    mailboxes.push(row.mailbox);
+  }
+  return mailboxes;
+}
