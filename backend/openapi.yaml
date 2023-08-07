@@ -36,7 +36,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
-  
+
   /register:
     post:
       description: New Account
@@ -50,6 +50,29 @@ paths:
       responses:
         200:
           description: Account Created
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+  /mailbox:
+    get:
+      description: Return User's Mailboxes
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successful Return
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mailboxes'
+        401:
+          description: Unauthorised Attempt
+        404:
+          description: Not Found
         default:
           description: Unexpected Error
           content:
@@ -108,3 +131,8 @@ components:
         - name
         - token
         - email
+
+    mailboxes:
+      type: array
+      items:
+        type: string

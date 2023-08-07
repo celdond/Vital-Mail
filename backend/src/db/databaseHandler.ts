@@ -4,10 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-
-interface CheckRequest extends Request {
-  usermail?: string;
-}
+import { CheckRequest } from '../appTypes';
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
