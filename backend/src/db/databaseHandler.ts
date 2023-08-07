@@ -13,6 +13,19 @@ const pool = new Pool({
   password: postgres_variables.POSTGRES_PASSWORD,
 });
 
+export function check(req: Request, res: Response, next: Function) {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, secrets.secretToken, (err) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      next();
+    });
+  }
+}
+
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
   const search = `SELECT username, email, credword
@@ -75,7 +88,9 @@ export async function register(req: Request, res: Response) {
       const queryLogin = await pool.query(registerInsert);
       res.status(200).send("Success");
     } catch {
-      res.status(500).send("Failure to Create Account, Please Try Again Later.");
+      res
+        .status(500)
+        .send("Failure to Create Account, Please Try Again Later.");
     }
   }
 }
