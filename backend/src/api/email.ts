@@ -1,4 +1,4 @@
-import { accessBoxes } from "../db/databaseHandler";
+import { accessBoxes, accessMail } from "../db/databaseHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
 
@@ -18,8 +18,10 @@ export async function getMailboxes(req: CheckRequest, res: Response) {
 
 export async function getMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (usermail) {
-    const mail = await accessMail(usermail, req.query.mailbox, req.query.from);
+  const mailbox = req.query.mailbox as string;
+
+  if (usermail && mailbox) {
+    const mail = await accessMail(usermail, mailbox);
     if (mail.length == 0) {
       res.status(404).send();
       return;

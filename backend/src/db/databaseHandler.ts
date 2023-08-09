@@ -117,3 +117,23 @@ export async function accessBoxes(usermail: string) {
   }
   return mailboxes;
 }
+
+export async function accessMail(usermail: string, mailbox: string) {
+  const boxcode = mailbox + '@' + usermail;
+  const search = 'SELECT id, mail FROM mail WHERE boxcode = $1';
+  const query = {
+    text: search,
+    values: [boxcode],
+  };
+  const { rows } = await pool.query(query);
+  const receivedMail = [];
+  if (rows.length > 0) {
+    for (const row of rows) {
+      row.mail.id = row.id;
+      row.mail.preview = row.mail.content.slice(0, 18) + '...';
+      delete row.mail.content;
+      receivedMail.push(row.mail);
+    }
+  }
+  return receivedMail;
+}
