@@ -18,15 +18,15 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
   if (auth) {
     const token = auth.split(" ")[1];
-    jwt.verify(token, secrets.secretToken, (err, usermail) => {
+    jwt.verify(token, secrets.secretToken, (err, user) => {
       if (err) {
         return res.sendStatus(403);
       }
-      if (typeof(usermail) == 'string') {
-        req.usermail = usermail;
+      if (typeof(user) == 'object') {
+        req.usermail = user.email;
         next();
       } else {
-        return res.sendStatus(400);
+        return res.status(400).send('User could not be deciphered.');
       }
     });
   } else {
