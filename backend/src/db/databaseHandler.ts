@@ -14,6 +14,8 @@ const pool = new Pool({
   password: postgres_variables.POSTGRES_PASSWORD,
 });
 
+const STATIC_MAILBOX = ['Inbox', 'Sent', 'Trash'];
+
 export function check(req: CheckRequest, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
   if (auth) {
@@ -88,8 +90,7 @@ export async function register(req: Request, res: Response) {
     };
     const query = await pool.query(registerSearch);
     if (query.rows[0]) {
-      res.status(403).send("Email Taken");
-      throw 1;
+      throw 403;
     } else {
       const hashedPassword = bcrypt.hashSync(password, 10);
       const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
@@ -99,11 +100,20 @@ export async function register(req: Request, res: Response) {
       };
       await pool.query(registerInsert);
     }
+    for (const box in STATIC_MAILBOX) {
+      const newBox = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
+      const newBoxCode = newBox + '@' + email;
+      const registerBox = {
+        text: newBox,
+        values: [newBoxCode, newBox, email],
+      };
+      await pool.query(registerBox);
+    }
     await client.query("COMMIT");
     res.status(200).send("Success");
   } catch (e) {
     await client.query("ROLLBACK");
-    if (e == 1) {
+    if (e == 403) {
       res.status(403).send("Email Taken");
     } else {
       res
