@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-import { CheckRequest } from '../appTypes';
+import { CheckRequest } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -22,11 +22,11 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
       if (err) {
         return res.sendStatus(403);
       }
-      if (typeof(user) == 'object') {
+      if (typeof user == "object") {
         req.usermail = user.email;
         next();
       } else {
-        return res.status(400).send('User could not be deciphered.');
+        return res.status(400).send("User could not be deciphered.");
       }
     });
   } else {
@@ -76,35 +76,47 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
-  const search = `SELECT username, email, credword
-    FROM usermail WHERE email = $1`;
-  const registerSearch = {
-    text: search,
-    values: [email],
-  };
-  const query = await pool.query(registerSearch);
-  if (query.rows[0]) {
-    res.status(403).send("Email Taken");
-  } else {
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
-    const registerInsert = {
-      text: entry,
-      values: [username, email, hashedPassword],
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    const search = `SELECT username, email, credword
+      FROM usermail WHERE email = $1`;
+    const registerSearch = {
+      text: search,
+      values: [email],
     };
-    try {
-      const queryLogin = await pool.query(registerInsert);
-      res.status(200).send("Success");
-    } catch {
+    const query = await pool.query(registerSearch);
+    if (query.rows[0]) {
+      res.status(403).send("Email Taken");
+      throw 1;
+    } else {
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
+      const registerInsert = {
+        text: entry,
+        values: [username, email, hashedPassword],
+      };
+      await pool.query(registerInsert);
+    }
+    await client.query("COMMIT");
+    res.status(200).send("Success");
+  } catch (e) {
+    await client.query("ROLLBACK");
+    if (e == 1) {
+      res.status(403).send("Email Taken");
+    } else {
       res
         .status(500)
         .send("Failure to Create Account, Please Try Again Later.");
     }
+  } finally {
+    client.release();
   }
 }
 
 export async function accessBoxes(usermail: string) {
-  const search = 'SELECT * FROM mailbox WHERE email = $1';
+  const search = "SELECT * FROM mailbox WHERE email = $1";
   const query = {
     text: search,
     values: [usermail],
@@ -119,8 +131,8 @@ export async function accessBoxes(usermail: string) {
 }
 
 export async function accessMail(usermail: string, mailbox: string) {
-  const boxcode = mailbox + '@' + usermail;
-  const search = 'SELECT id, mail FROM mail WHERE boxcode = $1';
+  const boxcode = mailbox + "@" + usermail;
+  const search = "SELECT id, mail FROM mail WHERE boxcode = $1";
   const query = {
     text: search,
     values: [boxcode],
@@ -130,7 +142,7 @@ export async function accessMail(usermail: string, mailbox: string) {
   if (rows.length > 0) {
     for (const row of rows) {
       row.mail.id = row.id;
-      row.mail.preview = row.mail.content.slice(0, 18) + '...';
+      row.mail.preview = row.mail.content.slice(0, 18) + "...";
       delete row.mail.content;
       receivedMail.push(row.mail);
     }
