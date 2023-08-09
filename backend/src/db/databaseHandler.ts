@@ -100,12 +100,12 @@ export async function register(req: Request, res: Response) {
       };
       await pool.query(registerInsert);
     }
-    for (const box in STATIC_MAILBOX) {
-      const newBox = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
-      const newBoxCode = newBox + '@' + email;
+    for (const box of STATIC_MAILBOX) {
+      const newBoxInsert = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
+      const newBoxCode = box + '@' + email;
       const registerBox = {
-        text: newBox,
-        values: [newBoxCode, newBox, email],
+        text: newBoxInsert,
+        values: [newBoxCode, box, email],
       };
       await pool.query(registerBox);
     }
