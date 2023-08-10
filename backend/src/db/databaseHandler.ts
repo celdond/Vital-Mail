@@ -14,7 +14,7 @@ const pool = new Pool({
   password: postgres_variables.POSTGRES_PASSWORD,
 });
 
-const STATIC_MAILBOX = ['Inbox', 'Sent', 'Trash'];
+const STATIC_MAILBOX = ["Inbox", "Sent", "Trash"];
 
 export function check(req: CheckRequest, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
@@ -102,7 +102,7 @@ export async function register(req: Request, res: Response) {
     }
     for (const box of STATIC_MAILBOX) {
       const newBoxInsert = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
-      const newBoxCode = box + '@' + email;
+      const newBoxCode = box + "@" + email;
       const registerBox = {
         text: newBoxInsert,
         values: [newBoxCode, box, email],
@@ -147,15 +147,23 @@ export async function accessMail(usermail: string, mailbox: string) {
     text: search,
     values: [boxcode],
   };
-  const { rows } = await pool.query(query);
+
   const receivedMail = [];
-  if (rows.length > 0) {
-    for (const row of rows) {
-      row.mail.id = row.id;
-      row.mail.preview = row.mail.content.slice(0, 18) + "...";
-      delete row.mail.content;
-      receivedMail.push(row.mail);
+  const client = await pool.connect();
+  try {
+    const queryMail = await pool.query(query);
+    if (queryMail.rows[0]) {
+      for (const row of queryMail.rows) {
+        row.mail.id = row.id;
+        row.mail.preview = row.mail.content.slice(0, 18) + "...";
+        delete row.mail.content;
+        receivedMail.push(row.mail);
+      }
     }
+  } catch {
+    await client.query("ROLLBACK");
+  } finally {
+    client.release();
   }
   return receivedMail;
 }
