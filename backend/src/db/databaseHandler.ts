@@ -140,6 +140,21 @@ export async function accessBoxes(usermail: string) {
   return mailboxes;
 }
 
+export async function checkBox(usermail: string, mailbox: string) {
+  const boxcode = mailbox + "@" + usermail;
+  const search = "SELECT * FROM mailbox WHERE boxcode = $1";
+  const query = {
+    text: search,
+    values: [boxcode],
+  };
+  const queryBox = await pool.query(query);
+  if (queryBox) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
 export async function accessMail(usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT id, mail FROM mail WHERE boxcode = $1";
