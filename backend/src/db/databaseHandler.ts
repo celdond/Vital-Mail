@@ -148,7 +148,7 @@ export async function checkBox(usermail: string, mailbox: string) {
     values: [boxcode],
   };
   const queryBox = await pool.query(query);
-  if (queryBox) {
+  if (queryBox.rows[0]) {
     return 0;
   } else {
     return -1;
