@@ -15,10 +15,11 @@ const getMail = (
 	mailbox: string,
 	user: tokenType,
 ) => {
-	const email = user ? user.email : null;
-	callServer('/mail?mailbox=' + mailbox, 'GET', null, email)
+	const token = user ? user.token : null;
+	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
+				console.log(response);
 				throw response;
 			}
 			return response.json();
@@ -63,7 +64,7 @@ const HomePage: NextPage = () => {
 				</Dropdown>
 			</Navbar>
 			<Container>
-				<MailListContext.Provider value={[]}>
+				<MailListContext.Provider value={maillist}>
 					<MailDisplay />
 				</MailListContext.Provider>
 			</Container>
