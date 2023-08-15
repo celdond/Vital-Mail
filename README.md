@@ -1,4 +1,4 @@
-# Essential-Mail
+# Vital-Mail
 An Email platform with third-party integration capabilities.
 
 ## Set-Up
