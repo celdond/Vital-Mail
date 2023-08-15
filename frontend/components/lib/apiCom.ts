@@ -9,7 +9,7 @@ export async function callServer(
 	const options: RequestInit = { method };
 	options.headers = {};
 	if (user) {
-		const token = localStorage.getItem(`essentialMailToken/${user}`);
+		const token = localStorage.getItem(`essentialMailToken`);
 		options.headers['authorization'] = `Bearer ${token}`;
 	}
 	if (body) {
