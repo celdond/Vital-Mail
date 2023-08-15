@@ -10,6 +10,6 @@ export type mailType = {
 	time: string;
 };
 
-export type mailListContextType = mailType[];
+export type MailListContextType = mailType[];
 
-export const mailListContext = createContext<mailListContextType>([]);
+export const MailListContext = createContext<MailListContextType>([]);

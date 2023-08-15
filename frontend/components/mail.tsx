@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { mailListContextType, mailListContext } from './lib/SharedContext';
+import { MailListContextType, MailListContext } from './lib/SharedContext';
 import Table from 'react-bootstrap/Table';
 
 function MailDisplay () {
-    const displayList = useContext(mailListContext) as mailListContextType;
+    const displayList = useContext(MailListContext) as MailListContextType;
 
     return (
         <Table>
