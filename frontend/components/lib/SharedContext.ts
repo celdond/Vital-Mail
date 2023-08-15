@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 export type mailType = {
-	id: string;
+	mid: string;
 	from: {
 		name: string;
 	};

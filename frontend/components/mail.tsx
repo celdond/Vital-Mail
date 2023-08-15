@@ -9,11 +9,11 @@ function MailDisplay () {
         <Table>
             <tbody>
                 {displayList.map((mail) => (
-                    <tr key={mail.id}>
-                        <td>mail.from.name</td>
-                        <td>mail.subject</td>
-                        <td>mail.preview</td>
-                        <td>mail.time</td>
+                    <tr key={mail.mid}>
+                        <td>{mail.from.name}</td>
+                        <td>{mail.subject}</td>
+                        <td>{mail.preview}</td>
+                        <td>{mail.time}</td>
                     </tr>
                 ))}
             </tbody>

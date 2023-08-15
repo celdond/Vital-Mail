@@ -88,7 +88,7 @@ export async function register(req: Request, res: Response) {
       text: search,
       values: [email],
     };
-    const query = await pool.query(registerSearch);
+    const query = await client.query(registerSearch);
     if (query.rows[0]) {
       throw 403;
     } else {
@@ -98,7 +98,7 @@ export async function register(req: Request, res: Response) {
         text: entry,
         values: [username, email, hashedPassword],
       };
-      await pool.query(registerInsert);
+      await client.query(registerInsert);
     }
     for (const box of STATIC_MAILBOX) {
       const newBoxInsert = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
@@ -107,7 +107,7 @@ export async function register(req: Request, res: Response) {
         text: newBoxInsert,
         values: [newBoxCode, box, email],
       };
-      await pool.query(registerBox);
+      await client.query(registerBox);
     }
     await client.query("COMMIT");
     res.status(200).send("Success");
@@ -157,28 +157,23 @@ export async function checkBox(usermail: string, mailbox: string) {
 
 export async function accessMail(usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
-  const search = "SELECT id, mail FROM mail WHERE boxcode = $1";
+  const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   const query = {
     text: search,
     values: [boxcode],
   };
 
   const receivedMail = [];
-  const client = await pool.connect();
   try {
     const queryMail = await pool.query(query);
     if (queryMail.rows[0]) {
       for (const row of queryMail.rows) {
-        row.mail.id = row.id;
+        row.mail.id = row.mid;
         row.mail.preview = row.mail.content.slice(0, 18) + "...";
         delete row.mail.content;
         receivedMail.push(row.mail);
       }
     }
-  } catch {
-    await client.query("ROLLBACK");
-  } finally {
-    client.release();
-  }
+  } catch {}
   return receivedMail;
 }
