@@ -8,13 +8,9 @@ import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Dropdown, Container, Navbar, Image } from 'react-bootstrap';
+import { Dropdown, Container, Navbar, Image, Offcanvas } from 'react-bootstrap';
 
-const getMail = (
-	setList: Function,
-	mailbox: string,
-	user: tokenType,
-) => {
+const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
 		.then((response) => {
@@ -51,17 +47,26 @@ const HomePage: NextPage = () => {
 	};
 
 	return (
-		<Container>
-			<Navbar>
-				<Dropdown>
-					<Dropdown.Toggle variant="success" id="dropdown-basic">
-						<Image alt="A" roundedCircle={true} />
-					</Dropdown.Toggle>
+		<Container fluid>
+			<Navbar variant="primary">
+				<Container fluid>
+					<Navbar.Toggle aria-controls="menu" />
+					<Navbar.Offcanvas backdrop={false} id="menu" aria-labelledby="menu" placement="start" variant="primary">
+						<Offcanvas.Header closeButton>V Mail</Offcanvas.Header>
+						<Offcanvas.Body>
+							Inbox
+						</Offcanvas.Body>
+					</Navbar.Offcanvas>
+					<Dropdown>
+						<Dropdown.Toggle variant="primary" id="dropdown-basic">
+							<Image alt="A" roundedCircle={true} />
+						</Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						<Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
+						<Dropdown.Menu>
+							<Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown>
+				</Container>
 			</Navbar>
 			<Container>
 				<MailListContext.Provider value={maillist}>
