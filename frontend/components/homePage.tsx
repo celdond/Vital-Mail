@@ -31,6 +31,11 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 const HomePage: NextPage = () => {
 	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	const router = useRouter();
 
 	const account = localStorage.getItem(`essentialMailToken`);
@@ -48,14 +53,20 @@ const HomePage: NextPage = () => {
 
 	return (
 		<Container fluid>
-			<Navbar variant="primary">
+			<Navbar variant="primary" expand={false}>
 				<Container fluid>
 					<Navbar.Toggle aria-controls="menu" />
-					<Navbar.Offcanvas backdrop={false} id="menu" aria-labelledby="menu" placement="start" variant="primary">
-						<Offcanvas.Header closeButton>V Mail</Offcanvas.Header>
-						<Offcanvas.Body>
-							Inbox
-						</Offcanvas.Body>
+					<Navbar.Offcanvas
+						backdrop={false}
+						id="menu"
+						aria-labelledby="menu"
+						placement="start"
+						variant="primary"
+					>
+						<Offcanvas.Header closeButton>
+							<Offcanvas.Title id="menu">V</Offcanvas.Title>
+						</Offcanvas.Header>
+						<Offcanvas.Body>Inbox</Offcanvas.Body>
 					</Navbar.Offcanvas>
 					<Dropdown>
 						<Dropdown.Toggle variant="primary" id="dropdown-basic">
