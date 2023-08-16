@@ -8,7 +8,13 @@ import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Dropdown, Container, Navbar, Image, Offcanvas } from 'react-bootstrap';
+import {
+	Container,
+	Navbar,
+	Offcanvas,
+	Row,
+} from 'react-bootstrap';
+import { InboxFill } from 'react-bootstrap-icons';
 
 const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
@@ -66,17 +72,32 @@ const HomePage: NextPage = () => {
 						<Offcanvas.Header closeButton>
 							<Offcanvas.Title id="menu">V</Offcanvas.Title>
 						</Offcanvas.Header>
-						<Offcanvas.Body>Inbox</Offcanvas.Body>
+						<Offcanvas.Body>
+							<Container>
+									<Row>
+										<div>
+											<InboxFill />
+										</div>
+										<div>Inbox</div>
+									</Row>
+									<Row>
+										<div>
+											<InboxFill />
+										</div>
+										<div>Sent</div>
+									</Row>
+									<Row>
+										<div>
+											<InboxFill />
+										</div>
+										<div>Trash</div>
+									</Row>
+									<Row onClick={logout}>
+										<div> Logout</div>
+									</Row>
+							</Container>
+						</Offcanvas.Body>
 					</Navbar.Offcanvas>
-					<Dropdown>
-						<Dropdown.Toggle variant="primary" id="dropdown-basic">
-							<Image alt="A" roundedCircle={true} />
-						</Dropdown.Toggle>
-
-						<Dropdown.Menu>
-							<Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
 				</Container>
 			</Navbar>
 			<Container>
