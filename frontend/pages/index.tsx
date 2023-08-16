@@ -30,35 +30,37 @@ const Login: NextPage = () => {
 	}
 
 	return (
-		<Container>
-				<Form>
-					<Form.Group>
-						<Form.Label>Email Address</Form.Label>
-						<Form.Control
-							type="email"
-							placeholder="Email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
-						<Form.Label>Password</Form.Label>
-						<Form.Control
-							type="password"
-							placeholder="Password"
-							value={passcode}
-							onChange={(e) => setCode(e.target.value)}
-						/>
-					</Form.Group>
-				</Form>
-				<Col>
-					<Button variant="primary" type="submit" onClick={submitLogin}>
-						Submit
-					</Button>
-					<div>
-						<Link href="/register">Register a new account</Link>
-					</div>
-				</Col>
+		<Container fluid>
+				<Container>
+					<Form>
+						<Form.Group>
+							<Form.Label>Email Address</Form.Label>
+							<Form.Control
+								type="email"
+								placeholder="Email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3" controlId="formBasicPassword">
+							<Form.Label>Password</Form.Label>
+							<Form.Control
+								type="password"
+								placeholder="Password"
+								value={passcode}
+								onChange={(e) => setCode(e.target.value)}
+							/>
+						</Form.Group>
+					</Form>
+					<Col>
+						<Button variant="primary" type="submit" onClick={submitLogin}>
+							Submit
+						</Button>
+						<div>
+							<Link href="/register">Register a new account</Link>
+						</div>
+					</Col>
+				</Container>
 		</Container>
 	);
 };

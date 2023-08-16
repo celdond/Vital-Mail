@@ -51,7 +51,7 @@ const HomePage: NextPage = () => {
 	};
 
 	return (
-		<Container fluid>
+		<Container>
 			<Navbar>
 				<Dropdown>
 					<Dropdown.Toggle variant="success" id="dropdown-basic">
