@@ -36,7 +36,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
-  
+
   /register:
     post:
       description: New Account
@@ -50,6 +50,59 @@ paths:
       responses:
         200:
           description: Account Created
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+  /mailbox:
+    get:
+      description: Return User's Mailboxes
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successful Return
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/mailboxes"
+        401:
+          description: Unauthorised Attempt
+        404:
+          description: Not Found
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+  /mail:
+    get:
+      description: Return Mail from Specified Mailbox
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          description: Specified Mailbox
+          name: mailbox
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Return
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/mailbox"
+        401:
+          description: Unauthorised Attempt
+        404:
+          description: Not Found
         default:
           description: Unexpected Error
           content:
@@ -104,7 +157,65 @@ components:
           type: string
         email:
           type: string
+      additionalProperties: false
       required:
         - name
         - token
         - email
+
+    mailboxes:
+      type: array
+      items:
+        type: string
+
+    mailbox:
+      type: array
+      items:
+        $ref: "#/components/schemas/previewmail"
+
+    previewmail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        to:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+        from:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+        subject:
+          type: string
+        received:
+          type: string
+        seen:
+          type: integer
+        sent:
+          type: string
+        preview:
+          type: string
+      additionalProperties: false
+      required:
+        - id
+        - to
+        - from
+        - seen
+        - sent
+        - subject
+        - received
+        - preview
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

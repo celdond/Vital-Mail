@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import registerAPIRoutes from "./api/api";
 import cors from "cors";
 import path from "path";

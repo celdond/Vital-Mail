@@ -1,9 +1,10 @@
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
+import { CheckRequest } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -12,6 +13,28 @@ const pool = new Pool({
   user: postgres_variables.POSTGRES_USER,
   password: postgres_variables.POSTGRES_PASSWORD,
 });
+
+const STATIC_MAILBOX = ["Inbox", "Sent", "Trash"];
+
+export function check(req: CheckRequest, res: Response, next: NextFunction) {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, secrets.secretToken, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      if (typeof user == "object") {
+        req.usermail = user.email;
+        next();
+      } else {
+        return res.status(400).send("User could not be deciphered.");
+      }
+    });
+  } else {
+    return res.sendStatus(401);
+  }
+}
 
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
@@ -55,27 +78,102 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
-  const search = `SELECT username, email, credword
-    FROM usermail WHERE email = $1`;
-  const registerSearch = {
-    text: search,
-    values: [email],
-  };
-  const query = await pool.query(registerSearch);
-  if (query.rows[0]) {
-    res.status(403).send("Email Taken");
-  } else {
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
-    const registerInsert = {
-      text: entry,
-      values: [username, email, hashedPassword],
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    const search = `SELECT username, email, credword
+      FROM usermail WHERE email = $1`;
+    const registerSearch = {
+      text: search,
+      values: [email],
     };
-    try {
-      const queryLogin = await pool.query(registerInsert);
-      res.status(200).send("Success");
-    } catch {
-      res.status(500).send("Failure to Create Account, Please Try Again Later.");
+    const query = await client.query(registerSearch);
+    if (query.rows[0]) {
+      throw 403;
+    } else {
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const entry = `INSERT INTO usermail VALUES ($1, $2, $3)`;
+      const registerInsert = {
+        text: entry,
+        values: [username, email, hashedPassword],
+      };
+      await client.query(registerInsert);
     }
+    for (const box of STATIC_MAILBOX) {
+      const newBoxInsert = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
+      const newBoxCode = box + "@" + email;
+      const registerBox = {
+        text: newBoxInsert,
+        values: [newBoxCode, box, email],
+      };
+      await client.query(registerBox);
+    }
+    await client.query("COMMIT");
+    res.status(200).send("Success");
+  } catch (e) {
+    await client.query("ROLLBACK");
+    if (e == 403) {
+      res.status(403).send("Email Taken");
+    } else {
+      res
+        .status(500)
+        .send("Failure to Create Account, Please Try Again Later.");
+    }
+  } finally {
+    client.release();
   }
+}
+
+export async function accessBoxes(usermail: string) {
+  const search = "SELECT * FROM mailbox WHERE email = $1";
+  const query = {
+    text: search,
+    values: [usermail],
+  };
+
+  const { rows } = await pool.query(query);
+  const mailboxes = [];
+  for (const row of rows) {
+    mailboxes.push(row.mailbox);
+  }
+  return mailboxes;
+}
+
+export async function checkBox(usermail: string, mailbox: string) {
+  const boxcode = mailbox + "@" + usermail;
+  const search = "SELECT * FROM mailbox WHERE boxcode = $1";
+  const query = {
+    text: search,
+    values: [boxcode],
+  };
+  const queryBox = await pool.query(query);
+  if (queryBox.rows[0]) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+export async function accessMail(usermail: string, mailbox: string) {
+  const boxcode = mailbox + "@" + usermail;
+  const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
+  const query = {
+    text: search,
+    values: [boxcode],
+  };
+
+  const receivedMail = [];
+  try {
+    const queryMail = await pool.query(query);
+    if (queryMail.rows[0]) {
+      for (const row of queryMail.rows) {
+        row.mail.id = row.mid;
+        row.mail.preview = row.mail.content.slice(0, 18) + "...";
+        delete row.mail.content;
+        receivedMail.push(row.mail);
+      }
+    }
+  } catch {}
+  return receivedMail;
 }

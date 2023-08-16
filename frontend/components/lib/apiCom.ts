@@ -4,12 +4,11 @@ export async function callServer(
 	targetUrl: string,
 	method: 'GET' | 'PUT' | 'POST' | 'DELETE',
     body?: any,
-	user?: string,
+	token?: string,
 ): Promise<Response> {
 	const options: RequestInit = { method };
 	options.headers = {};
-	if (user) {
-		const token = localStorage.getItem(`essentialMailToken/${user}`);
+	if (token) {
 		options.headers['authorization'] = `Bearer ${token}`;
 	}
 	if (body) {
