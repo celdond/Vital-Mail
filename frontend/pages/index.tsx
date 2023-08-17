@@ -1,7 +1,7 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import { Button, Container, Form, Col } from 'react-bootstrap';
+import { Button, Container, Form, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { callServer } from '../components/lib/apiCom';
@@ -30,8 +30,9 @@ const Login: NextPage = () => {
 	}
 
 	return (
-		<Container fluid>
-				<Container>
+		<main className="background">
+			<Container className="centerpiece">
+				<Col>
 					<Form>
 						<Form.Group>
 							<Form.Label>Email Address</Form.Label>
@@ -60,8 +61,9 @@ const Login: NextPage = () => {
 							<Link href="/register">Register a new account</Link>
 						</div>
 					</Col>
-				</Container>
-		</Container>
+				</Col>
+			</Container>
+		</main>
 	);
 };
 

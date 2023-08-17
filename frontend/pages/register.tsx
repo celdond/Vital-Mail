@@ -31,49 +31,51 @@ const Register: NextPage = () => {
 	}
 
 	return (
-		<Container>
-			<Form>
-				<Form.Group>
-					<Form.Label>Name</Form.Label>
-					<Form.Control
-						type="name"
-						placeholder="Username"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-				</Form.Group>
-				<Form.Group>
-					<Form.Label>Account Name</Form.Label>
-					<Form.Control
-						type="email"
-						placeholder="Account Name"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="formBasicPassword">
-					<Form.Label>Password</Form.Label>
-					<Form.Control
-						type="password"
-						placeholder="Password"
-						value={passcode}
-						onChange={(e) => setCode(e.target.value)}
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="formBasicPassword">
-					<Form.Label>Password Confirmation</Form.Label>
-					<Form.Control
-						type="password"
-						placeholder="Confirm Password"
-						value={confirmcode}
-						onChange={(e) => setConfirm(e.target.value)}
-					/>
-				</Form.Group>
-			</Form>
-			<Button variant="primary" type="submit" onClick={submitRegister}>
-				Register
-			</Button>
-		</Container>
+		<main className="background">
+			<Container className="centerpiece">
+				<Form>
+					<Form.Group>
+						<Form.Label>Name</Form.Label>
+						<Form.Control
+							type="name"
+							placeholder="Username"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
+					</Form.Group>
+					<Form.Group>
+						<Form.Label>Account Name</Form.Label>
+						<Form.Control
+							type="email"
+							placeholder="Account Name"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="formBasicPassword">
+						<Form.Label>Password</Form.Label>
+						<Form.Control
+							type="password"
+							placeholder="Password"
+							value={passcode}
+							onChange={(e) => setCode(e.target.value)}
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="formBasicPassword">
+						<Form.Label>Password Confirmation</Form.Label>
+						<Form.Control
+							type="password"
+							placeholder="Confirm Password"
+							value={confirmcode}
+							onChange={(e) => setConfirm(e.target.value)}
+						/>
+					</Form.Group>
+				</Form>
+				<Button variant="primary" type="submit" onClick={submitRegister}>
+					Register
+				</Button>
+			</Container>
+		</main>
 	);
 };
 
