@@ -32,10 +32,6 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 const HomePage: NextPage = () => {
 	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
-	const [show, setShow] = useState(false);
-
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
 
 	const router = useRouter();
 
@@ -69,19 +65,19 @@ const HomePage: NextPage = () => {
 						</Offcanvas.Header>
 						<Offcanvas.Body>
 							<Container>
-								<Row>
+								<Row onClick={() => setMailbox("Inbox")}>
 									<Col>
 										<InboxFill />
 									</Col>
 									<Col>Inbox</Col>
 								</Row>
-								<Row>
+								<Row onClick={() => setMailbox("Sent")}>
 									<Col>
 										<Inbox />
 									</Col>
 									<Col>Sent</Col>
 								</Row>
-								<Row>
+								<Row onClick={() => setMailbox("Trash")}>
 									<Col>
 										<Trash />
 									</Col>
