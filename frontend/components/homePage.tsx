@@ -8,13 +8,8 @@ import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import {
-	Container,
-	Navbar,
-	Offcanvas,
-	Row,
-} from 'react-bootstrap';
-import { InboxFill } from 'react-bootstrap-icons';
+import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
+import { InboxFill, Inbox, Trash } from 'react-bootstrap-icons';
 
 const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
@@ -58,8 +53,8 @@ const HomePage: NextPage = () => {
 	};
 
 	return (
-		<Container fluid>
-			<Navbar variant="primary" expand={false}>
+		<main className="backplate">
+			<Navbar className="navbar" expand={false}>
 				<Container fluid>
 					<Navbar.Toggle aria-controls="menu" />
 					<Navbar.Offcanvas
@@ -74,38 +69,38 @@ const HomePage: NextPage = () => {
 						</Offcanvas.Header>
 						<Offcanvas.Body>
 							<Container>
-									<Row>
-										<div>
-											<InboxFill />
-										</div>
-										<div>Inbox</div>
-									</Row>
-									<Row>
-										<div>
-											<InboxFill />
-										</div>
-										<div>Sent</div>
-									</Row>
-									<Row>
-										<div>
-											<InboxFill />
-										</div>
-										<div>Trash</div>
-									</Row>
-									<Row onClick={logout}>
-										<div> Logout</div>
-									</Row>
+								<Row>
+									<Col>
+										<InboxFill />
+									</Col>
+									<Col>Inbox</Col>
+								</Row>
+								<Row>
+									<Col>
+										<Inbox />
+									</Col>
+									<Col>Sent</Col>
+								</Row>
+								<Row>
+									<Col>
+										<Trash />
+									</Col>
+									<Col>Trash</Col>
+								</Row>
+								<Row onClick={logout}>
+									<div> Logout</div>
+								</Row>
 							</Container>
 						</Offcanvas.Body>
 					</Navbar.Offcanvas>
 				</Container>
 			</Navbar>
-			<Container>
+			<Container className="mailplate">
 				<MailListContext.Provider value={maillist}>
 					<MailDisplay />
 				</MailListContext.Provider>
 			</Container>
-		</Container>
+		</main>
 	);
 };
 
