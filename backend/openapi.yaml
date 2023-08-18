@@ -109,6 +109,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+    post:
+      description: Send New Mail
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Content of email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newmail'
+      responses:
+        201:
+          description: Mail Sent Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mail'
+        404:
+          description: User does not exist
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+
+
 
 components:
   schemas:
@@ -173,6 +202,65 @@ components:
       items:
         $ref: "#/components/schemas/previewmail"
 
+    mail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        to:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+          required:
+            - name
+            - email
+          additionalProperties: false
+        from:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+          required:
+            - name
+            - email
+          additionalProperties: false
+        subject:
+          type: string
+        timestamp:
+          type: string
+        content:
+          type: string
+      additionalProperties: false
+      required:
+        - id
+        - to
+        - from
+        - seen
+        - subject
+        - timestamp
+        - content
+
+    newmail:
+      type: object
+      properties:
+        to:
+          type: string
+        subject:
+          type: string
+        content:
+          type: string
+      additionalProperties: false
+      required:
+        - to
+        - subject
+        - content
+
     previewmail:
       type: object
       properties:
@@ -186,6 +274,9 @@ components:
               type: string
             email:
               type: string
+          required:
+            - name
+            - email
         from:
           type: object
           properties:
@@ -193,6 +284,9 @@ components:
               type: string
             email:
               type: string
+          required:
+            - name
+            - email
         subject:
           type: string
         received:
@@ -209,9 +303,8 @@ components:
         - to
         - from
         - seen
-        - sent
+        - timestamp
         - subject
-        - received
         - preview
 
   securitySchemes:
