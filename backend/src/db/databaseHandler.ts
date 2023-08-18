@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-import { CheckRequest } from "../appTypes";
+import { CheckRequest, newmailType } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -178,6 +178,16 @@ export async function accessMail(usermail: string, mailbox: string) {
   return receivedMail;
 }
 
-export async function createMail(usermail: string, newMail: object) {
+export async function createMail(usermail: string, newMail: newmailType) {
+  const search = `SELECT username, email
+    FROM person WHERE email = $1`;
+  const loginSearch = {
+    text: search,
+    values: [newMail.to],
+  };
+  const target = await pool.query(loginSearch);
+  if (target.rows.length == 0) {
+    return null;
+  }
   return '';
 }
