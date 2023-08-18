@@ -177,3 +177,7 @@ export async function accessMail(usermail: string, mailbox: string) {
   } catch {}
   return receivedMail;
 }
+
+export async function createMail(usermail: string, newMail: object) {
+  return '';
+}
