@@ -1,4 +1,9 @@
-import { accessBoxes, accessMail, checkBox, createMail } from "../db/databaseHandler";
+import {
+  accessBoxes,
+  accessMail,
+  checkBox,
+  createMail,
+} from "../db/databaseHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
 
@@ -34,8 +39,11 @@ export async function getMail(req: CheckRequest, res: Response) {
 }
 
 export async function sendMail(req: CheckRequest, res: Response) {
-  const usermail = req.usermail ?? '';
-  const success = await createMail(usermail, req.body);
+  const from = {
+    usermail: req.usermail ?? "",
+    name: req.name ?? "",
+  };
+  const success = await createMail(from, req.body);
   if (success) {
     res.status(201).json(success);
   } else {

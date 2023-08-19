@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-import { CheckRequest, newmailType } from "../appTypes";
+import { CheckRequest, newmailType, fromType } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -26,6 +26,7 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
       }
       if (typeof user == "object") {
         req.usermail = user.email;
+        req.name = user.name;
         next();
       } else {
         return res.status(400).send("User could not be deciphered.");
@@ -178,7 +179,7 @@ export async function accessMail(usermail: string, mailbox: string) {
   return receivedMail;
 }
 
-export async function createMail(usermail: string, newMail: newmailType) {
+export async function createMail(from: fromType, newMail: newmailType) {
   const search = `SELECT username, email
     FROM person WHERE email = $1`;
   const loginSearch = {
@@ -189,5 +190,7 @@ export async function createMail(usermail: string, newMail: newmailType) {
   if (target.rows.length == 0) {
     return null;
   }
+
+
   return '';
 }
