@@ -156,7 +156,11 @@ export async function checkBox(usermail: string, mailbox: string) {
   }
 }
 
-export async function accessMail(usermail: string, mailbox: string) {
+export async function accessMail (id: string) {
+  
+}
+
+export async function accessMailbox (usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   const query = {
