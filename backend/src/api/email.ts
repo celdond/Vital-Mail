@@ -24,7 +24,7 @@ export async function getMailboxes(req: CheckRequest, res: Response) {
 
 export async function getID(req: CheckRequest, res: Response) {
   const email = await accessMail(req.params.id);
-  if (typeof(email) == "mailType") {
+  if (email) {
     res.status(200).json(email);
     return;
   }

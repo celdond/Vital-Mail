@@ -157,7 +157,16 @@ export async function checkBox(usermail: string, mailbox: string) {
 }
 
 export async function accessMail (id: string) {
-  
+  const select = 'SELECT mid, mail FROM mail WHERE mid = $1';
+  const query = {
+    text: select,
+    values: [id],
+  };
+  const {rows} = await pool.query(query);
+  if (rows[0]) {
+    rows[0].mail.id = rows[0].mid;
+  }
+  return rows.length == 1 ? rows[0].mail : undefined;
 }
 
 export async function accessMailbox (usermail: string, mailbox: string) {
