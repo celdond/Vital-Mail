@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-import { CheckRequest, newmailType, fromType } from "../appTypes";
+import { CheckRequest, newmailType, fromType, mailType } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -180,17 +180,62 @@ export async function accessMail(usermail: string, mailbox: string) {
 }
 
 export async function createMail(from: fromType, newMail: newmailType) {
-  const search = `SELECT username, email
-    FROM person WHERE email = $1`;
-  const loginSearch = {
-    text: search,
-    values: [newMail.to],
-  };
-  const target = await pool.query(loginSearch);
-  if (target.rows.length == 0) {
-    return null;
+  const client = await pool.connect();
+
+  let id: string = '';
+  try {
+    const search = `SELECT username, email
+      FROM person WHERE email = $1`;
+    const loginSearch = {
+      text: search,
+      values: [newMail.to],
+    };
+    const targetUser = await client.query(loginSearch);
+    if (targetUser.rows.length == 0) {
+      throw 404;
+    }
+
+    const to: fromType = {
+      name: targetUser.rows[0].username ?? "",
+      email: targetUser.rows[0].email ?? "",
+    };
+
+    const today = new Date();
+
+    const mailSlip: mailType = {
+      from: from,
+      to: to,
+      timestamp: today.toISOString().split(".")[0] + "Z",
+      content: newMail.content,
+      subject: newMail.subject,
+      seen: 0,
+    };
+
+    // Send email to sender's sent mailbox
+    let boxcode = 'Sent@' + from.email;
+    const insert = 'INSERT INTO mail(boxcode, mail) VALUES ($1, $2) RETURNING id';
+    const query = {
+      text: insert,
+      values: [boxcode, mailSlip],
+    };
+    const r = await client.query(query);
+
+    // Send email to recipient's inbox
+    boxcode = 'Inbox@' + to.email;
+    mailSlip.seen = 1;
+    const receivingQuery = {
+      text: insert,
+      values: [boxcode, mailSlip],
+    };
+    await client.query(receivingQuery);
+    mailSlip['id'] = r.rows[0].id;
+    await client.query("COMMIT");
+    id = mailSlip['id'] ?? '';
+  } catch (e) {
+    await client.query("ROLLBACK");
+    client.release();
+    return e;
   }
-
-
-  return '';
+  client.release();
+  return id;
 }

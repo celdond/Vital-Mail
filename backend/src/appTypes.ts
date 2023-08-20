@@ -13,5 +13,15 @@ export interface newmailType {
 
 export interface fromType {
     name: string;
-    usermail: string;
+    email: string;
+}
+
+export interface mailType {
+    to: fromType;
+    from: fromType;
+    subject: string;
+    content: string;
+    timestamp: string;
+    seen: number;
+    id?: string;
 }

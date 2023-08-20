@@ -40,11 +40,11 @@ export async function getMail(req: CheckRequest, res: Response) {
 
 export async function sendMail(req: CheckRequest, res: Response) {
   const from = {
-    usermail: req.usermail ?? "",
+    email: req.usermail ?? "",
     name: req.name ?? "",
   };
   const success = await createMail(from, req.body);
-  if (success) {
+  if (typeof(success) != 'number') {
     res.status(201).json(success);
   } else {
     res.status(404).send();
