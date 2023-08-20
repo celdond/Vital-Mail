@@ -139,6 +139,8 @@ paths:
   /mail/{id}:
     get:
       description: Returns the desired email from the id
+      security:
+        - bearerAuth: []
       parameters:
       - name: id
         description: id of the email
