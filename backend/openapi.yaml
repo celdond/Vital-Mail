@@ -136,7 +136,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
 
-
+  /mail/{id}:
+    get:
+      description: Returns the desired email from the id
+      parameters:
+      - name: id
+        description: id of the email
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Successful Return
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mail'
+        404:
+          description: Not Found
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
 
 components:
@@ -148,6 +173,7 @@ components:
           format: int32
         message:
           type: string
+      additionalProperties: false
       required:
         - code
         - message
@@ -161,6 +187,7 @@ components:
           type: string
         password:
           type: string
+      additionalProperties: false
       required:
         - username
         - email
@@ -173,6 +200,7 @@ components:
           type: string
         password:
           type: string
+      additionalProperties: false
       required:
         - email
         - password
