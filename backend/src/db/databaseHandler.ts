@@ -185,13 +185,13 @@ export async function createMail(from: fromType, newMail: newmailType) {
   let id: string = '';
   try {
     const search = `SELECT username, email
-      FROM person WHERE email = $1`;
+      FROM usermail WHERE email = $1`;
     const loginSearch = {
       text: search,
       values: [newMail.to],
     };
     const targetUser = await client.query(loginSearch);
-    if (targetUser.rows.length == 0) {
+    if (targetUser.rowCount === 0) {
       throw 404;
     }
 
@@ -213,7 +213,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
 
     // Send email to sender's sent mailbox
     let boxcode = 'Sent@' + from.email;
-    const insert = 'INSERT INTO mail(boxcode, mail) VALUES ($1, $2) RETURNING id';
+    const insert = 'INSERT INTO mail(boxcode, mail) VALUES ($1, $2) RETURNING mid';
     const query = {
       text: insert,
       values: [boxcode, mailSlip],
@@ -228,13 +228,17 @@ export async function createMail(from: fromType, newMail: newmailType) {
       values: [boxcode, mailSlip],
     };
     await client.query(receivingQuery);
-    mailSlip['id'] = r.rows[0].id;
+    mailSlip['id'] = r.rows[0].mid;
     await client.query("COMMIT");
     id = mailSlip['id'] ?? '';
   } catch (e) {
     await client.query("ROLLBACK");
     client.release();
-    return e;
+    console.log(e);
+    if (e === 404) {
+      return 404;
+    }
+    return 500;
   }
   client.release();
   return id;
