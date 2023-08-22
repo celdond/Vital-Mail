@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-export type mailType = {
+export type mailListType = {
 	mid: string;
 	from: {
 		name: string;
@@ -8,6 +8,23 @@ export type mailType = {
 	subject: string;
 	preview: string;
 	time: string;
+	timestamp: string;
+};
+
+export type mailType = {
+	mid: string;
+	from: {
+		name: string;
+		email: string;
+	};
+	to: {
+		name: string;
+		email: string;
+	};
+	subject: string;
+	content: string;
+	time: string;
+	timestamp: string;
 };
 
 export type tokenType = {
@@ -16,6 +33,6 @@ export type tokenType = {
 	token: string;
 };
 
-export type MailListContextType = mailType[];
+export type MailListContextType = mailListType[];
 
 export const MailListContext = createContext<MailListContextType>([]);

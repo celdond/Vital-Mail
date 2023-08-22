@@ -1,8 +1,8 @@
-import type { NextPage } from 'next';
-import { tokenType } from './lib/SharedContext';
+import { tokenType, mailType } from './lib/SharedContext';
 import { callServer } from './lib/apiCom';
+import { useState, useEffect } from 'react';
 
-const getSlip = (id: string, user: tokenType) => {
+const getSlip = (setList: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail/' + id, 'GET', null, token)
 		.then((response) => {
@@ -13,12 +13,12 @@ const getSlip = (id: string, user: tokenType) => {
 			return response.json();
 		})
 		.then((json) => {
-			return json;
+			setList(json);
 		})
 		.catch((err) => {
 			alert(`Error retrieving email, please try again.\n${err}`);
 		});
-};
+}
 
 export interface ViewMailProps {
 	mid: string;
@@ -27,6 +27,11 @@ export interface ViewMailProps {
 export default function ViewMailPage(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
-	const email = getSlip(props.mid, user);
-	return <main></main>;
+    const [mail, setMail] = useState<mailType>(null);
+
+    useEffect(() => {
+		getSlip(setMail, props.mid, user);
+	}, [mail]);
+
+	return <main>{mail.content}</main>;
 }
