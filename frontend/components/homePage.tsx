@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<{box: string | null;}> = asy
 
 const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
-	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
+	callServer('/mail?' + mailbox, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
