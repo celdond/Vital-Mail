@@ -29,8 +29,12 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 		});
 };
 
-const HomePage: NextPage = () => {
-	const [mailbox, setMailbox] = useState('Inbox');
+export interface HomePageProps {
+	box: string | null;
+}
+
+const HomePage: NextPage = ({ box }: HomePageProps) => {
+	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
 
 	const router = useRouter();
