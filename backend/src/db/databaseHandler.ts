@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { postgres_variables } from "../config/processVariables";
-import { CheckRequest } from "../appTypes";
+import { CheckRequest, newmailType, fromType, mailType } from "../appTypes";
 
 const pool = new Pool({
   host: postgres_variables.POSTGRES_HOST,
@@ -26,6 +26,7 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
       }
       if (typeof user == "object") {
         req.usermail = user.email;
+        req.name = user.name;
         next();
       } else {
         return res.status(400).send("User could not be deciphered.");
@@ -155,7 +156,20 @@ export async function checkBox(usermail: string, mailbox: string) {
   }
 }
 
-export async function accessMail(usermail: string, mailbox: string) {
+export async function accessMail (id: string) {
+  const select = 'SELECT mid, mail FROM mail WHERE mid = $1';
+  const query = {
+    text: select,
+    values: [id],
+  };
+  const {rows} = await pool.query(query);
+  if (rows[0]) {
+    rows[0].mail.id = rows[0].mid;
+  }
+  return rows.length == 1 ? rows[0].mail : undefined;
+}
+
+export async function accessMailbox (usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   const query = {
@@ -176,4 +190,69 @@ export async function accessMail(usermail: string, mailbox: string) {
     }
   } catch {}
   return receivedMail;
+}
+
+export async function createMail(from: fromType, newMail: newmailType) {
+  const client = await pool.connect();
+
+  let id: string = '';
+  try {
+    const search = `SELECT username, email
+      FROM usermail WHERE email = $1`;
+    const loginSearch = {
+      text: search,
+      values: [newMail.to],
+    };
+    const targetUser = await client.query(loginSearch);
+    if (targetUser.rowCount === 0) {
+      throw 404;
+    }
+
+    const to: fromType = {
+      name: targetUser.rows[0].username ?? "",
+      email: targetUser.rows[0].email ?? "",
+    };
+
+    const today = new Date();
+
+    const mailSlip: mailType = {
+      from: from,
+      to: to,
+      timestamp: today.toISOString().split(".")[0] + "Z",
+      content: newMail.content,
+      subject: newMail.subject,
+      seen: 0,
+    };
+
+    // Send email to sender's sent mailbox
+    let boxcode = 'Sent@' + from.email;
+    const insert = 'INSERT INTO mail(boxcode, mail) VALUES ($1, $2) RETURNING mid';
+    const query = {
+      text: insert,
+      values: [boxcode, mailSlip],
+    };
+    const r = await client.query(query);
+
+    // Send email to recipient's inbox
+    boxcode = 'Inbox@' + to.email;
+    mailSlip.seen = 1;
+    const receivingQuery = {
+      text: insert,
+      values: [boxcode, mailSlip],
+    };
+    await client.query(receivingQuery);
+    mailSlip['id'] = r.rows[0].mid;
+    await client.query("COMMIT");
+    id = mailSlip['id'] ?? '';
+  } catch (e) {
+    await client.query("ROLLBACK");
+    client.release();
+    console.log(e);
+    if (e === 404) {
+      return 404;
+    }
+    return 500;
+  }
+  client.release();
+  return id;
 }

@@ -1,12 +1,8 @@
-import React from 'react';
-import type { NextPage } from 'next';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { Container, Form, Button } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
 
-const Register: NextPage = () => {
-	const router = useRouter();
+export default function Register() {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
@@ -22,7 +18,6 @@ const Register: NextPage = () => {
 				if (!response.ok) {
 					throw response;
 				}
-				router.push(`/`);
 				return;
 			})
 			.catch((err) => {
@@ -78,5 +73,3 @@ const Register: NextPage = () => {
 		</main>
 	);
 };
-
-export default Register;

@@ -4,12 +4,17 @@ import Table from 'react-bootstrap/Table';
 
 function MailDisplay () {
     const displayList = useContext(MailListContext) as MailListContextType;
+    const router = useRouter();
+
+    const navViewMail = (id: string) => {
+        router.push(`/mail/${id}`);
+    };
 
     return (
         <Table>
             <tbody>
                 {displayList.map((mail) => (
-                    <tr key={mail.mid}>
+                    <tr key={mail.id} onClick={() => navViewMail(mail.id)}>
                         <td>{mail.from.name}</td>
                         <td>{mail.subject}</td>
                         <td>{mail.preview}</td>
