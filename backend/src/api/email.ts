@@ -10,6 +10,7 @@ import { Response } from "express";
 
 export async function getMailboxes(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
+  console.log(usermail);
   if (usermail) {
     const boxes = await accessBoxes(usermail);
     if (boxes) {

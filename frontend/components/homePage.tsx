@@ -10,19 +10,10 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash } from 'react-bootstrap-icons';
-import { GetServerSideProps } from 'next';
-
-export const getServerSideProps: GetServerSideProps<{box: string | null;}> = async (context) => {
-	return {
-		props: {
-			box: typeof context.query.box == 'string' ? context.query.box : null,
-		},
-	};
-};
 
 const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
-	callServer('/mail?' + mailbox, 'GET', null, token)
+	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -42,12 +33,11 @@ export interface HomePageProps {
 	box: string | null;
 }
 
-const HomePage: NextPage = ({ box }: HomePageProps) => {
-	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
+const HomePage: NextPage = () => {
+	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
 
 	const router = useRouter();
-
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 
