@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 
 const getSlip = (setList: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
-	console.log(token);
 	callServer('/mail/' + id, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
@@ -26,13 +25,8 @@ export interface ViewMailProps {
 }
 
 export default function ViewMailPage(props: ViewMailProps) {
-	let account: string = '';
-	let user: any = {};
-
-	useEffect(() => {
-		account = localStorage.getItem(`essentialMailToken`);
-		user = JSON.parse(account);
-	}, []);
+	const account = localStorage.getItem(`essentialMailToken`);
+	const user = JSON.parse(account);
 
 	const [mail, setMail] = useState<mailType>(null);
 
@@ -42,8 +36,8 @@ export default function ViewMailPage(props: ViewMailProps) {
 
 	return (
 		<main>
-			<div>{''}</div>
-			<div>{''}</div>
+			<div>{mail.subject}</div>
+			<div>{mail.content}</div>
 		</main>
 	);
 }
