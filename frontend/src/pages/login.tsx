@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button, Container, Form, Col, Row } from 'react-bootstrap';
+import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { callServer } from '../components/lib/apiCom';
 
@@ -20,7 +19,7 @@ export default function Login() {
 				localStorage.setItem(`essentialMailToken`, JSON.stringify(json));
 				// router.push(`/mail/home`);
 			})
-			.catch((err) => {
+			.catch(() => {
 				alert(`Error logging in, please try again.`);
 			});
 	}

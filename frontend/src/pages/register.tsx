@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';

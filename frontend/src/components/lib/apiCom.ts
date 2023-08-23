@@ -1,4 +1,4 @@
-import { serverUrl } from '../../serverConfig';
+import { serverUrl } from '../../../serverConfig';
 
 export async function callServer(
 	targetUrl: string,

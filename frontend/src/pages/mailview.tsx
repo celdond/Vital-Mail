@@ -1,9 +1,8 @@
-import ViewMailPage from '../../components/viewmail';
-import { useRouter } from 'next/router';
+import ViewMailPage from '../components/viewmail';
 
 function ViewMail() {
-	const router = useRouter();
-	const id = router.query.id;
+	//const router = useRouter();
+	const id = '';
 
 	return <ViewMailPage id={typeof(id) == 'string' ? id : null} />;
 }
