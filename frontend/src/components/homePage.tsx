@@ -6,8 +6,6 @@ import {
 } from './lib/SharedContext';
 import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash } from 'react-bootstrap-icons';
 
@@ -33,11 +31,10 @@ export interface HomePageProps {
 	box: string | null;
 }
 
-const HomePage: NextPage = () => {
+function HomePage() {
 	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
 
-	const router = useRouter();
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 
@@ -48,7 +45,6 @@ const HomePage: NextPage = () => {
 	const logout = () => {
 		localStorage.removeItem(`essentialMailToken`);
 		setList([]);
-		router.push('/');
 	};
 
 	return (
