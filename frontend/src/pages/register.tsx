@@ -47,7 +47,7 @@ export default function Register() {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
+					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password</Form.Label>
 						<Form.Control
 							type="password"
@@ -56,7 +56,7 @@ export default function Register() {
 							onChange={(e) => setCode(e.target.value)}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
+					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password Confirmation</Form.Label>
 						<Form.Control
 							type="password"
