@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
 	MailListContext,
 	MailListContextType,
@@ -34,6 +35,7 @@ export interface HomePageProps {
 function HomePage() {
 	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
+	const navigation = useNavigate();
 
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
@@ -45,6 +47,7 @@ function HomePage() {
 	const logout = () => {
 		localStorage.removeItem(`essentialMailToken`);
 		setList([]);
+		navigation('/login');
 	};
 
 	return (

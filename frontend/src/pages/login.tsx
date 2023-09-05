@@ -1,10 +1,12 @@
-import { Button, Container, Form, Col } from 'react-bootstrap';
+import { Button, Container, Form, Col, NavLink } from 'react-bootstrap';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { callServer } from '../components/lib/apiCom';
 
 export default function Login() {
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
+	const navigation = useNavigate();
 
 	async function submitLogin() {
 		const loginInfo = { email: email, password: passcode };
@@ -17,7 +19,7 @@ export default function Login() {
 			})
 			.then((json) => {
 				localStorage.setItem(`essentialMailToken`, JSON.stringify(json));
-				// router.push(`/mail/home`);
+				navigation('/home');
 			})
 			.catch(() => {
 				alert(`Error logging in, please try again.`);
@@ -53,7 +55,7 @@ export default function Login() {
 							Submit
 						</Button>
 						<div>
-							<a href="/register">Register a new account</a>
+							<NavLink href="/register">Register a new account</NavLink>
 						</div>
 					</Col>
 				</Col>

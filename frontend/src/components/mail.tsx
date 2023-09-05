@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 import { MailListContextType, MailListContext } from './lib/SharedContext';
+import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 
 function MailDisplay () {
     const displayList = useContext(MailListContext) as MailListContextType;
-    const router = useRouter();
+    const navigation = useNavigate();
 
     const navViewMail = (id: string) => {
-        router.push(`/mail/${id}`);
+        navigation(`/mail/${id}`);
     };
 
     return (
