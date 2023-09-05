@@ -48,15 +48,30 @@ $danger: #137400;
     width: auto;
     background-color: $secondary;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px;
+}
+
+.mailpage {
+    max-width: 960px;
 }
 
 .simpleBar {
     color: $secondary;
     margin: 4px;
     font-size: 1.5em;
+    padding: 8px;
+}
+
+h1 {
+    margin: 1em 0;
 }
 
 button[type="submit"] {
+    margin: 0.5em auto;
+}
+
+.content {
     margin: 1em auto;
+    min-width: 350px;
+    width: 60%;
 }
