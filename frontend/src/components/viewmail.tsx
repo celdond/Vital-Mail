@@ -3,6 +3,7 @@ import { callServer } from './lib/apiCom';
 import { useState, useEffect } from 'react';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 import { Container, Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const getSlip = (setList: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
@@ -46,6 +47,7 @@ const emptyMail = {
 export default function ViewMailPage(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
+	const navigation = useNavigate();
 
 	const [mail, setMail] = useState<mailType>(emptyMail);
 
@@ -58,7 +60,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 			<Container className="mailpage">
 				<Col>
 					<div className="simpleBar">
-						<BoxArrowLeft />
+						<BoxArrowLeft onClick={() => navigation(-1)} />
 					</div>
 					<div className="mailview">
 						<h1>{mail.subject}</h1>
