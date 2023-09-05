@@ -69,23 +69,27 @@ function HomePage() {
 						</Offcanvas.Header>
 						<Offcanvas.Body>
 							<Container>
-								<Row onClick={() => setMailbox("Inbox")}>
+								<Row xs="auto" onClick={() => setMailbox("Inbox")}>
 									<Col>
 										<InboxFill />
 									</Col>
 									<Col>Inbox</Col>
 								</Row>
-								<Row onClick={() => setMailbox("Sent")}>
+								<Row xs="auto" onClick={() => setMailbox("Sent")}>
 									<Col>
 										<Inbox />
 									</Col>
 									<Col>Sent</Col>
 								</Row>
-								<Row onClick={() => setMailbox("Trash")}>
+								<Row xs="auto" onClick={() => setMailbox("Trash")}>
 									<Col>
 										<Trash />
 									</Col>
 									<Col>Trash</Col>
+								</Row>
+								<hr />
+								<Row>
+									<div> Account</div>
 								</Row>
 								<Row onClick={logout}>
 									<div> Logout</div>
@@ -95,11 +99,11 @@ function HomePage() {
 					</Navbar.Offcanvas>
 				</Container>
 			</Navbar>
-			<Container className="mailplate">
+			<div className="mailplate">
 				<MailListContext.Provider value={maillist}>
 					<MailDisplay />
 				</MailListContext.Provider>
-			</Container>
+			</div>
 		</div>
 	);
 };
