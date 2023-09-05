@@ -5,6 +5,7 @@ import {
 	MailListContextType,
 	tokenType,
 } from './lib/SharedContext';
+import { timeSet } from './lib/timeConvert';
 import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
@@ -21,7 +22,8 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 			return response.json();
 		})
 		.then((json) => {
-			setList(json);
+			const organizedList = timeSet(json);
+			setList(organizedList);
 		})
 		.catch((err) => {
 			alert(`Error retrieving emails, please try again.\n${err}`);

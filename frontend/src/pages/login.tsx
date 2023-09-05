@@ -1,6 +1,6 @@
-import { Button, Container, Form, Col, NavLink } from 'react-bootstrap';
+import { Button, Container, Form, Col} from 'react-bootstrap';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from '../components/lib/apiCom';
 
 export default function Login() {
@@ -55,7 +55,7 @@ export default function Login() {
 							Submit
 						</Button>
 						<div>
-							<NavLink href="/register">Register a new account</NavLink>
+							<Link to="/register">Register a new account</Link>
 						</div>
 					</Col>
 				</Col>
