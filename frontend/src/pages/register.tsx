@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
 
@@ -7,6 +8,7 @@ export default function Register() {
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 	const [confirmcode, setConfirm] = useState('');
+	const navigation = useNavigate();
 
 	async function submitRegister() {
 		if (passcode != confirmcode) {
@@ -18,6 +20,7 @@ export default function Register() {
 				if (!response.ok) {
 					throw response;
 				}
+				navigation('/login');
 				return;
 			})
 			.catch((err) => {
@@ -47,7 +50,7 @@ export default function Register() {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
+					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password</Form.Label>
 						<Form.Control
 							type="password"
@@ -56,7 +59,7 @@ export default function Register() {
 							onChange={(e) => setCode(e.target.value)}
 						/>
 					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
+					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password Confirmation</Form.Label>
 						<Form.Control
 							type="password"

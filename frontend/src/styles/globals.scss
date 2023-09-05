@@ -25,9 +25,8 @@ $danger: #137400;
     background-color: $offsecondary;
     height: 100%;
     width: 100%;
-    margin: 6px;
-    padding: 8px;
-    border-radius: 10px;
+    max-width: 1290px;
+    margin: 8px 8px auto auto;
 }
 
 .navbar {
@@ -41,4 +40,37 @@ $danger: #137400;
     background-color: $secondary;
     border-radius: 10px;
     padding: 10px;
+}
+
+.mailview {
+    margin: 4px 6px;
+    width: auto;
+    background-color: $secondary;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.mailpage {
+    max-width: 960px;
+}
+
+.simpleBar {
+    color: $secondary;
+    margin: 4px;
+    font-size: 1.5em;
+    padding: 8px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+button[type="submit"] {
+    margin: 0.5em auto;
+}
+
+.content {
+    margin: 1em auto;
+    min-width: 350px;
+    width: 60%;
 }

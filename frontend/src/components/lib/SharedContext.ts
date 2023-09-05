@@ -9,6 +9,7 @@ export type mailListType = {
 	preview: string;
 	time: string;
 	timestamp: string;
+	dateValue: Date;
 };
 
 export type mailType = {

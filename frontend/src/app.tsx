@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './pages/login';
 import Home from './pages/home';
 import Register from './pages/register';
+import ViewMail from './pages/mailview';
 
 const Authentication = ({ children }) => {
 	if (localStorage.getItem(`essentialMailToken`)) {
@@ -17,10 +18,18 @@ export default function App() {
 				<Route path="/" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route
-					path="/home"
+					path="/mail"
 					element={
 						<Authentication>
 							<Home />
+						</Authentication>
+					}
+				/>
+				<Route
+					path="/mail/:id"
+					element={
+						<Authentication>
+							<ViewMail />
 						</Authentication>
 					}
 				/>

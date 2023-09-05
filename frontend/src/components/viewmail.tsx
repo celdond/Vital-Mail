@@ -1,6 +1,8 @@
 import { tokenType, mailType } from './lib/SharedContext';
 import { callServer } from './lib/apiCom';
 import { useState, useEffect } from 'react';
+import { BoxArrowLeft } from 'react-bootstrap-icons';
+import { Container, Col, Row } from 'react-bootstrap';
 
 const getSlip = (setList: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
@@ -17,6 +19,7 @@ const getSlip = (setList: Function, id: string, user: tokenType) => {
 		})
 		.catch((err) => {
 			alert(`Error retrieving email, please try again.\n${err}`);
+			console.log(err);
 		});
 };
 
@@ -24,20 +27,59 @@ export interface ViewMailProps {
 	id: string;
 }
 
+const emptyMail = {
+	id: '',
+	from: {
+		name: '',
+		email: '',
+	},
+	to: {
+		name: '',
+		email: '',
+	},
+	subject: '',
+	content: '',
+	time: '',
+	timestamp: '',
+};
+
 export default function ViewMailPage(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 
-	const [mail, setMail] = useState<mailType>(null);
+	const [mail, setMail] = useState<mailType>(emptyMail);
 
 	useEffect(() => {
 		getSlip(setMail, props.id, user);
-	}, [mail]);
+	}, [props.id]);
 
 	return (
-		<main>
-			<div>{mail.subject}</div>
-			<div>{mail.content}</div>
+		<main className="backplate">
+			<Container className="mailpage">
+				<Col>
+					<div className="simpleBar">
+						<BoxArrowLeft />
+					</div>
+					<div className="mailview">
+						<h1>{mail.subject}</h1>
+						<Row xs="auto">
+							<Col>
+								<span className="bold">{mail.from.name}</span>
+							</Col>
+							<Col>
+								<span>{mail.from.email}</span>
+							</Col>
+							<Col>
+								<span>{mail.timestamp}</span>
+							</Col>
+						</Row>
+						<hr />
+						<div className="content">
+							<p>{mail.content}</p>
+						</div>
+					</div>
+				</Col>
+			</Container>
 		</main>
 	);
 }

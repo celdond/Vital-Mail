@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
 	MailListContext,
 	MailListContextType,
 	tokenType,
 } from './lib/SharedContext';
+import { timeSet } from './lib/timeConvert';
 import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
@@ -20,7 +22,8 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 			return response.json();
 		})
 		.then((json) => {
-			setList(json);
+			const organizedList = timeSet(json);
+			setList(organizedList);
 		})
 		.catch((err) => {
 			alert(`Error retrieving emails, please try again.\n${err}`);
@@ -34,6 +37,7 @@ export interface HomePageProps {
 function HomePage() {
 	const [mailbox, setMailbox] = useState('Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
+	const navigation = useNavigate();
 
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
@@ -45,10 +49,11 @@ function HomePage() {
 	const logout = () => {
 		localStorage.removeItem(`essentialMailToken`);
 		setList([]);
+		navigation('/');
 	};
 
 	return (
-		<main className="backplate">
+		<div className="backplate">
 			<Navbar className="navbar" expand={false}>
 				<Container fluid>
 					<Navbar.Toggle aria-controls="menu" />
@@ -64,23 +69,27 @@ function HomePage() {
 						</Offcanvas.Header>
 						<Offcanvas.Body>
 							<Container>
-								<Row onClick={() => setMailbox("Inbox")}>
+								<Row xs="auto" onClick={() => setMailbox("Inbox")}>
 									<Col>
 										<InboxFill />
 									</Col>
 									<Col>Inbox</Col>
 								</Row>
-								<Row onClick={() => setMailbox("Sent")}>
+								<Row xs="auto" onClick={() => setMailbox("Sent")}>
 									<Col>
 										<Inbox />
 									</Col>
 									<Col>Sent</Col>
 								</Row>
-								<Row onClick={() => setMailbox("Trash")}>
+								<Row xs="auto" onClick={() => setMailbox("Trash")}>
 									<Col>
 										<Trash />
 									</Col>
 									<Col>Trash</Col>
+								</Row>
+								<hr />
+								<Row>
+									<div> Account</div>
 								</Row>
 								<Row onClick={logout}>
 									<div> Logout</div>
@@ -90,12 +99,12 @@ function HomePage() {
 					</Navbar.Offcanvas>
 				</Container>
 			</Navbar>
-			<Container className="mailplate">
+			<div className="mailplate">
 				<MailListContext.Provider value={maillist}>
 					<MailDisplay />
 				</MailListContext.Provider>
-			</Container>
-		</main>
+			</div>
+		</div>
 	);
 };
 
