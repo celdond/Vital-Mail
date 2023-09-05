@@ -52,9 +52,11 @@ export default function ViewMailPage(props: ViewMailProps) {
 	}, [mail]);
 
 	return (
-		<>
-			<div>{mail.subject}</div>
+		<main>
+			<div>Toolbar</div>
+			<h1>{mail.subject}</h1>
+			<div>From Bar</div>
 			<div>{mail.content}</div>
-		</>
+		</main>
 	);
 }
