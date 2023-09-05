@@ -19,7 +19,7 @@ export default function Login() {
 			})
 			.then((json) => {
 				localStorage.setItem(`essentialMailToken`, JSON.stringify(json));
-				navigation('/home');
+				navigation('/mail');
 			})
 			.catch(() => {
 				alert(`Error logging in, please try again.`);

@@ -17,13 +17,14 @@ export default function App() {
 				<Route path="/" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route
-					path="/home"
+					path="/mail/*"
 					element={
 						<Authentication>
 							<Home />
 						</Authentication>
 					}
-				/>
+				>
+				</Route>
 			</Routes>
 		</BrowserRouter>
 	);
