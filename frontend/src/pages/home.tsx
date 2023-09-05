@@ -1,17 +1,13 @@
 import HomePage from '../components/homePage';
-// import { Container } from 'react-bootstrap';
-import { Routes, Route } from 'react-router-dom';
-import ViewMail from './mailview';
+import { Outlet } from 'react-router-dom';
 
 function Home() {
 	return (
-		<div>
+		<main>
 			<HomePage />
 
-			<Routes>
-				<Route path=":id" element={<ViewMail />} />
-			</Routes>
-		</div>
+			<Outlet />
+		</main>
 	);
 }
 
