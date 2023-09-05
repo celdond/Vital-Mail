@@ -2,7 +2,7 @@ import { tokenType, mailType } from './lib/SharedContext';
 import { callServer } from './lib/apiCom';
 import { useState, useEffect } from 'react';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
-import { Container } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 
 const getSlip = (setList: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
@@ -51,26 +51,34 @@ export default function ViewMailPage(props: ViewMailProps) {
 
 	useEffect(() => {
 		getSlip(setMail, props.id, user);
-	}, [mail]);
+	}, [props.id]);
 
 	return (
 		<main className="backplate">
 			<Container className="mailpage">
-				<div className="simpleBar">
-					<BoxArrowLeft />
-				</div>
-				<div className="mailview">
-					<h1>{mail.subject}</h1>
-					<hr />
-					<div>
-						<h3>{mail.from.name}</h3>
-						<p>[{mail.from.email}]</p>
+				<Col>
+					<div className="simpleBar">
+						<BoxArrowLeft />
 					</div>
-					<hr />
-					<div className="content">
-						<p>{mail.content}</p>
+					<div className="mailview">
+						<h1>{mail.subject}</h1>
+						<Row xs="auto">
+							<Col>
+								<span className="bold">{mail.from.name}</span>
+							</Col>
+							<Col>
+								<span>{mail.from.email}</span>
+							</Col>
+							<Col>
+								<span>{mail.timestamp}</span>
+							</Col>
+						</Row>
+						<hr />
+						<div className="content">
+							<p>{mail.content}</p>
+						</div>
 					</div>
-				</div>
+				</Col>
 			</Container>
 		</main>
 	);
