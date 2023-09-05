@@ -18,15 +18,21 @@ export default function App() {
 				<Route path="/" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route
-					path="/mail/*"
+					path="/mail"
 					element={
 						<Authentication>
 							<Home />
 						</Authentication>
 					}
-				>
-					<Route path=":id" element={<ViewMail />} />
-				</Route>
+				/>
+				<Route
+					path="/mail/:id"
+					element={
+						<Authentication>
+							<ViewMail />
+						</Authentication>
+					}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);

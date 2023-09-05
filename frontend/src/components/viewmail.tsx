@@ -17,6 +17,7 @@ const getSlip = (setList: Function, id: string, user: tokenType) => {
 		})
 		.catch((err) => {
 			alert(`Error retrieving email, please try again.\n${err}`);
+			console.log(err);
 		});
 };
 
@@ -24,20 +25,36 @@ export interface ViewMailProps {
 	id: string;
 }
 
+const emptyMail = {
+	id: '',
+	from: {
+        name: '',
+        email: '',
+    },
+    to: {
+        name: '',
+        email: '',
+    },
+    subject: '',
+    content: '',
+    time: '',
+    timestamp: '',
+};
+
 export default function ViewMailPage(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 
-	const [mail, setMail] = useState<mailType>(null);
+	const [mail, setMail] = useState<mailType>(emptyMail);
 
 	useEffect(() => {
 		getSlip(setMail, props.id, user);
 	}, [mail]);
 
 	return (
-		<main>
+		<>
 			<div>{mail.subject}</div>
 			<div>{mail.content}</div>
-		</main>
+		</>
 	);
 }

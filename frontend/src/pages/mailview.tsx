@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 function ViewMail() {
 	const { id } = useParams();
 
-	return (<div>Baba<ViewMailPage id={typeof(id) == 'string' ? id : null} /></div>);
+	return (<ViewMailPage id={typeof(id) == 'string' ? id : null} />);
 }
 
 export default ViewMail;

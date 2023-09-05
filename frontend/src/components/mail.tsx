@@ -8,7 +8,7 @@ function MailDisplay () {
     const navigation = useNavigate();
 
     const navViewMail = (id: string) => {
-        navigation(`/mail/${id}`);
+        navigation(`/mail/${id}`, { relative: "path" });
     };
 
     return (

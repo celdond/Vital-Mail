@@ -47,11 +47,11 @@ function HomePage() {
 	const logout = () => {
 		localStorage.removeItem(`essentialMailToken`);
 		setList([]);
-		navigation('/login');
+		navigation('/');
 	};
 
 	return (
-		<main className="backplate">
+		<div className="backplate">
 			<Navbar className="navbar" expand={false}>
 				<Container fluid>
 					<Navbar.Toggle aria-controls="menu" />
@@ -98,7 +98,7 @@ function HomePage() {
 					<MailDisplay />
 				</MailListContext.Provider>
 			</Container>
-		</main>
+		</div>
 	);
 };
 
