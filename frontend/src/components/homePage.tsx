@@ -10,8 +10,9 @@ import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash } from 'react-bootstrap-icons';
+import { useSearchParams } from 'react-router-dom';
 
-const getMail = (setList: Function, mailbox: string, user: tokenType) => {
+const getMail = (setList: Function, setQuery: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
 		.then((response) => {
@@ -23,6 +24,7 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 		})
 		.then((json) => {
 			const organizedList = timeSet(json);
+			setQuery({box: mailbox});
 			setList(organizedList);
 		})
 		.catch((err) => {
@@ -30,12 +32,11 @@ const getMail = (setList: Function, mailbox: string, user: tokenType) => {
 		});
 };
 
-export interface HomePageProps {
-	box: string | null;
-}
+export default function HomePage() {
+	const [searchParams, setSearchParams] = useSearchParams();
+	let box = searchParams.get("box");
 
-function HomePage() {
-	const [mailbox, setMailbox] = useState('Inbox');
+	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
 	const navigation = useNavigate();
 
@@ -43,7 +44,7 @@ function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
-		getMail(setList, mailbox, user);
+		getMail(setList, setSearchParams, mailbox, user);
 	}, [mailbox]);
 
 	const logout = () => {
@@ -107,5 +108,3 @@ function HomePage() {
 		</div>
 	);
 };
-
-export default HomePage;
