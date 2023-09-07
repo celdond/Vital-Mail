@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 const sendMail = (message: any, navigation: Function, user: tokenType) => {
 	const token = user ? user.token : null;
-	console.log(message);
 	callServer('/mail', 'POST', message, token)
 		.then((response) => {
 			if (!response.ok) {
@@ -44,13 +43,13 @@ export default function ComposePage() {
 	return (
 		<main className="backplate">
 			<Container className="mailpage">
-				<Col>
+				<Col className="full">
 					<div className="simpleBar">
 						<BoxArrowLeft onClick={() => navigation(-1)} />
 						<BoxArrowLeft onClick={() => sendMail(message, navigation, user)} />
 					</div>
 					<div className="mailview">
-						<Form>
+						<Form className="full">
 							<Form.Group controlId="to">
 								<Form.Label>Address</Form.Label>
 								<Form.Control
@@ -69,13 +68,13 @@ export default function ComposePage() {
 									type="text"
 								/>
 							</Form.Group>
-							<Form.Group controlId="content">
+							<Form.Group className="textcontainer" controlId="content">
 								<Form.Label>Message</Form.Label>
 								<Form.Control
 									name="content"
 									onChange={handleChange}
 									as="textarea"
-									rows={5}
+									className="textcontent"
 								/>
 							</Form.Group>
 						</Form>
