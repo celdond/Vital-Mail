@@ -58,6 +58,6 @@ export async function sendMail(req: CheckRequest, res: Response) {
   if (typeof success != "number") {
     res.status(201).json(success);
   } else {
-    res.status(404).send();
+    res.status(success).send();
   }
 }

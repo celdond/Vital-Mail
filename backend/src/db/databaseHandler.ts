@@ -199,6 +199,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
   try {
     const search = `SELECT username, email
       FROM usermail WHERE email = $1`;
+      console.log(newMail);
     const loginSearch = {
       text: search,
       values: [newMail.to],

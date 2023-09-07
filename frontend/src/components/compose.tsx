@@ -1,14 +1,14 @@
 import { tokenType } from './lib/SharedContext';
-import { Container, Col, Form, Button } from 'react-bootstrap';
+import { Container, Col, Form } from 'react-bootstrap';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 import { useState } from 'react';
 
-const sendMail = (event: any, navigation: Function, user: tokenType) => {
+const sendMail = (message: any, navigation: Function, user: tokenType) => {
 	const token = user ? user.token : null;
-	console.log(event.target);
-	callServer('/mail', 'POST', event, token)
+	console.log(message);
+	callServer('/mail', 'POST', message, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -34,8 +34,8 @@ export default function ComposePage() {
 	const user = JSON.parse(account);
 	const navigation = useNavigate();
 
-	const handleTypeChange = (target: any) => {
-		const { value, name } = target;
+	const handleChange = (event: any) => {
+		const { value, name } = event.target;
 		const u = message;
 		u[name] = value;
 		setMessage(u);
@@ -47,21 +47,36 @@ export default function ComposePage() {
 				<Col>
 					<div className="simpleBar">
 						<BoxArrowLeft onClick={() => navigation(-1)} />
+						<BoxArrowLeft onClick={() => sendMail(message, navigation, user)} />
 					</div>
 					<div className="mailview">
-						<Form onSubmit={() => sendMail(message, navigation, user)}>
-							<Button type="submit">Send</Button>
-							<Form.Group controlId="address">
+						<Form>
+							<Form.Group controlId="to">
 								<Form.Label>Address</Form.Label>
-								<Form.Control onChange={handleTypeChange} required type="text" />
+								<Form.Control
+									name="to"
+									onChange={handleChange}
+									required
+									type="text"
+								/>
 							</Form.Group>
 							<Form.Group controlId="subject">
 								<Form.Label>Subject</Form.Label>
-								<Form.Control onChange={handleTypeChange} required type="text" />
+								<Form.Control
+									name="subject"
+									onChange={handleChange}
+									required
+									type="text"
+								/>
 							</Form.Group>
 							<Form.Group controlId="content">
 								<Form.Label>Message</Form.Label>
-								<Form.Control onChange={handleTypeChange} as="textarea" rows={5} />
+								<Form.Control
+									name="content"
+									onChange={handleChange}
+									as="textarea"
+									rows={5}
+								/>
 							</Form.Group>
 						</Form>
 					</div>
