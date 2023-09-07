@@ -3,6 +3,7 @@ import Login from './pages/login';
 import Home from './pages/home';
 import Register from './pages/register';
 import ViewMail from './pages/mailview';
+import Compose from './pages/compose';
 
 const Authentication = ({ children }) => {
 	if (localStorage.getItem(`essentialMailToken`)) {
@@ -30,6 +31,14 @@ export default function App() {
 					element={
 						<Authentication>
 							<ViewMail />
+						</Authentication>
+					}
+				/>
+				<Route
+					path="compose"
+					element={
+						<Authentication>
+							<Compose />
 						</Authentication>
 					}
 				/>

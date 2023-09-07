@@ -9,7 +9,7 @@ import { timeSet } from './lib/timeConvert';
 import MailDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
-import { InboxFill, Inbox, Trash } from 'react-bootstrap-icons';
+import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 
 const getMail = (setList: Function, setQuery: Function, mailbox: string, user: tokenType) => {
@@ -70,6 +70,13 @@ export default function HomePage() {
 						</Offcanvas.Header>
 						<Offcanvas.Body>
 							<Container>
+								<Row xs="auto" onClick={() => navigation('/compose')}>
+									<Col>
+										<PencilSquare />
+									</Col>
+									<Col>Compose</Col>
+								</Row>
+								<hr />
 								<Row xs="auto" onClick={() => setMailbox("Inbox")}>
 									<Col>
 										<InboxFill />
