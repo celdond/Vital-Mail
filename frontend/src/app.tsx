@@ -5,6 +5,10 @@ import Register from './pages/register';
 import ViewMail from './pages/mailview';
 import Compose from './pages/compose';
 
+// Authentication:
+//
+// Simply checks to ensure there is an available token to use in API requests
+// before passing to the page
 const Authentication = ({ children }) => {
 	if (localStorage.getItem(`essentialMailToken`)) {
 		return children;
@@ -12,6 +16,9 @@ const Authentication = ({ children }) => {
 	return <Navigate to="/" replace />;
 };
 
+// App Function:
+//
+// Contains all routes for the web application
 export default function App() {
 	return (
 		<BrowserRouter>

@@ -1,4 +1,4 @@
-import ViewMailPage from '../components/viewmail';
+import ViewMailPage from '../components/viewmailPage';
 import { useParams } from 'react-router-dom';
 
 function ViewMail() {

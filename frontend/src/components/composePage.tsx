@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 import { useState } from 'react';
 
+// sendMail:
+//
+// API Call to send a message
+// Navigates back to the previous page if successful
+// Alerts the user if unsuccessful
 const sendMail = (message: any, navigation: Function, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail', 'POST', message, token)
@@ -23,6 +28,9 @@ const sendMail = (message: any, navigation: Function, user: tokenType) => {
 		});
 };
 
+// ComposePage
+//
+// Page contents for the compose functionality
 export default function ComposePage() {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const [message, setMessage] = useState({
@@ -33,6 +41,7 @@ export default function ComposePage() {
 	const user = JSON.parse(account);
 	const navigation = useNavigate();
 
+	// 
 	const handleChange = (event: any) => {
 		const { value, name } = event.target;
 		const u = message;
