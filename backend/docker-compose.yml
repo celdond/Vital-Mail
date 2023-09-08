@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: essential-db
+    container_name: vital-db
     image: postgres
     environment:
       POSTGRES_HOST: ${POSTGRES_HOST}
