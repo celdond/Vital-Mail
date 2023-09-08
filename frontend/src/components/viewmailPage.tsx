@@ -44,7 +44,7 @@ const emptyMail = {
 	timestamp: '',
 };
 
-export default function ViewMailPage(props: ViewMailProps) {
+export default function ViewMail(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 	const navigation = useNavigate();

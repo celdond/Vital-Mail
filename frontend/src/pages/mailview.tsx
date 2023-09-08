@@ -1,10 +1,8 @@
-import ViewMailPage from '../components/viewmailPage';
+import ViewMail from '../components/viewmailPage';
 import { useParams } from 'react-router-dom';
 
-function ViewMail() {
+export default function ViewMailPage() {
 	const { id } = useParams();
 
-	return (<ViewMailPage id={typeof(id) == 'string' ? id : null} />);
+	return (<ViewMail id={typeof(id) == 'string' ? id : null} />);
 }
-
-export default ViewMail;

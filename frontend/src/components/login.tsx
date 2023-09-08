@@ -1,7 +1,7 @@
 import { Button, Container, Form, Col} from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { callServer } from '../components/lib/apiCom';
+import { callServer } from './lib/apiCom';
 
 export default function Login() {
 	const [email, setEmail] = useState('');
