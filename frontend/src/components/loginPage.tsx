@@ -3,11 +3,18 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 
-export default function Login() {
+// LoginPage:
+//
+// Page for users to login to the site
+export default function LoginPage() {
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 	const navigation = useNavigate();
 
+	// submitLogin:
+	//
+	// API call to attempt a login
+	// Success moves the user to the home page
 	async function submitLogin() {
 		const loginInfo = { email: email, password: passcode };
 		callServer('/login', 'POST', loginInfo)

@@ -12,6 +12,14 @@ import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 
+// getMail:
+//
+// API call to retrieve mailbox contents
+//
+// setList 	- set the mailbox contents to display
+// setQuery - sets the query in the search bar for history sake
+// mailbox 	- name of the desired mailbox to retrieve
+// user		- user token for verification
 const getMail = (setList: Function, setQuery: Function, mailbox: string, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
@@ -32,6 +40,9 @@ const getMail = (setList: Function, setQuery: Function, mailbox: string, user: t
 		});
 };
 
+// HomePage:
+//
+// Dashboard page to access account contents and information
 export default function HomePage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	let box = searchParams.get("box");

@@ -5,7 +5,14 @@ import { BoxArrowLeft } from 'react-bootstrap-icons';
 import { Container, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const getSlip = (setList: Function, id: string, user: tokenType) => {
+// getSlip:
+//
+// API call to retrieve mail content to display
+//
+// setMail 	- Function to change the state of the mail content
+// id		- Message id to retrieve from server
+// user		- user field for verification
+const getSlip = (setMail: Function, id: string, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/mail/' + id, 'GET', null, token)
 		.then((response) => {
@@ -16,7 +23,7 @@ const getSlip = (setList: Function, id: string, user: tokenType) => {
 			return response.json();
 		})
 		.then((json) => {
-			setList(json);
+			setMail(json);
 		})
 		.catch((err) => {
 			alert(`Error retrieving email, please try again.\n${err}`);
@@ -44,7 +51,13 @@ const emptyMail = {
 	timestamp: '',
 };
 
-export default function ViewMail(props: ViewMailProps) {
+// ViewMailPage:
+//
+// Page to view message contents
+//
+// props:
+// id - Message id for content to display
+export default function ViewMailPage(props: ViewMailProps) {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 	const navigation = useNavigate();

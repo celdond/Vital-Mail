@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './pages/loginPage';
-import Home from './pages/home';
-import Register from './pages/register';
+import HomePage from './pages/home';
+import RegisterPage from './pages/register';
 import ViewMailPage from './pages/mailview';
-import Compose from './pages/compose';
+import ComposePage from './pages/compose';
 
 // Authentication:
 //
@@ -24,12 +24,12 @@ export default function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<LoginPage />} />
-				<Route path="/register" element={<Register />} />
+				<Route path="/register" element={<RegisterPage />} />
 				<Route
 					path="/mail"
 					element={
 						<Authentication>
-							<Home />
+							<HomePage />
 						</Authentication>
 					}
 				/>
@@ -45,7 +45,7 @@ export default function App() {
 					path="compose"
 					element={
 						<Authentication>
-							<Compose />
+							<ComposePage />
 						</Authentication>
 					}
 				/>

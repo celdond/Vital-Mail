@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
 
-export default function Register() {
+// RegisterPage:
+//
+// Page for creating a new account
+export default function RegisterPage() {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
