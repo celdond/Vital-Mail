@@ -48,10 +48,10 @@ export default function RegisterPage() {
 						/>
 					</Form.Group>
 					<Form.Group>
-						<Form.Label>Account Name</Form.Label>
+						<Form.Label>Username</Form.Label>
 						<Form.Control
-							type="email"
-							placeholder="Account Name"
+							type="text"
+							placeholder="Username"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>

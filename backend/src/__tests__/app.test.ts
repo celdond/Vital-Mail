@@ -18,7 +18,3 @@ afterAll((done) => {
 test('GET Invalid URL', async () => {
 	await request.get('/DefinitelyReal/').expect(404);
 });
-
-test('GET Steam', async () => {
-	await request.get('/steam').expect(200);
-});

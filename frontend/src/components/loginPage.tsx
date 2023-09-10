@@ -39,12 +39,13 @@ export default function LoginPage() {
 				<Col>
 					<Form>
 						<Form.Group>
-							<Form.Label>Email Address</Form.Label>
+							<Form.Label>Username</Form.Label>
 							<Form.Control
-								type="email"
-								placeholder="Email"
+								type="text"
+								placeholder="Username"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
+								required
 							/>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">

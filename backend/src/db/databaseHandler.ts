@@ -16,6 +16,9 @@ const pool = new Pool({
 
 const STATIC_MAILBOX = ["Inbox", "Sent", "Trash"];
 
+// check:
+//
+// Validates the token of the client before allowing access to server functionality
 export function check(req: CheckRequest, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
   if (auth) {
@@ -37,6 +40,9 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
   }
 }
 
+// login:
+//
+// function to handle login and token distribution
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
   const search = `SELECT username, email, credword
@@ -66,8 +72,13 @@ export async function login(req: Request, res: Response) {
   }
 }
 
+// register
+//
+// Endpoint to create a new account in the database
 export async function register(req: Request, res: Response) {
   const { username, email, password } = req.body;
+
+  // Check to ensure valid entries
   if (username.length == 0) {
     res.status(400).send("No Username Entered.");
     return;
@@ -83,6 +94,8 @@ export async function register(req: Request, res: Response) {
 
   try {
     await client.query("BEGIN");
+
+    // Check if username already exists
     const search = `SELECT username, email, credword
       FROM usermail WHERE email = $1`;
     const registerSearch = {
@@ -90,6 +103,8 @@ export async function register(req: Request, res: Response) {
       values: [email],
     };
     const query = await client.query(registerSearch);
+
+    // Create Account if email is unique
     if (query.rows[0]) {
       throw 403;
     } else {
@@ -101,6 +116,8 @@ export async function register(req: Request, res: Response) {
       };
       await client.query(registerInsert);
     }
+
+    // Insert static boxes
     for (const box of STATIC_MAILBOX) {
       const newBoxInsert = `INSERT INTO mailbox VALUES ($1, $2, $3)`;
       const newBoxCode = box + "@" + email;
@@ -110,12 +127,14 @@ export async function register(req: Request, res: Response) {
       };
       await client.query(registerBox);
     }
+
     await client.query("COMMIT");
     res.status(200).send("Success");
   } catch (e) {
+
     await client.query("ROLLBACK");
     if (e == 403) {
-      res.status(403).send("Email Taken");
+      res.status(403).send("Username Taken");
     } else {
       res
         .status(500)
@@ -126,6 +145,11 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+// accessBoxes:
+//
+// Retrieve all mailboxes for a user
+//
+// usermail - the username requesting their boxes
 export async function accessBoxes(usermail: string) {
   const search = "SELECT * FROM mailbox WHERE email = $1";
   const query = {
@@ -141,6 +165,12 @@ export async function accessBoxes(usermail: string) {
   return mailboxes;
 }
 
+// checkBox
+//
+// ensures that the mailbox exists for the user
+//
+// usermail - user requesting the mailbox
+// mailbox  - name of the mailbox
 export async function checkBox(usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -156,6 +186,11 @@ export async function checkBox(usermail: string, mailbox: string) {
   }
 }
 
+// accessMail:
+//
+// retrieve mail content for the specified id
+//
+// id - desired mail id
 export async function accessMail(id: string) {
   const select = "SELECT mid, mail FROM mail WHERE mid = $1";
   const query = {
@@ -169,6 +204,12 @@ export async function accessMail(id: string) {
   return rows.length == 1 ? rows[0].mail : undefined;
 }
 
+// accessMailbox:
+//
+// retrieves mail from the chosen mailbox
+//
+// usermail - user requesting the mailbox
+// mailbox  - name of the mailbox
 export async function accessMailbox(usermail: string, mailbox: string) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
@@ -180,6 +221,7 @@ export async function accessMailbox(usermail: string, mailbox: string) {
   const receivedMail = [];
   try {
     const queryMail = await pool.query(query);
+
     if (queryMail.rows[0]) {
       for (const row of queryMail.rows) {
         row.mail.id = row.mid;
@@ -192,11 +234,20 @@ export async function accessMailbox(usermail: string, mailbox: string) {
   return receivedMail;
 }
 
+// createMail:
+//
+// creates a new mail entry to send another user
+//
+// from     - object describing who is sending the message
+// newMail  - object being sent to reciever
 export async function createMail(from: fromType, newMail: newmailType) {
-  const client = await pool.connect();
 
+  const client = await pool.connect();
   let id: string = "";
+
   try {
+
+    // Search to ensure reciever exists
     const search = `SELECT username, email
       FROM usermail WHERE email = $1`;
     const loginSearch = {
@@ -213,8 +264,8 @@ export async function createMail(from: fromType, newMail: newmailType) {
       email: targetUser.rows[0].email ?? "",
     };
 
+    // Set Timestamp
     const today = new Date();
-
     const mailSlip: mailType = {
       from: from,
       to: to,
@@ -224,7 +275,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
       seen: 0,
     };
 
-    // Send email to sender's sent mailbox
+    // Send message to sender's sent mailbox
     let boxcode = "Sent@" + from.email;
     const insert =
       "INSERT INTO mail(boxcode, mail) VALUES ($1, $2) RETURNING mid";
@@ -234,17 +285,19 @@ export async function createMail(from: fromType, newMail: newmailType) {
     };
     const r = await client.query(query);
 
-    // Send email to recipient's inbox
+    // Send message to recipient's inbox
     boxcode = "Inbox@" + to.email;
     mailSlip.seen = 1;
     const receivingQuery = {
       text: insert,
       values: [boxcode, mailSlip],
     };
+
     await client.query(receivingQuery);
     mailSlip["id"] = r.rows[0].mid;
     await client.query("COMMIT");
     id = mailSlip["id"] ?? "";
+
   } catch (e) {
     await client.query("ROLLBACK");
     client.release();
@@ -253,6 +306,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
     }
     return 500;
   }
+
   client.release();
   return id;
 }
