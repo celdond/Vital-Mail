@@ -1,9 +1,17 @@
 import { serverUrl } from '../../../serverConfig';
 
+// callServer:
+//
+// API call function
+//
+// targetURL - target endpoint in the api to call
+// method 	 - method type to use for call
+// body		 - content of API call
+// token	 - Bearer user token to verify sign in
 export async function callServer(
 	targetUrl: string,
 	method: 'GET' | 'PUT' | 'POST' | 'DELETE',
-    body?: any,
+	body?: any,
 	token?: string,
 ): Promise<Response> {
 	const options: RequestInit = { method };

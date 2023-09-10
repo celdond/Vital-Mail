@@ -1,16 +1,12 @@
-# Essential Mail Backend
+# Vital Mail Backend
 
-## Installation and Option
-Ensure Node.js is installed before continuing.
+## Installation and Operation
+Ensure Node.js is installed before continuing. Version 18 of Node.js was used for this project.
 
 Install package dependencies:
 
 ```npm install```
 
-Compile the server:
+Run the server for development:
 
-```npx tsc```
-
-Run it using:
-
-```node .```
+```npm run dev```

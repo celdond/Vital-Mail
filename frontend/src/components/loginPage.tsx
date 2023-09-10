@@ -1,13 +1,20 @@
-import { Button, Container, Form, Col} from 'react-bootstrap';
+import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { callServer } from '../components/lib/apiCom';
+import { callServer } from './lib/apiCom';
 
-export default function Login() {
+// LoginPage:
+//
+// Page for users to login to the site
+export default function LoginPage() {
 	const [email, setEmail] = useState('');
 	const [passcode, setCode] = useState('');
 	const navigation = useNavigate();
 
+	// submitLogin:
+	//
+	// API call to attempt a login
+	// Success moves the user to the home page
 	async function submitLogin() {
 		const loginInfo = { email: email, password: passcode };
 		callServer('/login', 'POST', loginInfo)
@@ -32,12 +39,13 @@ export default function Login() {
 				<Col>
 					<Form>
 						<Form.Group>
-							<Form.Label>Email Address</Form.Label>
+							<Form.Label>Username</Form.Label>
 							<Form.Control
-								type="email"
-								placeholder="Email"
+								type="text"
+								placeholder="Username"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
+								required
 							/>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">
@@ -62,4 +70,4 @@ export default function Login() {
 			</Container>
 		</main>
 	);
-};
+}

@@ -1,8 +1,26 @@
-import { mailListType } from "./SharedContext";
+import { mailListType } from './SharedContext';
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May',
-  'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const months = [
+	'Jan',
+	'Feb',
+	'Mar',
+	'Apr',
+	'May',
+	'Jun',
+	'Jul',
+	'Aug',
+	'Sep',
+	'Oct',
+	'Nov',
+	'Dec',
+];
 
+// timeSet:
+//
+// Sets the list's time function based on its timestamp
+// Sorts the list before returning it
+//
+// list - the mailbox list to sort
 export function timeSet(list: mailListType[]) {
 	const setList = list;
 	const now = new Date();

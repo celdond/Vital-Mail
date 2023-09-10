@@ -1,10 +1,14 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import Login from './pages/login';
-import Home from './pages/home';
-import Register from './pages/register';
-import ViewMail from './pages/mailview';
-import Compose from './pages/compose';
+import LoginPage from './pages/loginPage';
+import HomePage from './pages/home';
+import RegisterPage from './pages/register';
+import ViewMailPage from './pages/mailview';
+import ComposePage from './pages/compose';
 
+// Authentication:
+//
+// Simply checks to ensure there is an available token to use in API requests
+// before passing to the page
 const Authentication = ({ children }) => {
 	if (localStorage.getItem(`essentialMailToken`)) {
 		return children;
@@ -12,17 +16,20 @@ const Authentication = ({ children }) => {
 	return <Navigate to="/" replace />;
 };
 
+// App Function:
+//
+// Contains all routes for the web application
 export default function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<Login />} />
-				<Route path="/register" element={<Register />} />
+				<Route path="/" element={<LoginPage />} />
+				<Route path="/register" element={<RegisterPage />} />
 				<Route
 					path="/mail"
 					element={
 						<Authentication>
-							<Home />
+							<HomePage />
 						</Authentication>
 					}
 				/>
@@ -30,7 +37,7 @@ export default function App() {
 					path="/mail/:id"
 					element={
 						<Authentication>
-							<ViewMail />
+							<ViewMailPage />
 						</Authentication>
 					}
 				/>
@@ -38,7 +45,7 @@ export default function App() {
 					path="compose"
 					element={
 						<Authentication>
-							<Compose />
+							<ComposePage />
 						</Authentication>
 					}
 				/>

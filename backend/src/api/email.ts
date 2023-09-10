@@ -8,6 +8,9 @@ import {
 import { CheckRequest, mailType } from "../appTypes";
 import { Response } from "express";
 
+// getMailboxes:
+//
+// Response control for retrieving all user's mailboxes
 export async function getMailboxes(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   console.log(usermail);
@@ -23,6 +26,9 @@ export async function getMailboxes(req: CheckRequest, res: Response) {
   }
 }
 
+// getID:
+//
+// Response control for retrieving mail content
 export async function getID(req: CheckRequest, res: Response) {
   const email = await accessMail(req.params.id);
   if (email) {
@@ -32,6 +38,9 @@ export async function getID(req: CheckRequest, res: Response) {
   res.status(404).send();
 }
 
+// getMailbox:
+//
+// Response control for retrieving all mailbox content
 export async function getMailbox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   const mailbox = req.query.mailbox as string;
@@ -49,6 +58,9 @@ export async function getMailbox(req: CheckRequest, res: Response) {
   }
 }
 
+// sendMail:
+//
+// Response control for sending a message
 export async function sendMail(req: CheckRequest, res: Response) {
   const from = {
     email: req.usermail ?? "",

@@ -1,6 +1,5 @@
-import ComposePage from '../components/compose';
+import ComposePage from '../components/composePage';
 
 export default function Compose() {
-
-	return (<ComposePage />);
+	return <ComposePage />;
 }
