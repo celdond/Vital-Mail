@@ -6,7 +6,7 @@ import {
 	tokenType,
 } from './lib/SharedContext';
 import { timeSet } from './lib/timeConvert';
-import MailDisplay from './mail';
+import MailboxDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
@@ -120,7 +120,7 @@ export default function HomePage() {
 			</Navbar>
 			<div className="mailplate">
 				<MailListContext.Provider value={maillist}>
-					<MailDisplay />
+					<MailboxDisplay />
 				</MailListContext.Provider>
 			</div>
 		</div>

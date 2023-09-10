@@ -13,6 +13,9 @@ export default function RegisterPage() {
 	const [confirmcode, setConfirm] = useState('');
 	const navigation = useNavigate();
 
+	// submitRegister:
+	//
+	// API call to register a new account
 	async function submitRegister() {
 		if (passcode != confirmcode) {
 			alert('Passwords do not match.');
