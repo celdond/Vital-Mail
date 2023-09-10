@@ -59,7 +59,7 @@ export async function login(req: Request, res: Response) {
     const token = jwt.sign(
       { email: queryLogin.rows[0].email, name: queryLogin.rows[0].username },
       secrets.secretToken,
-      { expiresIn: "60m", algorithm: "HS256" }
+      { expiresIn: "60m", algorithm: "HS256" },
     );
     const account = {
       name: queryLogin.rows[0].username,
@@ -131,7 +131,6 @@ export async function register(req: Request, res: Response) {
     await client.query("COMMIT");
     res.status(200).send("Success");
   } catch (e) {
-
     await client.query("ROLLBACK");
     if (e == 403) {
       res.status(403).send("Username Taken");
@@ -241,12 +240,10 @@ export async function accessMailbox(usermail: string, mailbox: string) {
 // from     - object describing who is sending the message
 // newMail  - object being sent to reciever
 export async function createMail(from: fromType, newMail: newmailType) {
-
   const client = await pool.connect();
   let id: string = "";
 
   try {
-
     // Search to ensure reciever exists
     const search = `SELECT username, email
       FROM usermail WHERE email = $1`;
@@ -297,7 +294,6 @@ export async function createMail(from: fromType, newMail: newmailType) {
     mailSlip["id"] = r.rows[0].mid;
     await client.query("COMMIT");
     id = mailSlip["id"] ?? "";
-
   } catch (e) {
     await client.query("ROLLBACK");
     client.release();
