@@ -41,7 +41,7 @@ export default function ComposePage() {
 	const user = JSON.parse(account);
 	const navigation = useNavigate();
 
-	// 
+	//
 	const handleChange = (event: any) => {
 		const { value, name } = event.target;
 		const u = message;

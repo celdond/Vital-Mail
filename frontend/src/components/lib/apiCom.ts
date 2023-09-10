@@ -11,7 +11,7 @@ import { serverUrl } from '../../../serverConfig';
 export async function callServer(
 	targetUrl: string,
 	method: 'GET' | 'PUT' | 'POST' | 'DELETE',
-    body?: any,
+	body?: any,
 	token?: string,
 ): Promise<Response> {
 	const options: RequestInit = { method };

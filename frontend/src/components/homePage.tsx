@@ -20,7 +20,12 @@ import { useSearchParams } from 'react-router-dom';
 // setQuery - sets the query in the search bar for history sake
 // mailbox 	- name of the desired mailbox to retrieve
 // user		- user token for verification
-const getMail = (setList: Function, setQuery: Function, mailbox: string, user: tokenType) => {
+const getMail = (
+	setList: Function,
+	setQuery: Function,
+	mailbox: string,
+	user: tokenType,
+) => {
 	const token = user ? user.token : null;
 	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
 		.then((response) => {
@@ -32,7 +37,7 @@ const getMail = (setList: Function, setQuery: Function, mailbox: string, user: t
 		})
 		.then((json) => {
 			const organizedList = timeSet(json);
-			setQuery({box: mailbox});
+			setQuery({ box: mailbox });
 			setList(organizedList);
 		})
 		.catch((err) => {
@@ -45,7 +50,7 @@ const getMail = (setList: Function, setQuery: Function, mailbox: string, user: t
 // Dashboard page to access account contents and information
 export default function HomePage() {
 	const [searchParams, setSearchParams] = useSearchParams();
-	let box = searchParams.get("box");
+	let box = searchParams.get('box');
 
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState<MailListContextType>([]);
@@ -88,19 +93,19 @@ export default function HomePage() {
 									<Col>Compose</Col>
 								</Row>
 								<hr />
-								<Row xs="auto" onClick={() => setMailbox("Inbox")}>
+								<Row xs="auto" onClick={() => setMailbox('Inbox')}>
 									<Col>
 										<InboxFill />
 									</Col>
 									<Col>Inbox</Col>
 								</Row>
-								<Row xs="auto" onClick={() => setMailbox("Sent")}>
+								<Row xs="auto" onClick={() => setMailbox('Sent')}>
 									<Col>
 										<Inbox />
 									</Col>
 									<Col>Sent</Col>
 								</Row>
-								<Row xs="auto" onClick={() => setMailbox("Trash")}>
+								<Row xs="auto" onClick={() => setMailbox('Trash')}>
 									<Col>
 										<Trash />
 									</Col>
@@ -125,4 +130,4 @@ export default function HomePage() {
 			</div>
 		</div>
 	);
-};
+}

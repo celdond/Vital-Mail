@@ -1,4 +1,4 @@
-import { Button, Container, Form, Col} from 'react-bootstrap';
+import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
@@ -70,4 +70,4 @@ export default function LoginPage() {
 			</Container>
 		</main>
 	);
-};
+}

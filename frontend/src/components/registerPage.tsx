@@ -81,4 +81,4 @@ export default function RegisterPage() {
 			</Container>
 		</main>
 	);
-};
+}
