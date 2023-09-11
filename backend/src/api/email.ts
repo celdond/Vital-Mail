@@ -5,7 +5,7 @@ import {
   createMail,
   accessMail,
 } from "../db/databaseHandler";
-import { CheckRequest, mailType } from "../appTypes";
+import { CheckRequest } from "../appTypes";
 import { Response } from "express";
 
 // getMailboxes:
@@ -13,7 +13,6 @@ import { Response } from "express";
 // Response control for retrieving all user's mailboxes
 export async function getMailboxes(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  console.log(usermail);
   if (usermail) {
     const boxes = await accessBoxes(usermail);
     if (boxes) {
