@@ -14,6 +14,13 @@ $danger: #137400;
 	height: 100%;
 }
 
+.dashboard {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: space-between;
+}
+
 .backplate {
 	background-color: $primary;
 	position: fixed;
@@ -25,8 +32,6 @@ $danger: #137400;
 	background-color: $offsecondary;
 	height: 100%;
 	width: 100%;
-	max-width: 1290px;
-	margin: 8px 8px auto auto;
 }
 
 .navbar {
@@ -94,4 +99,20 @@ button[type='submit'] {
 .textcontent {
 	box-sizing: border-box;
 	height: calc(100% - 30px);
+}
+
+.nomargin {
+	margin: 0;
+	padding: 0;
+}
+
+.emblemSpacing {
+	margin-left: 12px;
+}
+
+.mailNav {
+	background-color: $secondary;
+	width: 400px;
+	height: 100%;
+	margin-left: 0;
 }
