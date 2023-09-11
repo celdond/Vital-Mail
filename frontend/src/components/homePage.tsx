@@ -69,64 +69,76 @@ export default function HomePage() {
 		navigation('/');
 	};
 
+	const mailboxNav = (
+		<Container>
+			<hr />
+			<Row xs="auto" onClick={() => setMailbox('Inbox')}>
+				<Col>
+					<InboxFill />
+				</Col>
+				<Col>Inbox</Col>
+			</Row>
+			<Row xs="auto" onClick={() => setMailbox('Sent')}>
+				<Col>
+					<Inbox />
+				</Col>
+				<Col>Sent</Col>
+			</Row>
+			<Row xs="auto" onClick={() => setMailbox('Trash')}>
+				<Col>
+					<Trash />
+				</Col>
+				<Col>Trash</Col>
+			</Row>
+			<hr />
+			<Row>
+				<div> Account</div>
+			</Row>
+			<Row onClick={logout}>
+				<div> Logout</div>
+			</Row>
+		</Container>
+	);
+
 	return (
 		<div className="backplate">
-			<Navbar className="navbar" expand={false}>
-				<Container fluid>
-					<Navbar.Toggle aria-controls="menu" />
-					<Navbar.Offcanvas
-						backdrop={false}
-						id="menu"
-						aria-labelledby="menu"
-						placement="start"
-						variant="primary"
-					>
-						<Offcanvas.Header closeButton>
-							<Offcanvas.Title id="menu">V</Offcanvas.Title>
-						</Offcanvas.Header>
-						<Offcanvas.Body>
-							<Container>
-								<Row xs="auto" onClick={() => navigation('/compose')}>
-									<Col>
-										<PencilSquare />
-									</Col>
-									<Col>Compose</Col>
-								</Row>
-								<hr />
-								<Row xs="auto" onClick={() => setMailbox('Inbox')}>
-									<Col>
-										<InboxFill />
-									</Col>
-									<Col>Inbox</Col>
-								</Row>
-								<Row xs="auto" onClick={() => setMailbox('Sent')}>
-									<Col>
-										<Inbox />
-									</Col>
-									<Col>Sent</Col>
-								</Row>
-								<Row xs="auto" onClick={() => setMailbox('Trash')}>
-									<Col>
-										<Trash />
-									</Col>
-									<Col>Trash</Col>
-								</Row>
-								<hr />
-								<Row>
-									<div> Account</div>
-								</Row>
-								<Row onClick={logout}>
-									<div> Logout</div>
-								</Row>
-							</Container>
-						</Offcanvas.Body>
-					</Navbar.Offcanvas>
+			<Navbar className="navbar" expand={'false'}>
+				<Container className="nomargin">
+					<Col xs="auto">
+						<Container className="d-lg-none" fluid>
+							<Navbar.Toggle aria-controls="menu" />
+							<Navbar.Offcanvas
+								backdrop={false}
+								id="menu"
+								aria-labelledby="menu"
+								variant="primary"
+							>
+								<Offcanvas.Header closeButton>
+									<Offcanvas.Title id="menu">V</Offcanvas.Title>
+								</Offcanvas.Header>
+								<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
+							</Navbar.Offcanvas>
+						</Container>
+					</Col>
+					<Col className="colSpacing">
+						<PencilSquare
+							className="emblemSpacing"
+							width="40"
+							height="40"
+							onClick={() => navigation('/compose')}
+						/>
+					</Col>
 				</Container>
 			</Navbar>
-			<div className="mailplate">
-				<MailListContext.Provider value={maillist}>
-					<MailboxDisplay />
-				</MailListContext.Provider>
+			<div className="dashboard">
+				<Container className="mailNav d-none d-lg-block">
+					{mailboxNav}
+				</Container>
+				<div className="mailplate">
+					<MailListContext.Provider value={maillist}>
+						<MailboxDisplay />
+					</MailListContext.Provider>
+				</div>
 			</div>
 		</div>
 	);
