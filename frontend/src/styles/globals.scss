@@ -32,6 +32,15 @@ $danger: #137400;
 	background-color: $offsecondary;
 	height: 100%;
 	width: 100%;
+	margin: 8px 0 0 auto;
+	min-width: 415px;
+}
+
+@media screen and (min-width: 992px) {
+	.mailplate {
+		width: calc(100% - 408px);
+		margin: 8px 0 8px 0;
+	}
 }
 
 .navbar {
