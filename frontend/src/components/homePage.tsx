@@ -116,9 +116,7 @@ export default function HomePage() {
 								<Offcanvas.Header closeButton>
 									<Offcanvas.Title id="menu">V</Offcanvas.Title>
 								</Offcanvas.Header>
-								<Offcanvas.Body>
-									{mailboxNav}
-								</Offcanvas.Body>
+								<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
 							</Navbar.Offcanvas>
 						</Container>
 					</Col>
