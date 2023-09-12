@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { login, register, check } from "../db/databaseHandler";
+import { login, register, check } from "../db/accountHandler";
 import { getMailboxes, getMailbox, sendMail, getID } from "./email";
 import { changeAccount } from "./account";
 

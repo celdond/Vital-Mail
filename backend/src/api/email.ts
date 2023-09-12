@@ -4,7 +4,7 @@ import {
   checkBox,
   createMail,
   accessMail,
-} from "../db/databaseHandler";
+} from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
 

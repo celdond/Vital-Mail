@@ -370,10 +370,6 @@ components:
         password:
             type: string
       additionalProperties: false
-      required:
-        - name
-        - email
-        - password
 
   securitySchemes:
     bearerAuth:
