@@ -3,8 +3,9 @@ import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
 import { CheckRequest } from "../appTypes";
+import { PoolClient } from "pg";
 
-import { pool } from './pool';
+import { pool } from "./pool";
 
 const STATIC_MAILBOX = ["Inbox", "Sent", "Trash"];
 
@@ -134,4 +135,29 @@ export async function register(req: Request, res: Response) {
   } finally {
     client.release();
   }
+}
+
+// setPassword:
+//
+// Changes the input email's password in the database
+//
+// client   - PoolClient instance
+// email    - target to update password
+// password -
+async function updatePassword(
+  client: PoolClient,
+  email: string,
+  password: string
+) {
+  const updatePassword = `UPDATE usermail SET credword=$1 WHERE email = $2`;
+  const registerBox = {
+    text: updatePassword,
+    values: [password, email],
+  };
+  try {
+    await client.query(registerBox);
+  } catch {
+    return 500;
+  }
+  return 200;
 }

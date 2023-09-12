@@ -2,8 +2,6 @@ import { newmailType, fromType, mailType } from "../appTypes";
 
 import { pool } from './pool';
 
-const STATIC_MAILBOX = ["Inbox", "Sent", "Trash"];
-
 // accessBoxes:
 //
 // Retrieve all mailboxes for a user
