@@ -10,7 +10,6 @@ import { updateAccount } from "../db/accountHandler";
 export async function changeAccount(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   if (usermail && req.body) {
-
     const result = await updateAccount(req.body, usermail);
     if (result != 200) {
       res.status(result).send();

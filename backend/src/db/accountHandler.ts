@@ -141,10 +141,11 @@ export async function register(req: Request, res: Response) {
 //
 // Changes the input email's password in the database
 //
-// client   - PoolClient instance
-// email    - target to update password
-// password -
-export async function enactAccountChanges(
+// client       - PoolClient instance
+// email        - target to update password
+// updateData   - array of changes
+// updateField  - array of fields to change
+async function enactAccountChanges(
   client: PoolClient,
   email: string,
   updateData: string[],
@@ -153,6 +154,8 @@ export async function enactAccountChanges(
   let updateQuery = `UPDATE usermail SET `;
   let counter = 2;
   const dataCount = updateData.length;
+
+  // Set Fields to Update
   for (let i = 0; i < dataCount; i++) {
     updateQuery += updateField[i] + " = $" + counter.toString();
     if (i != dataCount - 1) {
@@ -160,6 +163,8 @@ export async function enactAccountChanges(
     }
     counter += 1;
   }
+
+  // Update Query
   updateQuery += " WHERE email = $" + counter.toString() + ";";
   updateData.push(email);
   const registerBox = {
@@ -174,6 +179,12 @@ export async function enactAccountChanges(
   return 200;
 }
 
+// updateAccount:
+//
+// Transaction to update account, all or nothing
+//
+// updates  - changes wanted to be enacted
+// usermail - user asking for the updates
 export async function updateAccount(
   updates: changeAccountType,
   usermail: string
@@ -183,18 +194,30 @@ export async function updateAccount(
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+
+    // Add values and fields to arrays if they are present
     if (updates.name) {
       dataChanges.push(updates.name);
       fieldChanges.push("username");
     }
     if (updates.email) {
-      // Check is email is available
+      // Check if Email is Taken
+      const search = `SELECT username, email, credword
+        FROM usermail WHERE email = $1`;
+      const registerSearch = {
+        text: search,
+        values: [usermail],
+      };
+      const query = await client.query(registerSearch);
+      if (query.rows[0]) {
+        throw 403;
+      }
       dataChanges.push(updates.email);
       fieldChanges.push("email");
     }
     if (updates.password) {
-      // Hash Password
-      dataChanges.push(updates.password);
+      const hashedPassword = bcrypt.hashSync(updates.password, 10);
+      dataChanges.push(hashedPassword);
       fieldChanges.push("credword");
     }
 
@@ -202,6 +225,7 @@ export async function updateAccount(
       return 400;
     }
 
+    // Attempt to Apply Changes
     const result = await enactAccountChanges(
       client,
       usermail,
