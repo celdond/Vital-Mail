@@ -144,15 +144,28 @@ export async function register(req: Request, res: Response) {
 // client   - PoolClient instance
 // email    - target to update password
 // password -
-async function updatePassword(
+async function updateAccount(
   client: PoolClient,
   email: string,
-  password: string
+  updateData: string[],
+  updateField: string[],
+  updateTable: string
 ) {
-  const updatePassword = `UPDATE usermail SET credword=$1 WHERE email = $2`;
+  let updateQuery = `UPDATE ` + updateTable + ` SET `;
+  let counter = 2;
+  const dataCount = updateData.length;
+  for (let i = 0; i < dataCount; i++) {
+    updateQuery += updateField[i] + '= $' + counter.toString();
+    if (i != dataCount) {
+        updateQuery += ', ';
+    }
+    counter += 1;
+  }
+  updateQuery += ' WHERE email = $' + counter.toString();
+  updateData.push(email);
   const registerBox = {
-    text: updatePassword,
-    values: [password, email],
+    text: updateQuery,
+    values: updateData,
   };
   try {
     await client.query(registerBox);
