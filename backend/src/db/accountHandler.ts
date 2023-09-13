@@ -152,7 +152,7 @@ async function enactAccountChanges(
   updateField: string[]
 ) {
   let updateQuery = `UPDATE usermail SET `;
-  let counter = 2;
+  let counter = 1;
   const dataCount = updateData.length;
 
   // Set Fields to Update
@@ -173,7 +173,8 @@ async function enactAccountChanges(
   };
   try {
     await client.query(registerBox);
-  } catch {
+  } catch (e) {
+    console.log(e);
     return 500;
   }
   return 200;
