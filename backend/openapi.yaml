@@ -16,6 +16,8 @@ paths:
   /account:
     post:
       description: Change Account Details
+      security:
+        - bearerAuth: []
       requestBody:
         description: Changes to Enact
         required: true
@@ -26,10 +28,8 @@ paths:
       responses:
         200:
           description: Changes were Successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/changes"
+        401:
+          description: Unauthorised Attempt
         default:
           description: Unexpected Error
           content:

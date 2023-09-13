@@ -1,5 +1,6 @@
 import { Response } from "express";
-import { CheckRequest } from "../appTypes";
+import { CheckRequest, changeAccountType } from "../appTypes";
+import { updateAccount } from "../db/accountHandler";
 
 // changeAccount:
 //
@@ -8,10 +9,14 @@ import { CheckRequest } from "../appTypes";
 // otherwise no changes go through
 export async function changeAccount(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  const changes = req.body.changes;
-  if (usermail && changes) {
+  if (usermail && req.body) {
 
-    res.status(200).send(JSON.stringify({}));
+    const result = await updateAccount(req.body, usermail);
+    if (result != 200) {
+      res.status(result).send();
+      return;
+    }
+    res.status(200).send();
   } else {
     res.status(400).send("Bad Request.");
   }

@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import secrets from "../secrets/secret.json";
-import { CheckRequest } from "../appTypes";
+import { CheckRequest, changeAccountType } from "../appTypes";
 import { PoolClient } from "pg";
 
 import { pool } from "./pool";
@@ -144,24 +144,23 @@ export async function register(req: Request, res: Response) {
 // client   - PoolClient instance
 // email    - target to update password
 // password -
-async function updateAccount(
+export async function enactAccountChanges(
   client: PoolClient,
   email: string,
   updateData: string[],
-  updateField: string[],
-  updateTable: string
+  updateField: string[]
 ) {
-  let updateQuery = `UPDATE ` + updateTable + ` SET `;
+  let updateQuery = `UPDATE usermail SET `;
   let counter = 2;
   const dataCount = updateData.length;
   for (let i = 0; i < dataCount; i++) {
-    updateQuery += updateField[i] + '= $' + counter.toString();
-    if (i != dataCount) {
-        updateQuery += ', ';
+    updateQuery += updateField[i] + " = $" + counter.toString();
+    if (i != dataCount - 1) {
+      updateQuery += ", ";
     }
     counter += 1;
   }
-  updateQuery += ' WHERE email = $' + counter.toString();
+  updateQuery += " WHERE email = $" + counter.toString() + ";";
   updateData.push(email);
   const registerBox = {
     text: updateQuery,
@@ -172,5 +171,55 @@ async function updateAccount(
   } catch {
     return 500;
   }
+  return 200;
+}
+
+export async function updateAccount(
+  updates: changeAccountType,
+  usermail: string
+) {
+  const dataChanges: string[] = [];
+  const fieldChanges: string[] = [];
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    if (updates.name) {
+      dataChanges.push(updates.name);
+      fieldChanges.push("username");
+    }
+    if (updates.email) {
+      // Check is email is available
+      dataChanges.push(updates.email);
+      fieldChanges.push("email");
+    }
+    if (updates.password) {
+      // Hash Password
+      dataChanges.push(updates.password);
+      fieldChanges.push("credword");
+    }
+
+    if (dataChanges.length == 0) {
+      return 400;
+    }
+
+    const result = await enactAccountChanges(
+      client,
+      usermail,
+      dataChanges,
+      fieldChanges
+    );
+    if (result != 200) {
+      throw result;
+    }
+    await client.query("COMMIT");
+  } catch (e) {
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    }
+    return 500;
+  }
+  client.release();
   return 200;
 }
