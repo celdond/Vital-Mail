@@ -52,7 +52,7 @@ export async function login(req: Request, res: Response) {
     const token = jwt.sign(
       { email: queryLogin.rows[0].email, name: queryLogin.rows[0].username },
       secrets.secretToken,
-      { expiresIn: "60m", algorithm: "HS256" }
+      { expiresIn: "60m", algorithm: "HS256" },
     );
     const account = {
       name: queryLogin.rows[0].username,
@@ -149,7 +149,7 @@ async function enactAccountChanges(
   client: PoolClient,
   email: string,
   updateData: string[],
-  updateField: string[]
+  updateField: string[],
 ) {
   let updateQuery = `UPDATE usermail SET `;
   let counter = 1;
@@ -188,7 +188,7 @@ async function enactAccountChanges(
 // usermail - user asking for the updates
 export async function updateAccount(
   updates: changeAccountType,
-  usermail: string
+  usermail: string,
 ) {
   const dataChanges: string[] = [];
   const fieldChanges: string[] = [];
@@ -231,7 +231,7 @@ export async function updateAccount(
       client,
       usermail,
       dataChanges,
-      fieldChanges
+      fieldChanges,
     );
     if (result != 200) {
       throw result;

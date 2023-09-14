@@ -5,7 +5,13 @@ import { callServer } from './lib/apiCom';
 import { tokenType } from './lib/SharedContext';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 
-const sendMail = (changes: any, user: tokenType) => {
+// sendMail;
+//
+// Function to send desired changes to API
+//
+// changes	- desired changes in a JSON object
+// user		- user desiring changes to their account
+const sendChanges = (changes: any, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/account', 'POST', changes, token)
 		.then((response) => {
@@ -23,6 +29,9 @@ const sendMail = (changes: any, user: tokenType) => {
 		});
 };
 
+// AccountPage:
+//
+// Page for updating account information
 export default function AccountPage() {
 	const account = localStorage.getItem(`essentialMailToken`);
 	const [changes, setChanges] = useState({
@@ -81,7 +90,7 @@ export default function AccountPage() {
 							</Form.Group>
 							<Button
 								className="accountSubmit"
-								onClick={() => sendMail(changes, user)}
+								onClick={() => sendChanges(changes, user)}
 							>
 								Submit
 							</Button>

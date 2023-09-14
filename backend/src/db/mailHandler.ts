@@ -1,6 +1,6 @@
 import { newmailType, fromType, mailType } from "../appTypes";
 
-import { pool } from './pool';
+import { pool } from "./pool";
 
 // accessBoxes:
 //
