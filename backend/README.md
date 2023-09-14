@@ -7,6 +7,10 @@ Install package dependencies:
 
 ```npm install```
 
+To run the database server:
+
+```docker-compose up -d```
+
 Run the server for development:
 
 ```npm run dev```

@@ -25,7 +25,7 @@ $danger: #137400;
 	background-color: $primary;
 	position: fixed;
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 }
 
 .mailplate {
@@ -63,6 +63,7 @@ $danger: #137400;
 	background-color: $secondary;
 	border-radius: 10px;
 	padding: 12px;
+	overflow: auto;
 }
 
 .mailpage {
@@ -124,4 +125,8 @@ button[type='submit'] {
 	width: 400px;
 	height: 100%;
 	margin-left: 0;
+}
+
+.accountSubmit {
+	margin: 8px auto 8px;
 }

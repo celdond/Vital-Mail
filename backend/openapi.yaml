@@ -13,6 +13,29 @@ servers:
   - url: http://localhost:3010
 
 paths:
+  /account:
+    post:
+      description: Change Account Details
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Changes to Enact
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/changes"
+      responses:
+        200:
+          description: Changes were Successful
+        401:
+          description: Unauthorised Attempt
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
   /login:
     post:
       description: Login
@@ -336,6 +359,17 @@ components:
         - timestamp
         - subject
         - preview
+
+    changes:
+      type: object
+      properties:
+        name:
+            type: string
+        email:
+            type: string
+        password:
+            type: string
+      additionalProperties: false
 
   securitySchemes:
     bearerAuth:

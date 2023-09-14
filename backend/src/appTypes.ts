@@ -25,3 +25,9 @@ export interface mailType {
   seen: number;
   id?: string;
 }
+
+export interface changeAccountType {
+  name?: string;
+  email?: string;
+  password?: string;
+}
