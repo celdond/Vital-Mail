@@ -4,6 +4,7 @@ import HomePage from './pages/home';
 import RegisterPage from './pages/register';
 import ViewMailPage from './pages/mailview';
 import ComposePage from './pages/compose';
+import AccountPage from './pages/account';
 
 // Authentication:
 //
@@ -46,6 +47,14 @@ export default function App() {
 					element={
 						<Authentication>
 							<ComposePage />
+						</Authentication>
+					}
+				/>
+				<Route
+					path="account"
+					element={
+						<Authentication>
+							<AccountPage />
 						</Authentication>
 					}
 				/>
