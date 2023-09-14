@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Container, Col, Form } from 'react-bootstrap';
+import { Container, Col, Form, Button } from 'react-bootstrap';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 
 export default function AccountPage() {
@@ -26,7 +26,6 @@ export default function AccountPage() {
 				<Col className="full">
 					<div className="simpleBar">
 						<BoxArrowLeft onClick={() => navigation(-1)} />
-						<BoxArrowLeft />
 					</div>
 					<div className="mailview">
 						<Form className="full">
@@ -36,15 +35,17 @@ export default function AccountPage() {
 									name="name"
 									onChange={handleChange}
 									required
+                                    placeholder={user.name}
 									type="text"
 								/>
 							</Form.Group>
 							<Form.Group controlId="email">
-								<Form.Label>Email</Form.Label>
+								<Form.Label>Username</Form.Label>
 								<Form.Control
 									name="email"
 									onChange={handleChange}
 									required
+                                    placeholder={user.email}
 									type="text"
 								/>
 							</Form.Group>
@@ -54,9 +55,13 @@ export default function AccountPage() {
 									name="password"
 									onChange={handleChange}
 									required
+                                    placeholder="**********"
 									type="password"
 								/>
 							</Form.Group>
+                            <Button className="accountSubmit">
+                                Submit
+                            </Button>
 						</Form>
 					</div>
 				</Col>

@@ -91,7 +91,7 @@ export default function HomePage() {
 				<Col>Trash</Col>
 			</Row>
 			<hr />
-			<Row>
+			<Row onClick={() => navigation('/account')}>
 				<div> Account</div>
 			</Row>
 			<Row onClick={logout}>
