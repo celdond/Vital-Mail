@@ -1,7 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Container, Col, Form, Button } from 'react-bootstrap';
+import { callServer } from './lib/apiCom';
+import { tokenType } from './lib/SharedContext';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
+
+const sendMail = (changes: any, user: tokenType) => {
+	const token = user ? user.token : null;
+	callServer('/account', 'POST', changes, token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return;
+		})
+		.then(() => {
+			alert('Success!');
+		})
+		.catch((err) => {
+			alert(`(${err}), please try again`);
+		});
+};
 
 export default function AccountPage() {
 	const account = localStorage.getItem(`essentialMailToken`);
@@ -35,7 +55,7 @@ export default function AccountPage() {
 									name="name"
 									onChange={handleChange}
 									required
-                                    placeholder={user.name}
+									placeholder={user.name}
 									type="text"
 								/>
 							</Form.Group>
@@ -45,7 +65,7 @@ export default function AccountPage() {
 									name="email"
 									onChange={handleChange}
 									required
-                                    placeholder={user.email}
+									placeholder={user.email}
 									type="text"
 								/>
 							</Form.Group>
@@ -55,13 +75,16 @@ export default function AccountPage() {
 									name="password"
 									onChange={handleChange}
 									required
-                                    placeholder="**********"
+									placeholder="**********"
 									type="password"
 								/>
 							</Form.Group>
-                            <Button className="accountSubmit">
-                                Submit
-                            </Button>
+							<Button
+								className="accountSubmit"
+								onClick={() => sendMail(changes, user)}
+							>
+								Submit
+							</Button>
 						</Form>
 					</div>
 				</Col>
