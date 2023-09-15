@@ -1,7 +1,7 @@
 import app from "../app";
 import http from "http";
 import supertest from "supertest";
-import { startDatabase, end } from './testDatabase';
+import { startDatabase, end } from "./testDatabase";
 
 let request: supertest.SuperTest<supertest.Test>;
 let server: http.Server<
@@ -33,4 +33,22 @@ const wrongObject = {
 
 test("FAIL - Send Wrong Object", async () => {
   await request.post("/login").send(wrongObject).expect(400);
+});
+
+const zeroLength = {
+  email: "",
+  password: "",
+};
+
+test("FAIL - Send Object with empty strings", async () => {
+  await request.post("/login").send(zeroLength).expect(400);
+});
+
+const wrongPassword = {
+  email: "Abigail",
+  password: "baba",
+};
+
+test("FAIL - Send the wrong password", async () => {
+  await request.post("/login").send(wrongPassword).expect(401);
 });
