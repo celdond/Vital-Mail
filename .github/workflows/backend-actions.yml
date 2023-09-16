@@ -8,15 +8,6 @@ on:
 jobs:
   backend-compiles:
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: "dev"
-          POSTGRES_USER: "postgres"
-          POSTGRES_PASSWORD: "postgres"
-          POSTGRES_HOST: "localhost"
     defaults:
       run:
         working-directory: backend
@@ -27,5 +18,4 @@ jobs:
         with:
           node-version: "18.x"
       - run: npm ci
-      - run: docker-compose up -d
       - run: npm run check-format
