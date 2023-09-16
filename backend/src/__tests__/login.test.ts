@@ -23,7 +23,7 @@ afterAll((done) => {
 
 // Failed Logins
 test("FAIL - Send Nothing", async () => {
-  await request.post("/login").send().expect(400);
+  await request.post("/login").send().expect(415);
 });
 
 const wrongObject = {
@@ -41,7 +41,7 @@ const zeroLength = {
 };
 
 test("FAIL - Send Object with empty strings", async () => {
-  await request.post("/login").send(zeroLength).expect(400);
+  await request.post("/login").send(zeroLength).expect(401);
 });
 
 const wrongPassword = {

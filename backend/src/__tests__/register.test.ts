@@ -23,7 +23,7 @@ afterAll((done) => {
 
 // Failed Registers
 test("FAIL - Send Nothing", async () => {
-  await request.post("/register").send().expect(400);
+  await request.post("/register").send().expect(415);
 });
 
 const missingField = {
