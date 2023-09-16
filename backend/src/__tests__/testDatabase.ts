@@ -34,5 +34,5 @@ export async function startDatabase() {
 }
 
 export function end() {
-    pool.end();
+  pool.end();
 }

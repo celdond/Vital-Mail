@@ -16,7 +16,7 @@ app.use(
     apiSpec: "./openapi.yaml",
     validateRequests: true,
     validateResponses: true,
-  })
+  }),
 );
 
 registerAPIRoutes(app);
