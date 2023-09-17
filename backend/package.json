@@ -4,7 +4,7 @@
   "description": "\u0016An Email platform with third-party integration capabilities.",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest --runInBand --coverage",
+    "test": "jest --runInBand --coverage --detectOpenHandles",
     "dev": "nodemon -e ts --exec \"npm run build && npm start\"",
     "build": "npx tsc",
     "start": "node dist/server.js",

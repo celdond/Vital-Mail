@@ -52,3 +52,13 @@ const wrongPassword = {
 test("FAIL - Send the wrong password", async () => {
   await request.post("/login").send(wrongPassword).expect(401);
 });
+
+const correct = {
+  email: "Abigail",
+  password: "abi123",
+};
+
+// Successful Login
+test("Successful Login", async () => {
+  await request.post("/login").send(correct).expect(200);
+});

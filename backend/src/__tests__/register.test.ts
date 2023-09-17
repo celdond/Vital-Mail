@@ -34,3 +34,24 @@ const missingField = {
 test("FAIL - Missing One Field", async () => {
   await request.post("/register").send(missingField).expect(400);
 });
+
+const passwordEmpty = {
+  username: "string",
+  email: "wakka",
+  password: "",
+};
+
+test("FAIL - Empty Password", async () => {
+  await request.post("/register").send(passwordEmpty).expect(400);
+});
+
+const correct = {
+  username: "string",
+  email: "wakka",
+  password: "wakkawakka",
+};
+
+// Successful Register
+test("FAIL - Empty Password", async () => {
+  await request.post("/register").send(correct).expect(201);
+});

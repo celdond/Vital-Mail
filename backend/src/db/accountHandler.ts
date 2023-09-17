@@ -78,7 +78,7 @@ export async function register(req: Request, res: Response) {
   } else if (email.length == 0) {
     res.status(400).send("No Email Entered.");
     return;
-  } else if (email.password == 0) {
+  } else if (password.length == 0) {
     res.status(400).send("No Password Entered.");
     return;
   }
@@ -122,7 +122,7 @@ export async function register(req: Request, res: Response) {
     }
 
     await client.query("COMMIT");
-    res.status(200).send("Success");
+    res.status(201).send("Success");
   } catch (e) {
     await client.query("ROLLBACK");
     if (e == 403) {
