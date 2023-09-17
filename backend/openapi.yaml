@@ -226,9 +226,7 @@ components:
         password:
           type: string
       additionalProperties: false
-      required:
-        - email
-        - password
+      required: [email, password]
 
     user:
       type: object
