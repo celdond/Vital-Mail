@@ -201,20 +201,24 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: mailbox
-          description: Mailbox name
+          name: box
+          description: Mailbox to move email to
           required: true
           schema:
             type: string
       responses:
-        204:
-          description: No Content
+        200:
+          description: Move was a success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/mail"
         404:
-          description: Not found
+          description: Email not found
         409:
           description: Cannot move into sent mailbox
         default:
-          description: unexpected error
+          description: Unexpected error
           content:
             application/json:
               schema:
