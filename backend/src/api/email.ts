@@ -72,3 +72,7 @@ export async function sendMail(req: CheckRequest, res: Response) {
     res.status(success).send();
   }
 }
+
+export async function moveMail(req: CheckRequest, res: Response) {
+  
+}

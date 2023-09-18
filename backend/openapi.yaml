@@ -23,8 +23,8 @@ paths:
         required: true
         content:
           application/json:
-              schema:
-                $ref: "#/components/schemas/changes"
+            schema:
+              $ref: "#/components/schemas/changes"
       responses:
         200:
           description: Changes were Successful
@@ -142,14 +142,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/newmail'
+              $ref: "#/components/schemas/newmail"
       responses:
         201:
           description: Mail Sent Successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mail'
+                $ref: "#/components/schemas/mail"
         404:
           description: User does not exist
         default:
@@ -165,20 +165,20 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-      - name: id
-        description: id of the email
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+        - name: id
+          description: id of the email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: Successful Return
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mail'
+                $ref: "#/components/schemas/mail"
         404:
           description: Not Found
         default:
@@ -186,8 +186,39 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: "#/components/schemas/error"
 
+    put:
+      description: Moves email to specified box
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id of the email
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: mailbox
+          description: Mailbox name
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: No Content
+        404:
+          description: Not found
+        409:
+          description: Cannot move into sent mailbox
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
 components:
   schemas:
@@ -362,11 +393,11 @@ components:
       type: object
       properties:
         name:
-            type: string
+          type: string
         email:
-            type: string
+          type: string
         password:
-            type: string
+          type: string
       additionalProperties: false
 
   securitySchemes:
