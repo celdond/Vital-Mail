@@ -164,3 +164,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
   client.release();
   return id;
 }
+
+export async function moveBox(id: string, box: string) {
+
+}

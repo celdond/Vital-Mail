@@ -208,6 +208,8 @@ paths:
             type: string
       responses:
         200:
+          description: Email was moved to the same box
+        201:
           description: Move was a success
           content:
             application/json:

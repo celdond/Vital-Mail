@@ -4,6 +4,7 @@ import {
   checkBox,
   createMail,
   accessMail,
+  moveBox,
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
@@ -74,5 +75,10 @@ export async function sendMail(req: CheckRequest, res: Response) {
 }
 
 export async function moveMail(req: CheckRequest, res: Response) {
-  
+  if (typeof(req.query.box) == 'string') {
+    const status = await moveBox(req.params.id, req.query.box);
+    res.status(status).send();
+  } else {
+    res.status(400).send("Bad Request.");
+  }
 }
