@@ -1,5 +1,6 @@
 import { newmailType, fromType, mailType } from "../appTypes";
 
+import { PoolClient } from "pg";
 import { pool } from "./pool";
 
 // accessBoxes:
@@ -165,17 +166,27 @@ export async function createMail(from: fromType, newMail: newmailType) {
   return id;
 }
 
-async function changeBox(id: string, box: string) {
-
+async function changeBox(client: PoolClient, id: string, box: string) {
+  const update = "UPDATE mail SET mailbox = $1 WHERE id = $2 RETURNING mail";
+  const query = {
+    text: update,
+    values: [box, id],
+  };
+  try {
+    await client.query(query);
+  } catch (e) {
+    return 500;
+  }
+  return 201;
 }
 
 export async function moveBox(id: string, box: string) {
-  const select = 'SELECT id, mailbox, mail FROM mail WHERE id = $1';
+  const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
   const query = {
     text: select,
     values: [id],
   };
-  const {rows} = await pool.query(query);
+  const { rows } = await pool.query(query);
   const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
   if (!currentBox) {
     return 404;
