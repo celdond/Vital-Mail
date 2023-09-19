@@ -165,6 +165,25 @@ export async function createMail(from: fromType, newMail: newmailType) {
   return id;
 }
 
-export async function moveBox(id: string, box: string) {
+async function changeBox(id: string, box: string) {
 
+}
+
+export async function moveBox(id: string, box: string) {
+  const select = 'SELECT id, mailbox, mail FROM mail WHERE id = $1';
+  const query = {
+    text: select,
+    values: [id],
+  };
+  const {rows} = await pool.query(query);
+  const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
+  if (!currentBox) {
+    return 404;
+  } else if (currentBox != "Sent" && box === "Sent") {
+    return 409;
+  } else if (currentBox === box) {
+    return 200;
+  } else {
+    return 201;
+  }
 }
