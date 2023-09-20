@@ -181,20 +181,36 @@ async function changeBox(client: PoolClient, id: string, box: string) {
 }
 
 export async function moveBox(id: string, box: string) {
-  const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
-  const query = {
-    text: select,
-    values: [id],
-  };
-  const { rows } = await pool.query(query);
-  const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
-  if (!currentBox) {
-    return 404;
-  } else if (currentBox != "Sent" && box === "Sent") {
-    return 409;
-  } else if (currentBox === box) {
-    return 200;
-  } else {
-    return 201;
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
+    const query = {
+      text: select,
+      values: [id],
+    };
+    const { rows } = await client.query(query);
+    const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
+    if (!currentBox) {
+      throw 404;
+    } else if (currentBox != "Sent" && box === "Sent") {
+      throw 409;
+    } else if (currentBox === box) {
+      client.release();
+      return 200;
+    } else {
+      const check = await changeBox(client, id, box);
+      await client.query("COMMIT");
+      client.release();
+      return 201;
+    }
+  } catch (e) {
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    } else {
+      return 500;
+    }
   }
 }

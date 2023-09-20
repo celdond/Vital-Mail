@@ -7,7 +7,7 @@ openapi: "3.0.3"
 info:
   description: API for the Vital Mail Application
   version: 1.0.0
-  title: Essential Mail Backend
+  title: Vital Mail Backend
 
 servers:
   - url: http://localhost:3010
