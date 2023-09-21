@@ -31,3 +31,8 @@ export interface changeAccountType {
   email?: string;
   password?: string;
 }
+
+export interface returnType {
+  content?: any;
+  status: number;
+};

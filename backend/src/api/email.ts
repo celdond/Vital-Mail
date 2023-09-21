@@ -44,14 +44,11 @@ export async function getID(req: CheckRequest, res: Response) {
 export async function getMailbox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   const mailbox = req.query.mailbox as string;
-
   if (usermail && mailbox) {
-    const existBox = await checkBox(usermail, mailbox);
-    if (existBox == -1) {
-      res.status(404).send("Not Found.");
-      return;
-    }
     const mail = await accessMailbox(usermail, mailbox);
+    if (mail.length == 0) {
+      res.status(404).json("Mailbox not found.");
+    }
     res.status(200).json(mail);
   } else {
     res.status(400).send("Bad Request.");
@@ -78,8 +75,9 @@ export async function sendMail(req: CheckRequest, res: Response) {
 //
 // Response control for changing the mailbox of a message
 export async function moveMail(req: CheckRequest, res: Response) {
-  if (typeof(req.query.box) == 'string') {
-    const status = await moveBox(req.params.id, req.query.box);
+  const usermail = req.usermail;
+  if (typeof(req.query.box) == 'string' && usermail) {
+    const status = await moveBox(req.params.id, req.query.box, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");

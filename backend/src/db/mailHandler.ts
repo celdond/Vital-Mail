@@ -27,16 +27,21 @@ export async function accessBoxes(usermail: string) {
 //
 // ensures that the mailbox exists for the user
 //
+// client   - PoolClient Instance
 // usermail - user requesting the mailbox
 // mailbox  - name of the mailbox
-export async function checkBox(usermail: string, mailbox: string) {
+export async function checkBox(
+  client: PoolClient,
+  usermail: string,
+  mailbox: string
+) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
   const query = {
     text: search,
     values: [boxcode],
   };
-  const queryBox = await pool.query(query);
+  const queryBox = await client.query(query);
   if (queryBox.rows[0]) {
     return 0;
   } else {
@@ -59,7 +64,12 @@ export async function accessMail(id: string) {
   if (rows[0]) {
     rows[0].mail.id = rows[0].mid;
   }
-  return rows.length == 1 ? rows[0].mail : undefined;
+
+  const returnObject = {
+    content: rows.length == 1 ? rows[0].mail : undefined,
+    status: 200,
+  };
+  return returnObject;
 }
 
 // accessMailbox:
@@ -75,11 +85,9 @@ export async function accessMailbox(usermail: string, mailbox: string) {
     text: search,
     values: [boxcode],
   };
-
   const receivedMail = [];
   try {
     const queryMail = await pool.query(query);
-
     if (queryMail.rows[0]) {
       for (const row of queryMail.rows) {
         row.mail.id = row.mid;
@@ -187,11 +195,14 @@ async function changeBox(client: PoolClient, id: string, box: string) {
   return 201;
 }
 
-export async function moveBox(id: string, box: string) {
+export async function moveBox(id: string, box: string, usermail: string) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
-    
+    const mailboxCheck = await checkBox(client, usermail, box);
+    if (mailboxCheck != 0) {
+      throw 404;
+    }
     const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
     const query = {
       text: select,
