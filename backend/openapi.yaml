@@ -187,7 +187,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
-
     put:
       description: Moves email to specified box
       security:
