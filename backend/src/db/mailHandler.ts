@@ -166,6 +166,13 @@ export async function createMail(from: fromType, newMail: newmailType) {
   return id;
 }
 
+// changeBox:
+//
+// Function to update the mailbox a message is in
+//
+// client - PoolClient instance
+// id     - id of the message to move
+// box    - mailbox to move to
 async function changeBox(client: PoolClient, id: string, box: string) {
   const update = "UPDATE mail SET mailbox = $1 WHERE id = $2 RETURNING mail";
   const query = {
@@ -184,12 +191,13 @@ export async function moveBox(id: string, box: string) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    
     const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
     const query = {
       text: select,
       values: [id],
     };
-    const { rows } = await client.query(query);
+    let { rows } = await client.query(query);
     const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
     if (!currentBox) {
       throw 404;

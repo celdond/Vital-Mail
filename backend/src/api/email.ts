@@ -74,6 +74,9 @@ export async function sendMail(req: CheckRequest, res: Response) {
   }
 }
 
+// moveMail:
+//
+// Response control for changing the mailbox of a message
 export async function moveMail(req: CheckRequest, res: Response) {
   if (typeof(req.query.box) == 'string') {
     const status = await moveBox(req.params.id, req.query.box);
