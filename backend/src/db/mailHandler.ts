@@ -118,7 +118,6 @@ export async function accessMailbox(usermail: string, mailbox: string) {
 // newMail  - object being sent to reciever
 export async function createMail(from: fromType, newMail: newmailType) {
   const client = await pool.connect();
-  let id: string = "";
 
   try {
     await client.query("BEGIN");
@@ -171,7 +170,6 @@ export async function createMail(from: fromType, newMail: newmailType) {
     await client.query(receivingQuery);
     mailSlip["id"] = r.rows[0].mid;
     await client.query("COMMIT");
-    id = mailSlip["id"] ?? "";
   } catch (e) {
     await client.query("ROLLBACK");
     client.release();
@@ -182,7 +180,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
   }
 
   client.release();
-  return id;
+  return 201;
 }
 
 // changeBox:

@@ -146,10 +146,6 @@ paths:
       responses:
         201:
           description: Mail Sent Successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mail"
         404:
           description: User does not exist
         default:

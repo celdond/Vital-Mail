@@ -49,6 +49,7 @@ test("GET Missing Mailbox", async () => {
     .expect(404);
 });
 
+let id = "";
 test("GET Inbox Mailbox", async () => {
   await request
     .get("/mail?mailbox=Inbox")
@@ -58,5 +59,23 @@ test("GET Inbox Mailbox", async () => {
     .then((data) => {
       expect(data).toBeDefined();
       expect(data.body).toBeDefined();
+      expect(data.body[0]).toBeDefined();
+      expect(data.body[0].preview).toBeDefined();
+      expect(data.body[0].id).toBeDefined();
+      id = data.body[0].id;
+    });
+});
+
+// Get Mail Test
+test("GET ID", async () => {
+  await request
+    .get("/mail/" + id)
+    .set({ authorization: "Bearer " + token })
+    .expect(200)
+    .expect("Content-Type", /json/)
+    .then((data) => {
+      expect(data).toBeDefined();
+      expect(data.body).toBeDefined();
+      expect(data.body.content).toBeDefined();
     });
 });

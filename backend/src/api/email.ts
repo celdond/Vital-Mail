@@ -31,8 +31,8 @@ export async function getMailboxes(req: CheckRequest, res: Response) {
 // Response control for retrieving mail content
 export async function getID(req: CheckRequest, res: Response) {
   const email = await accessMail(req.params.id);
-  if (email) {
-    res.status(200).json(email);
+  if (email.status == 200) {
+    res.status(200).json(email.content);
     return;
   }
   res.status(404).send();
@@ -65,11 +65,7 @@ export async function sendMail(req: CheckRequest, res: Response) {
     name: req.name ?? "",
   };
   const success = await createMail(from, req.body);
-  if (typeof success != "number") {
-    res.status(201).json(success);
-  } else {
-    res.status(success).send();
-  }
+  res.status(success).send();
 }
 
 // moveMail:
