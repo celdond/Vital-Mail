@@ -206,6 +206,11 @@ async function changeBox(client: PoolClient, id: string, box: string) {
   return 201;
 }
 
+// moveBox:
+//
+// move an email to another box
+//
+// 
 export async function moveBox(id: string, box: string, usermail: string) {
   const client = await pool.connect();
   try {
@@ -232,7 +237,7 @@ export async function moveBox(id: string, box: string, usermail: string) {
       const check = await changeBox(client, id, box);
       await client.query("COMMIT");
       client.release();
-      return 201;
+      return 200;
     }
   } catch (e) {
     await client.query("ROLLBACK");

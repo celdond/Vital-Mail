@@ -208,12 +208,6 @@ paths:
       responses:
         200:
           description: Email was moved to the same box
-        201:
-          description: Move was a success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mail"
         404:
           description: Email not found
         409:
