@@ -208,17 +208,25 @@ async function changeBox(client: PoolClient, id: string, box: string) {
 
 // moveBox:
 //
-// move an email to another box
+// move an message to another box
 //
-// 
+// id       - id of the message
+// box      - mailbox to send message to
+// usermail - user moving the messages
 export async function moveBox(id: string, box: string, usermail: string) {
   const client = await pool.connect();
+
+  // SQL Transaction
   try {
     await client.query("BEGIN");
+
+    // Check to ensure mailbox exists
     const mailboxCheck = await checkBox(client, usermail, box);
     if (mailboxCheck != 0) {
       throw 404;
     }
+
+    // Find Mail and Current Mailbox
     const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
     const query = {
       text: select,
@@ -226,6 +234,8 @@ export async function moveBox(id: string, box: string, usermail: string) {
     };
     let { rows } = await client.query(query);
     const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
+
+    // Check the current mailbox for validity
     if (!currentBox) {
       throw 404;
     } else if (currentBox != "Sent" && box === "Sent") {
@@ -234,12 +244,14 @@ export async function moveBox(id: string, box: string, usermail: string) {
       client.release();
       return 200;
     } else {
-      const check = await changeBox(client, id, box);
+      // Change mailbox of message if valid
+      await changeBox(client, id, box);
       await client.query("COMMIT");
       client.release();
       return 200;
     }
   } catch (e) {
+    // Send Error if any issue occurs in SQL Transaction
     await client.query("ROLLBACK");
     client.release();
     if (typeof e == "number") {
