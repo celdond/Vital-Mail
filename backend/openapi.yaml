@@ -376,11 +376,9 @@ components:
             - email
         subject:
           type: string
-        received:
-          type: string
         seen:
           type: integer
-        sent:
+        timestamp:
           type: string
         preview:
           type: string

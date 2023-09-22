@@ -79,6 +79,7 @@ export async function accessMail(id: string) {
 // usermail - user requesting the mailbox
 // mailbox  - name of the mailbox
 export async function accessMailbox(usermail: string, mailbox: string) {
+  const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   const query = {
@@ -87,6 +88,11 @@ export async function accessMailbox(usermail: string, mailbox: string) {
   };
   const receivedMail = [];
   try {
+    await client.query("BEGIN");
+    const mailboxCheck = await checkBox(client, usermail, mailbox);
+    if (mailboxCheck != 0) {
+      throw 404;
+    }
     const queryMail = await pool.query(query);
     if (queryMail.rows[0]) {
       for (const row of queryMail.rows) {
@@ -96,7 +102,11 @@ export async function accessMailbox(usermail: string, mailbox: string) {
         receivedMail.push(row.mail);
       }
     }
-  } catch {}
+    await client.query("COMMIT");
+  } catch {
+    await client.query("ROLLBACK");
+  }
+  client.release();
   return receivedMail;
 }
 
@@ -111,6 +121,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
   let id: string = "";
 
   try {
+    await client.query("BEGIN");
     // Search to ensure reciever exists
     const search = `SELECT username, email
       FROM usermail WHERE email = $1`;
