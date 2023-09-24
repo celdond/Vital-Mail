@@ -319,6 +319,8 @@ components:
           type: string
         content:
           type: string
+        seen:
+          type: number
       additionalProperties: false
       required:
         - id

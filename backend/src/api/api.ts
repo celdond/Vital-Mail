@@ -11,5 +11,5 @@ export default function registerAPIRoutes(app: Express) {
   app.post("/mail", check, sendMail);
   app.get("/mail/:id", check, getID);
   app.post("/account", check, changeAccount);
-  app.put("/mail/:id", check, moveMail);
+  app.put("/mail", check, moveMail);
 }
