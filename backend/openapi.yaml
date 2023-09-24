@@ -154,6 +154,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+    put:
+      description: Moves messages to specified box
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: box
+          description: Mailbox to move messages to
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: List of Messages to Move
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/messageArray"
+      responses:
+        200:
+          description: Email was moved to the same box
+        404:
+          description: Email not found
+        409:
+          description: Cannot move into sent mailbox
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
   /mail/{id}:
     get:
@@ -179,37 +210,6 @@ paths:
           description: Not Found
         default:
           description: Unexpected Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-    put:
-      description: Moves email to specified box
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          description: Id of the email
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: query
-          name: box
-          description: Mailbox to move email to
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Email was moved to the same box
-        404:
-          description: Email not found
-        409:
-          description: Cannot move into sent mailbox
-        default:
-          description: Unexpected error
           content:
             application/json:
               schema:
@@ -273,6 +273,12 @@ components:
       type: array
       items:
         type: string
+
+    messageArray:
+      type: array
+      items:
+        type: string
+        format: uuid
 
     mailbox:
       type: array
