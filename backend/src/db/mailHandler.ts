@@ -208,10 +208,10 @@ async function changeBox(client: PoolClient, id: string, box: string) {
 //
 // move an message to another box
 //
-// id       - id of the message
+// ids      - ids of the messages to move
 // box      - mailbox to send message to
 // usermail - user moving the messages
-export async function moveBox(id: string, box: string, usermail: string) {
+export async function moveBox(ids: string[], box: string, usermail: string) {
   const client = await pool.connect();
 
   // SQL Transaction
@@ -224,30 +224,31 @@ export async function moveBox(id: string, box: string, usermail: string) {
       throw 404;
     }
 
-    // Find Mail and Current Mailbox
-    const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
-    const query = {
-      text: select,
-      values: [id],
-    };
-    let { rows } = await client.query(query);
-    const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
+    for (const id of ids) {
+      // Find Mail and Current Mailbox
+      const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
+      const query = {
+        text: select,
+        values: [id],
+      };
+      let { rows } = await client.query(query);
+      const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
 
-    // Check the current mailbox for validity
-    if (!currentBox) {
-      throw 404;
-    } else if (currentBox != "Sent" && box === "Sent") {
-      throw 409;
-    } else if (currentBox === box) {
-      client.release();
-      return 200;
-    } else {
-      // Change mailbox of message if valid
-      await changeBox(client, id, box);
-      await client.query("COMMIT");
-      client.release();
-      return 200;
+      // Check the current mailbox for validity
+      if (!currentBox) {
+        throw 404;
+      } else if (currentBox != "Sent" && box === "Sent") {
+        throw 409;
+      } else if (currentBox === box) {
+        continue;
+      } else {
+        // Change mailbox of message if valid
+        await changeBox(client, id, box);
+      }
     }
+    await client.query("COMMIT");
+    client.release();
+    return 200;
   } catch (e) {
     // Send Error if any issue occurs in SQL Transaction
     await client.query("ROLLBACK");
