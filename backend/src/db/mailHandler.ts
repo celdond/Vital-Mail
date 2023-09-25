@@ -226,7 +226,7 @@ export async function moveBox(ids: string[], box: string, usermail: string) {
 
     for (const id of ids) {
       // Find Mail and Current Mailbox
-      const select = "SELECT id, mailbox, mail FROM mail WHERE id = $1";
+      const select = "SELECT mid, mailbox, mail FROM mail WHERE mid = $1";
       const query = {
         text: select,
         values: [id],
@@ -253,6 +253,7 @@ export async function moveBox(ids: string[], box: string, usermail: string) {
     // Send Error if any issue occurs in SQL Transaction
     await client.query("ROLLBACK");
     client.release();
+    console.log(e);
     if (typeof e == "number") {
       return e;
     } else {
