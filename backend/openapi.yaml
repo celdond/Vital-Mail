@@ -7,7 +7,7 @@ openapi: "3.0.3"
 info:
   description: API for the Vital Mail Application
   version: 1.0.0
-  title: Essential Mail Backend
+  title: Vital Mail Backend
 
 servers:
   - url: http://localhost:3010
@@ -23,8 +23,8 @@ paths:
         required: true
         content:
           application/json:
-              schema:
-                $ref: "#/components/schemas/changes"
+            schema:
+              $ref: "#/components/schemas/changes"
       responses:
         200:
           description: Changes were Successful
@@ -142,18 +142,45 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/newmail'
+              $ref: "#/components/schemas/newmail"
       responses:
         201:
           description: Mail Sent Successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/mail'
         404:
           description: User does not exist
         default:
           description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    put:
+      description: Moves messages to specified box
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: box
+          description: Mailbox to move messages to
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: List of Messages to Move
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/messageArray"
+      responses:
+        200:
+          description: Email was moved to the same box
+        404:
+          description: Email not found
+        409:
+          description: Cannot move into sent mailbox
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
@@ -165,20 +192,20 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-      - name: id
-        description: id of the email
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+        - name: id
+          description: id of the email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: Successful Return
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/mail'
+                $ref: "#/components/schemas/mail"
         404:
           description: Not Found
         default:
@@ -186,8 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
-
+                $ref: "#/components/schemas/error"
 
 components:
   schemas:
@@ -248,6 +274,12 @@ components:
       items:
         type: string
 
+    messageArray:
+      type: array
+      items:
+        type: string
+        format: uuid
+
     mailbox:
       type: array
       items:
@@ -287,6 +319,8 @@ components:
           type: string
         content:
           type: string
+        seen:
+          type: number
       additionalProperties: false
       required:
         - id
@@ -340,11 +374,9 @@ components:
             - email
         subject:
           type: string
-        received:
-          type: string
         seen:
           type: integer
-        sent:
+        timestamp:
           type: string
         preview:
           type: string
@@ -362,11 +394,11 @@ components:
       type: object
       properties:
         name:
-            type: string
+          type: string
         email:
-            type: string
+          type: string
         password:
-            type: string
+          type: string
       additionalProperties: false
 
   securitySchemes:

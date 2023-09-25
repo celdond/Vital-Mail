@@ -1,7 +1,7 @@
 {
   "name": "vital-mail",
   "version": "1.0.0",
-  "description": "\u0016An Email platform with third-party integration capabilities.",
+  "description": "\u0016A messaging platform designed after email systems.",
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --runInBand --coverage --detectOpenHandles",

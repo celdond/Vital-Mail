@@ -1,5 +1,6 @@
 import { newmailType, fromType, mailType } from "../appTypes";
 
+import { PoolClient } from "pg";
 import { pool } from "./pool";
 
 // accessBoxes:
@@ -26,16 +27,21 @@ export async function accessBoxes(usermail: string) {
 //
 // ensures that the mailbox exists for the user
 //
+// client   - PoolClient Instance
 // usermail - user requesting the mailbox
 // mailbox  - name of the mailbox
-export async function checkBox(usermail: string, mailbox: string) {
+export async function checkBox(
+  client: PoolClient,
+  usermail: string,
+  mailbox: string,
+) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
   const query = {
     text: search,
     values: [boxcode],
   };
-  const queryBox = await pool.query(query);
+  const queryBox = await client.query(query);
   if (queryBox.rows[0]) {
     return 0;
   } else {
@@ -58,7 +64,12 @@ export async function accessMail(id: string) {
   if (rows[0]) {
     rows[0].mail.id = rows[0].mid;
   }
-  return rows.length == 1 ? rows[0].mail : undefined;
+
+  const returnObject = {
+    content: rows.length == 1 ? rows[0].mail : undefined,
+    status: 200,
+  };
+  return returnObject;
 }
 
 // accessMailbox:
@@ -68,17 +79,21 @@ export async function accessMail(id: string) {
 // usermail - user requesting the mailbox
 // mailbox  - name of the mailbox
 export async function accessMailbox(usermail: string, mailbox: string) {
+  const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   const query = {
     text: search,
     values: [boxcode],
   };
-
   const receivedMail = [];
   try {
+    await client.query("BEGIN");
+    const mailboxCheck = await checkBox(client, usermail, mailbox);
+    if (mailboxCheck != 0) {
+      throw 404;
+    }
     const queryMail = await pool.query(query);
-
     if (queryMail.rows[0]) {
       for (const row of queryMail.rows) {
         row.mail.id = row.mid;
@@ -87,7 +102,11 @@ export async function accessMailbox(usermail: string, mailbox: string) {
         receivedMail.push(row.mail);
       }
     }
-  } catch {}
+    await client.query("COMMIT");
+  } catch {
+    await client.query("ROLLBACK");
+  }
+  client.release();
   return receivedMail;
 }
 
@@ -99,9 +118,9 @@ export async function accessMailbox(usermail: string, mailbox: string) {
 // newMail  - object being sent to reciever
 export async function createMail(from: fromType, newMail: newmailType) {
   const client = await pool.connect();
-  let id: string = "";
 
   try {
+    await client.query("BEGIN");
     // Search to ensure reciever exists
     const search = `SELECT username, email
       FROM usermail WHERE email = $1`;
@@ -151,7 +170,6 @@ export async function createMail(from: fromType, newMail: newmailType) {
     await client.query(receivingQuery);
     mailSlip["id"] = r.rows[0].mid;
     await client.query("COMMIT");
-    id = mailSlip["id"] ?? "";
   } catch (e) {
     await client.query("ROLLBACK");
     client.release();
@@ -162,5 +180,92 @@ export async function createMail(from: fromType, newMail: newmailType) {
   }
 
   client.release();
-  return id;
+  return 201;
+}
+
+// changeBox:
+//
+// Function to update the mailbox a message is in
+//
+// client - PoolClient instance
+// id     - id of the message to move
+// box    - boxcode to move to
+async function changeBox(client: PoolClient, id: string, boxcode: string) {
+  const update = "UPDATE mail SET boxcode = $1 WHERE mid = $2 RETURNING mail";
+  const query = {
+    text: update,
+    values: [boxcode, id],
+  };
+  try {
+    await client.query(query);
+  } catch (e) {
+    console.log(e);
+    return 500;
+  }
+  return 200;
+}
+
+// moveBox:
+//
+// move an message to another box
+//
+// ids      - ids of the messages to move
+// usermail - user moving the messages
+// mailbox  - mailbox to send message to
+export async function moveBox(
+  ids: string[],
+  usermail: string,
+  mailbox: string,
+) {
+  const client = await pool.connect();
+  const boxcode = mailbox + "@" + usermail;
+  // SQL Transaction
+  try {
+    await client.query("BEGIN");
+
+    // Check to ensure mailbox exists
+    const mailboxCheck = await checkBox(client, usermail, mailbox);
+    if (mailboxCheck != 0) {
+      throw 404;
+    }
+
+    for (const id of ids) {
+      // Find Mail and Current Mailbox
+      const select =
+        "SELECT m.mid, m.boxcode, m.mail FROM mail m WHERE m.mid = $1 AND m.boxcode IN (SELECT b.boxcode FROM mailbox b WHERE b.email = $2)";
+      const query = {
+        text: select,
+        values: [id, usermail],
+      };
+      let { rows } = await client.query(query);
+      const currentBox = rows.length == 1 ? rows[0].boxcode : undefined;
+
+      // Check the current mailbox for validity
+      if (!currentBox) {
+        throw 404;
+      } else if (currentBox != "Sent@" + usermail && mailbox === "Sent") {
+        throw 409;
+      } else if (currentBox === boxcode) {
+        continue;
+      } else {
+        // Change mailbox of message if valid
+        const change = await changeBox(client, id, boxcode);
+        if (change != 200) {
+          throw change;
+        }
+      }
+    }
+    await client.query("COMMIT");
+    client.release();
+    return 200;
+  } catch (e) {
+    // Send Error if any issue occurs in SQL Transaction
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    } else {
+      return 500;
+    }
+  }
 }
