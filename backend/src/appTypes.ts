@@ -35,4 +35,4 @@ export interface changeAccountType {
 export interface returnType {
   content?: any;
   status: number;
-};
+}

@@ -73,7 +73,7 @@ export async function sendMail(req: CheckRequest, res: Response) {
 // Response control for changing the mailbox of a message
 export async function moveMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (typeof(req.query.box) == 'string' && usermail && req.body) {
+  if (typeof req.query.box == "string" && usermail && req.body) {
     const status = await moveBox(req.body, usermail, req.query.box);
     res.status(status).send();
   } else {
