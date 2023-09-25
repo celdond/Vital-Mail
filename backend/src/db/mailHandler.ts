@@ -191,7 +191,7 @@ export async function createMail(from: fromType, newMail: newmailType) {
 // id     - id of the message to move
 // box    - boxcode to move to
 async function changeBox(client: PoolClient, id: string, boxcode: string) {
-  const update = "UPDATE mail SET boxcode = $1 WHERE id = $2 RETURNING mail";
+  const update = "UPDATE mail SET boxcode = $1 WHERE mid = $2 RETURNING mail";
   const query = {
     text: update,
     values: [boxcode, id],
@@ -209,9 +209,13 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 // move an message to another box
 //
 // ids      - ids of the messages to move
-// box      - mailbox to send message to
 // usermail - user moving the messages
-export async function moveBox(ids: string[], usermail: string, mailbox: string) {
+// mailbox  - mailbox to send message to
+export async function moveBox(
+  ids: string[],
+  usermail: string,
+  mailbox: string
+) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
   // SQL Transaction
@@ -221,7 +225,6 @@ export async function moveBox(ids: string[], usermail: string, mailbox: string) 
     // Check to ensure mailbox exists
     const mailboxCheck = await checkBox(client, usermail, mailbox);
     if (mailboxCheck != 0) {
-      console.log(boxcode);
       throw 404;
     }
 
@@ -237,7 +240,6 @@ export async function moveBox(ids: string[], usermail: string, mailbox: string) 
 
       // Check the current mailbox for validity
       if (!currentBox) {
-        console.log(rows);
         throw 404;
       } else if (currentBox != "Sent@" + usermail && mailbox === "Sent") {
         throw 409;
