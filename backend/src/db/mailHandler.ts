@@ -199,6 +199,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
   try {
     await client.query(query);
   } catch (e) {
+    console.log(e);
     return 500;
   }
   return 200;
@@ -230,10 +231,11 @@ export async function moveBox(
 
     for (const id of ids) {
       // Find Mail and Current Mailbox
-      const select = "SELECT mid, boxcode, mail FROM mail WHERE mid = $1";
+      const select =
+        "SELECT m.mid, m.boxcode, m.mail FROM mail m WHERE m.mid = $1 AND m.boxcode IN (SELECT b.boxcode FROM mailbox b WHERE b.email = $2)";
       const query = {
         text: select,
-        values: [id],
+        values: [id, usermail],
       };
       let { rows } = await client.query(query);
       const currentBox = rows.length == 1 ? rows[0].boxcode : undefined;
