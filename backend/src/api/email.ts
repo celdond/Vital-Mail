@@ -74,7 +74,7 @@ export async function sendMail(req: CheckRequest, res: Response) {
 export async function moveMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   if (typeof(req.query.box) == 'string' && usermail && req.body) {
-    const status = await moveBox(req.body, req.query.box, usermail);
+    const status = await moveBox(req.body, usermail, req.query.box);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");

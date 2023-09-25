@@ -189,19 +189,19 @@ export async function createMail(from: fromType, newMail: newmailType) {
 //
 // client - PoolClient instance
 // id     - id of the message to move
-// box    - mailbox to move to
-async function changeBox(client: PoolClient, id: string, box: string) {
-  const update = "UPDATE mail SET mailbox = $1 WHERE id = $2 RETURNING mail";
+// box    - boxcode to move to
+async function changeBox(client: PoolClient, id: string, boxcode: string) {
+  const update = "UPDATE mail SET boxcode = $1 WHERE id = $2 RETURNING mail";
   const query = {
     text: update,
-    values: [box, id],
+    values: [boxcode, id],
   };
   try {
     await client.query(query);
   } catch (e) {
     return 500;
   }
-  return 201;
+  return 200;
 }
 
 // moveBox:
@@ -211,39 +211,44 @@ async function changeBox(client: PoolClient, id: string, box: string) {
 // ids      - ids of the messages to move
 // box      - mailbox to send message to
 // usermail - user moving the messages
-export async function moveBox(ids: string[], box: string, usermail: string) {
+export async function moveBox(ids: string[], usermail: string, mailbox: string) {
   const client = await pool.connect();
-
+  const boxcode = mailbox + "@" + usermail;
   // SQL Transaction
   try {
     await client.query("BEGIN");
 
     // Check to ensure mailbox exists
-    const mailboxCheck = await checkBox(client, usermail, box);
+    const mailboxCheck = await checkBox(client, usermail, mailbox);
     if (mailboxCheck != 0) {
+      console.log(boxcode);
       throw 404;
     }
 
     for (const id of ids) {
       // Find Mail and Current Mailbox
-      const select = "SELECT mid, mailbox, mail FROM mail WHERE mid = $1";
+      const select = "SELECT mid, boxcode, mail FROM mail WHERE mid = $1";
       const query = {
         text: select,
         values: [id],
       };
       let { rows } = await client.query(query);
-      const currentBox = rows.length == 1 ? rows[0].mailbox : undefined;
+      const currentBox = rows.length == 1 ? rows[0].boxcode : undefined;
 
       // Check the current mailbox for validity
       if (!currentBox) {
+        console.log(rows);
         throw 404;
-      } else if (currentBox != "Sent" && box === "Sent") {
+      } else if (currentBox != "Sent@" + usermail && mailbox === "Sent") {
         throw 409;
-      } else if (currentBox === box) {
+      } else if (currentBox === boxcode) {
         continue;
       } else {
         // Change mailbox of message if valid
-        await changeBox(client, id, box);
+        const change = await changeBox(client, id, boxcode);
+        if (change != 200) {
+          throw change;
+        }
       }
     }
     await client.query("COMMIT");
@@ -253,7 +258,6 @@ export async function moveBox(ids: string[], box: string, usermail: string) {
     // Send Error if any issue occurs in SQL Transaction
     await client.query("ROLLBACK");
     client.release();
-    console.log(e);
     if (typeof e == "number") {
       return e;
     } else {
