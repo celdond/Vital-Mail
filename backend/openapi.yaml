@@ -160,7 +160,7 @@ paths:
         - bearerAuth: []
       parameters:
         - in: query
-          name: box
+          name: mailbox
           description: Mailbox to move messages to
           required: true
           schema:

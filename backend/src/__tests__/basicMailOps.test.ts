@@ -50,6 +50,7 @@ test("GET Missing Mailbox", async () => {
 });
 
 let id = "";
+let oneID: string[] = [];
 test("GET Inbox Mailbox", async () => {
   await request
     .get("/mail?mailbox=Inbox")
@@ -63,6 +64,7 @@ test("GET Inbox Mailbox", async () => {
       expect(data.body[0].preview).toBeDefined();
       expect(data.body[0].id).toBeDefined();
       id = data.body[0].id;
+      oneID.push(id);
     });
 });
 
@@ -81,26 +83,24 @@ test("GET ID", async () => {
 });
 
 // Move Mail
-const oneID = [id];
-const wrongSend = { id: id };
 test("Send Nothing", async () => {
   await request
-    .put("/mail")
+    .put("/mail?mailbox=Trash")
     .set({ authorization: "Bearer " + token })
-    .expect(400);
+    .expect(415);
 });
 
 test("Send JSON", async () => {
   await request
-    .put("/mail")
+    .put("/mail?mailbox=Trash")
     .set({ authorization: "Bearer " + token })
-    .send(wrongSend)
+    .send({id: id})
     .expect(400);
 });
 
 test("Move one ID", async () => {
   await request
-    .put("/mail")
+    .put("/mail?mailbox=Trash")
     .set({ authorization: "Bearer " + token })
     .send(oneID)
     .expect(200);
