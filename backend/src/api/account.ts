@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { CheckRequest, changeAccountType } from "../appTypes";
+import { CheckRequest } from "../appTypes";
 import { updateAccount } from "../db/accountHandler";
 
 // changeAccount:
