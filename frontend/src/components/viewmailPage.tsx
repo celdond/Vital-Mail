@@ -26,7 +26,33 @@ const getSlip = (setMail: Function, id: string, user: tokenType) => {
 			setMail(json);
 		})
 		.catch((err) => {
-			alert(`Error retrieving email, please try again.\n${err}`);
+			alert(`Error retrieving message, please try again.\n${err}`);
+			console.log(err);
+		});
+};
+
+// moveSlip:
+//
+// API call to request the current message is moved to target mailbox
+//
+// mailbox	- target mailbox to move to
+// id		- Message id to retrieve from server
+// user		- user field for verification
+const moveSlip = (mailbox: string, id: string, user: tokenType) => {
+	const token = user ? user.token : null;
+	callServer('/mail?mailbox=' + mailbox, 'GET', [id], token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return response.json();
+		})
+		.then(() => {
+			alert("Success!");
+		})
+		.catch((err) => {
+			alert(`Error moving message, please try again.\n${err}`);
 			console.log(err);
 		});
 };
@@ -74,6 +100,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 				<Col>
 					<div className="simpleBar">
 						<BoxArrowLeft onClick={() => navigation(-1)} />
+
 					</div>
 					<div className="mailview">
 						<h1>{mail.subject}</h1>
