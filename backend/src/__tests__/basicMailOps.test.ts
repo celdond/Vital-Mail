@@ -79,3 +79,29 @@ test("GET ID", async () => {
       expect(data.body.content).toBeDefined();
     });
 });
+
+// Move Mail
+const oneID = [id];
+const wrongSend = { id: id };
+test("Send Nothing", async () => {
+  await request
+    .put("/mail")
+    .set({ authorization: "Bearer " + token })
+    .expect(400);
+});
+
+test("Send JSON", async () => {
+  await request
+    .put("/mail")
+    .set({ authorization: "Bearer " + token })
+    .send(wrongSend)
+    .expect(400);
+});
+
+test("Move one ID", async () => {
+  await request
+    .put("/mail")
+    .set({ authorization: "Bearer " + token })
+    .send(oneID)
+    .expect(200);
+});
