@@ -1,8 +1,9 @@
 import { tokenType, mailType } from './lib/SharedContext';
 import { callServer } from './lib/apiCom';
+import { moveSlip } from './lib/moveSlip';
 import { useState, useEffect } from 'react';
 import { BoxArrowLeft, Mailbox } from 'react-bootstrap-icons';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Dropdown, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 // getSlip:
@@ -103,8 +104,19 @@ export default function ViewMailPage(props: ViewMailProps) {
 			<Container className="mailpage">
 				<Col>
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation(-1)} />
-						<Mailbox onClick={() => navigation(-1)} />
+						<Button className="simpleBarButton" >
+							<BoxArrowLeft size={28} onClick={() => navigation(-1)} />
+						</Button>
+						<Dropdown>
+							<Dropdown.Toggle className="simpleBarButton" id="dropdown-basic">
+								<Mailbox size={28} />
+							</Dropdown.Toggle>
+
+							<Dropdown.Menu>{mailboxes.map((mailbox) => (
+								<Dropdown.Item id={`#/action-${mailbox}`} onClick={() => moveSlip(mailbox, [props.id], user)}>{mailbox}</Dropdown.Item>
+							))}
+							</Dropdown.Menu>
+						</Dropdown>
 					</div>
 					<div className="mailview">
 						<h1>{mail.subject}</h1>

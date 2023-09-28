@@ -63,7 +63,7 @@ $danger: #137400;
 	background-color: $secondary;
 	border-radius: 10px;
 	padding: 12px;
-	overflow: auto;
+	overflow-x: auto;
 }
 
 .mailpage {
@@ -93,7 +93,8 @@ button[type='submit'] {
 .content {
 	margin: 1em auto;
 	min-width: 350px;
-	width: 60%;
+	width: 80%;
+	overflow-wrap: break-word;
 }
 
 .full {
