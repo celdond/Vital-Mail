@@ -94,7 +94,7 @@ test("Send JSON", async () => {
   await request
     .put("/mail?mailbox=Trash")
     .set({ authorization: "Bearer " + token })
-    .send({id: id})
+    .send({ id: id })
     .expect(400);
 });
 

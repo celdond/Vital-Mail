@@ -104,7 +104,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 			<Container className="mailpage">
 				<Col>
 					<div className="simpleBar">
-						<Button className="simpleBarButton" >
+						<Button className="simpleBarButton">
 							<BoxArrowLeft size={28} onClick={() => navigation(-1)} />
 						</Button>
 						<Dropdown>
@@ -112,9 +112,15 @@ export default function ViewMailPage(props: ViewMailProps) {
 								<Mailbox size={28} />
 							</Dropdown.Toggle>
 
-							<Dropdown.Menu>{mailboxes.map((mailbox) => (
-								<Dropdown.Item id={`#/action-${mailbox}`} onClick={() => moveSlip(mailbox, [props.id], user)}>{mailbox}</Dropdown.Item>
-							))}
+							<Dropdown.Menu>
+								{mailboxes.map((mailbox) => (
+									<Dropdown.Item
+										id={`#/action-${mailbox}`}
+										onClick={() => moveSlip(mailbox, [props.id], user)}
+									>
+										{mailbox}
+									</Dropdown.Item>
+								))}
 							</Dropdown.Menu>
 						</Dropdown>
 					</div>
