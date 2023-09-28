@@ -16,7 +16,7 @@ export const moveSlip = (mailbox: string, id: string[], user: tokenType) => {
 				console.log(response);
 				throw response;
 			}
-			return response.json();
+			return;
 		})
 		.then(() => {
 			alert('Success!');
