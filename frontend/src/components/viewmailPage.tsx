@@ -39,7 +39,7 @@ const getSlip = (setMail: Function, id: string, user: tokenType) => {
 // user		- user field for verification
 const getBoxes = (setBoxes: Function, user: tokenType) => {
 	const token = user ? user.token : null;
-	callServer('/mail', 'GET', null, token)
+	callServer('/mailbox', 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -88,9 +88,14 @@ export default function ViewMailPage(props: ViewMailProps) {
 	const navigation = useNavigate();
 
 	const [mail, setMail] = useState<mailType>(emptyMail);
+	const [mailboxes, setBoxes] = useState<string[]>([]);
 
 	useEffect(() => {
 		getSlip(setMail, props.id, user);
+	}, [props.id]);
+
+	useEffect(() => {
+		getBoxes(setBoxes, user);
 	}, [props.id]);
 
 	return (
