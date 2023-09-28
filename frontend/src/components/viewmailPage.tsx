@@ -31,6 +31,31 @@ const getSlip = (setMail: Function, id: string, user: tokenType) => {
 		});
 };
 
+// getBoxes:
+//
+// API call to retrieve mail boxes
+//
+// setBoxes	- Function to change the state of the mailbox content
+// user		- user field for verification
+const getBoxes = (setBoxes: Function, user: tokenType) => {
+	const token = user ? user.token : null;
+	callServer('/mail', 'GET', null, token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return response.json();
+		})
+		.then((json) => {
+			setBoxes(json);
+		})
+		.catch((err) => {
+			alert(`Error retrieving message, please try again.\n${err}`);
+			console.log(err);
+		});
+};
+
 export interface ViewMailProps {
 	id: string;
 }
