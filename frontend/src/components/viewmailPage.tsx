@@ -1,8 +1,9 @@
 import { tokenType, mailType } from './lib/SharedContext';
 import { callServer } from './lib/apiCom';
+import { moveSlip } from './lib/moveSlip';
 import { useState, useEffect } from 'react';
-import { BoxArrowLeft } from 'react-bootstrap-icons';
-import { Container, Col, Row } from 'react-bootstrap';
+import { BoxArrowLeft, Mailbox } from 'react-bootstrap-icons';
+import { Container, Col, Row, Dropdown, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 // getSlip:
@@ -26,7 +27,32 @@ const getSlip = (setMail: Function, id: string, user: tokenType) => {
 			setMail(json);
 		})
 		.catch((err) => {
-			alert(`Error retrieving email, please try again.\n${err}`);
+			alert(`Error retrieving message, please try again.\n${err}`);
+			console.log(err);
+		});
+};
+
+// getBoxes:
+//
+// API call to retrieve mail boxes
+//
+// setBoxes	- Function to change the state of the mailbox content
+// user		- user field for verification
+const getBoxes = (setBoxes: Function, user: tokenType) => {
+	const token = user ? user.token : null;
+	callServer('/mailbox', 'GET', null, token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return response.json();
+		})
+		.then((json) => {
+			setBoxes(json);
+		})
+		.catch((err) => {
+			alert(`Error retrieving message, please try again.\n${err}`);
 			console.log(err);
 		});
 };
@@ -63,9 +89,14 @@ export default function ViewMailPage(props: ViewMailProps) {
 	const navigation = useNavigate();
 
 	const [mail, setMail] = useState<mailType>(emptyMail);
+	const [mailboxes, setBoxes] = useState<string[]>([]);
 
 	useEffect(() => {
 		getSlip(setMail, props.id, user);
+	}, [props.id]);
+
+	useEffect(() => {
+		getBoxes(setBoxes, user);
 	}, [props.id]);
 
 	return (
@@ -73,7 +104,25 @@ export default function ViewMailPage(props: ViewMailProps) {
 			<Container className="mailpage">
 				<Col>
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation(-1)} />
+						<Button className="simpleBarButton">
+							<BoxArrowLeft size={28} onClick={() => navigation(-1)} />
+						</Button>
+						<Dropdown>
+							<Dropdown.Toggle className="simpleBarButton" id="dropdown-basic">
+								<Mailbox size={28} />
+							</Dropdown.Toggle>
+
+							<Dropdown.Menu>
+								{mailboxes.map((mailbox) => (
+									<Dropdown.Item
+										id={`#/action-${mailbox}`}
+										onClick={() => moveSlip(mailbox, [props.id], user)}
+									>
+										{mailbox}
+									</Dropdown.Item>
+								))}
+							</Dropdown.Menu>
+						</Dropdown>
 					</div>
 					<div className="mailview">
 						<h1>{mail.subject}</h1>
