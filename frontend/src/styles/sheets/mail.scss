@@ -36,3 +36,10 @@ button[type='submit'] {
 	box-sizing: border-box;
 	height: calc(100% - 30px);
 }
+
+.content {
+	margin: 1em auto;
+	min-width: 350px;
+	width: 80%;
+	overflow-wrap: break-word;
+}
