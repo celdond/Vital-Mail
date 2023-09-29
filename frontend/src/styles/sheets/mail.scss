@@ -1,0 +1,38 @@
+@import 'colors';
+
+.mailpage {
+	box-sizing: border-box;
+	max-width: 960px;
+	height: 100%;
+	padding-bottom: 2em;
+}
+
+.simpleBar {
+	color: $secondary;
+	margin: 4px;
+	font-size: 1.5em;
+	padding: 8px;
+	display: flex;
+	justify-content: space-between;
+}
+
+button[type='submit'] {
+	margin: 0.5em auto;
+}
+
+.content {
+	margin: 1em auto;
+	min-width: 350px;
+	width: 80%;
+	overflow-wrap: break-word;
+}
+
+.textcontainer {
+	box-sizing: border-box;
+	height: calc(100% - 140px);
+}
+
+.textcontent {
+	box-sizing: border-box;
+	height: calc(100% - 30px);
+}
