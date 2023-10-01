@@ -80,3 +80,16 @@ export async function moveMail(req: CheckRequest, res: Response) {
     res.status(400).send("Bad Request.");
   }
 }
+
+// deleteMail:
+//
+// Response control for changing the mailbox of a message
+export async function deleteMail(req: CheckRequest, res: Response) {
+  const usermail = req.usermail;
+  if (usermail && req.body) {
+    const status = await deleteMail(req.body, usermail);
+    res.status(status).send();
+  } else {
+    res.status(400).send("Bad Request.");
+  }
+}
