@@ -67,7 +67,7 @@ export async function accessMail(id: string) {
 
   const returnObject = {
     content: rows.length == 1 ? rows[0].mail : undefined,
-    status: 200,
+    status: rows.length == 1 ? 200 : 404,
   };
   return returnObject;
 }

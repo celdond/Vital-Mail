@@ -105,3 +105,16 @@ test("Move one ID", async () => {
     .send(oneID)
     .expect(200);
 });
+
+test("Delete one ID", async () => {
+  await request
+    .delete("/mail")
+    .set({ authorization: "Bearer " + token })
+    .send(oneID)
+    .expect(200);
+  
+  await request
+    .get("/mail/" + id)
+    .set({ authorization: "Bearer " + token })
+    .expect(404);
+});

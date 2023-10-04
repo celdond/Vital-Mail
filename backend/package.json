@@ -4,7 +4,7 @@
   "description": "\u0016A messaging platform designed after email systems.",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest --runInBand --coverage --detectOpenHandles",
+    "test": "jest --runInBand --coverage --forceExit",
     "dev": "nodemon -e ts --exec \"npm run build && npm start\"",
     "build": "npx tsc",
     "start": "node dist/server.js",
