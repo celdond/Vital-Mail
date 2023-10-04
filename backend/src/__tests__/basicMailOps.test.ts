@@ -112,7 +112,7 @@ test("Delete one ID", async () => {
     .set({ authorization: "Bearer " + token })
     .send(oneID)
     .expect(200);
-  
+
   await request
     .get("/mail/" + id)
     .set({ authorization: "Bearer " + token })
