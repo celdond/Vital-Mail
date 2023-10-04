@@ -5,6 +5,7 @@ import {
   createMail,
   accessMail,
   moveBox,
+  deleteIDs
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
@@ -86,8 +87,8 @@ export async function moveMail(req: CheckRequest, res: Response) {
 // Response control for changing the mailbox of a message
 export async function deleteMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (usermail && req.body) {
-    const status = await deleteMail(req.body, usermail);
+  if (typeof usermail == "string" && req.body) {
+    const status = await deleteIDs(req.body, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");

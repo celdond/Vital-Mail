@@ -33,7 +33,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -215,7 +215,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
@@ -254,6 +254,39 @@ export async function moveBox(
           throw change;
         }
       }
+    }
+    await client.query("COMMIT");
+    client.release();
+    return 200;
+  } catch (e) {
+    // Send Error if any issue occurs in SQL Transaction
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    } else {
+      return 500;
+    }
+  }
+}
+
+// deleteIDs:
+//
+// deletes messages
+//
+// ids      - ids of the messages to delete
+// usermail - user moving the messages
+export async function deleteIDs(ids: string[], usermail: string) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    for (const id of ids) {
+      const select = "DELETE FROM mail m WHERE m.mid = $1";
+      const query = {
+        text: select,
+        values: [id],
+      };
+      await client.query(query);
     }
     await client.query("COMMIT");
     client.release();
