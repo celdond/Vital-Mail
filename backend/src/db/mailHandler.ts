@@ -105,6 +105,8 @@ export async function accessMailbox(usermail: string, mailbox: string) {
     await client.query("COMMIT");
   } catch {
     await client.query("ROLLBACK");
+    client.release();
+    return 404;
   }
   client.release();
   return receivedMail;

@@ -1,7 +1,6 @@
 import {
   accessBoxes,
   accessMailbox,
-  checkBox,
   createMail,
   accessMail,
   moveBox,
@@ -47,7 +46,7 @@ export async function getMailbox(req: CheckRequest, res: Response) {
   const mailbox = req.query.mailbox as string;
   if (usermail && mailbox) {
     const mail = await accessMailbox(usermail, mailbox);
-    if (mail.length == 0) {
+    if (typeof mail == "number") {
       res.status(404).send("Mailbox not found.");
       return;
     }
