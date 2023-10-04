@@ -200,8 +200,6 @@ paths:
       responses:
         200:
           description: Messages were successfully deleted
-        404:
-          description: Message was not found
         default:
           description: Unexpected error
           content:
