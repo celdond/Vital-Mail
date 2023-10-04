@@ -279,12 +279,13 @@ export async function moveBox(
 export async function deleteIDs(ids: string[], usermail: string) {
   const client = await pool.connect();
   try {
+    
     await client.query("BEGIN");
     for (const id of ids) {
-      const select = "DELETE FROM mail m WHERE m.mid = $1";
+      const select = "DELETE FROM mail m WHERE m.mid = $1 AND m.boxcode IN (SELECT b.boxcode FROM mailbox b WHERE b.email = $2)";
       const query = {
         text: select,
-        values: [id],
+        values: [id, usermail],
       };
       await client.query(query);
     }
