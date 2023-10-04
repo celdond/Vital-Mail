@@ -26,7 +26,7 @@ export default function RegisterPage() {
 				if (!response.ok) {
 					throw response;
 				}
-				navigation('/login');
+				navigation('/');
 				return;
 			})
 			.catch((err) => {

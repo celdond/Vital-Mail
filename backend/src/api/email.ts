@@ -1,10 +1,10 @@
 import {
   accessBoxes,
   accessMailbox,
-  checkBox,
   createMail,
   accessMail,
   moveBox,
+  deleteIDs
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
@@ -46,7 +46,7 @@ export async function getMailbox(req: CheckRequest, res: Response) {
   const mailbox = req.query.mailbox as string;
   if (usermail && mailbox) {
     const mail = await accessMailbox(usermail, mailbox);
-    if (mail.length == 0) {
+    if (typeof mail == "number") {
       res.status(404).send("Mailbox not found.");
       return;
     }
@@ -75,6 +75,19 @@ export async function moveMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   if (typeof req.query.mailbox == "string" && usermail && req.body) {
     const status = await moveBox(req.body, usermail, req.query.mailbox);
+    res.status(status).send();
+  } else {
+    res.status(400).send("Bad Request.");
+  }
+}
+
+// deleteMail:
+//
+// Response control for changing the mailbox of a message
+export async function deleteMail(req: CheckRequest, res: Response) {
+  const usermail = req.usermail;
+  if (typeof usermail == "string" && req.body) {
+    const status = await deleteIDs(req.body, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");

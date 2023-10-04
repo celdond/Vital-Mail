@@ -186,6 +186,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
 
+    delete:
+      description: Delete set of messages
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: List of Messages to Delete
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/messageArray"
+      responses:
+        200:
+          description: Messages were successfully deleted
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
   /mail/{id}:
     get:
       description: Returns the desired email from the id
