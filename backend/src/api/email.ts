@@ -4,7 +4,7 @@ import {
   createMail,
   accessMail,
   moveBox,
-  deleteIDs
+  deleteIDs,
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";

@@ -33,7 +33,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string
+  mailbox: string,
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -217,7 +217,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string
+  mailbox: string,
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
@@ -281,10 +281,10 @@ export async function moveBox(
 export async function deleteIDs(ids: string[], usermail: string) {
   const client = await pool.connect();
   try {
-    
     await client.query("BEGIN");
     for (const id of ids) {
-      const select = "DELETE FROM mail m WHERE m.mid = $1 AND m.boxcode IN (SELECT b.boxcode FROM mailbox b WHERE b.email = $2)";
+      const select =
+        "DELETE FROM mail m WHERE m.mid = $1 AND m.boxcode IN (SELECT b.boxcode FROM mailbox b WHERE b.email = $2)";
       const query = {
         text: select,
         values: [id, usermail],

@@ -10,9 +10,9 @@ The frontend requires the backend to be running in order to operate.
 
 Vital Mail is a messaging platform modeled after email systems built using Vite and Express with NodeJS.
 
-## Features
+# Features
 
-### Account Creation and Login
+## Account Creation and Login
 
 Vital Mail requires an account login to utilize its features.
 
@@ -22,18 +22,25 @@ Accounts require a unique address and a password for creation.
 
 Once logged in, clicking Log Out in the navigation menu will clear your login token.
 
-### Mailbox View
+## Mailbox View
 
 Vital Mail gives you a standard view of all of your mail in each mailbox from the home page.  By 
 clicking on another mailbox in the navigation menu, you can switch what mailbox you are viewing.
 
 The mailbox displays mail by date from most recently received to most distant.
 
-### Viewing Messages
+## Viewing Messages
 
 While viewing a mailbox, clicking on any entry in the table will open a view of the message's full contents.
 
-### Sending Messages
+## Sending Messages
 
 By clicking compose in the navigation bar, a message can be sent to another user. To send a message, a subject 
 and valid recipient must be included.  No content is required for a successful message.
+
+## Moving Messages
+
+Messages are stored in mailboxes, just like an email, and they can be moved between emails as desired. While
+viewing a message, you may click the move button at the top of the screen to select a new destination.
+
+Messages outside of the Sent mailbox cannot be insert into the Sent mailbox for any user.

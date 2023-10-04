@@ -1,6 +1,13 @@
 import { Express } from "express";
 import { login, register, check } from "../db/accountHandler";
-import { getMailboxes, getMailbox, sendMail, getID, moveMail, deleteMail } from "./email";
+import {
+  getMailboxes,
+  getMailbox,
+  sendMail,
+  getID,
+  moveMail,
+  deleteMail,
+} from "./email";
 import { changeAccount } from "./account";
 
 export default function registerAPIRoutes(app: Express) {
