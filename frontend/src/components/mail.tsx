@@ -3,7 +3,8 @@ import { MailListContextType, MailListContext } from './lib/SharedContext';
 import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Navbar from 'react-bootstrap/Navbar';
-import { FormCheck } from 'react-bootstrap';
+import { FormCheck, Dropdown } from 'react-bootstrap';
+import { Trash, Mailbox } from 'react-bootstrap-icons';
 
 // MailboxDisplay:
 //
@@ -62,9 +63,7 @@ export default function MailboxDisplay() {
 			setIDs(new Array(displayList.length).fill(''));
 		} else {
 			setCheckedState(new Array(displayList.length).fill(true));
-			const idArray = displayList.map((item) =>
-				item.id
-			);
+			const idArray = displayList.map((item) => item.id);
 			setIDs(idArray);
 		}
 	};
@@ -78,6 +77,8 @@ export default function MailboxDisplay() {
 					checked={checkAll || false}
 					onChange={() => handleCheckAll()}
 				/>
+				<Mailbox className="actionFunction" />
+				<Trash className="actionFunction" />
 			</Navbar>
 			<Table>
 				<tbody>
