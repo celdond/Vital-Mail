@@ -45,6 +45,18 @@ const getMail = (
 		});
 };
 
+const emptyMail = {
+	id: '',
+	from: {
+		name: '',
+	},
+	subject: '',
+	preview: '',
+	time: '',
+	timestamp: '',
+	dateValue: new Date,
+};
+
 // HomePage:
 //
 // Dashboard page to access account contents and information
@@ -53,7 +65,7 @@ export default function HomePage() {
 	let box = searchParams.get('box');
 
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
-	const [maillist, setList] = useState<MailListContextType>([]);
+	const [maillist, setList] = useState<MailListContextType>([emptyMail]);
 	const navigation = useNavigate();
 
 	const account = localStorage.getItem(`essentialMailToken`);

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { MailListContextType, MailListContext } from './lib/SharedContext';
 import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
@@ -12,10 +12,17 @@ export default function MailboxDisplay() {
 	const displayList = useContext(MailListContext) as MailListContextType;
 	const navigation = useNavigate();
 
-	const [checked, setCheckedState] = useState(
-		new Array(displayList.length).fill(false),
-	);
+	const [checked, setCheckedState] = useState(new Array(displayList.length).fill(false));
 	const [checkedIDs, setIDs] = useState(new Array(displayList.length).fill(''));
+
+	const resetState = () => {
+		setCheckedState(new Array(displayList.length).fill(false));
+		setIDs(new Array(displayList.length).fill(''));
+	};
+
+	useEffect(() => {
+		resetState();
+	}, [displayList]);
 
 	// Navigation to content view of each mail entry
 	const navViewMail = (id: string) => {
@@ -28,6 +35,17 @@ export default function MailboxDisplay() {
 		);
 
 		setCheckedState(newCheckState);
+
+		if (newCheckState[position] == false) {
+			const newIDState = checkedIDs;
+			newIDState[position] = '';
+			setIDs(newIDState);
+		} else {
+			const newIDState = checkedIDs;
+			newIDState[position] = id;
+			setIDs(newIDState);
+		}
+		console.log(checkedIDs);
 	};
 
 	return (
@@ -42,7 +60,7 @@ export default function MailboxDisplay() {
 									id={`${mail.id}-checkbox`}
 									value={mail.id}
 									onClick={(e) => e.stopPropagation()}
-									checked={checked[index]}
+									checked={checked[index] || false}
 									onChange={() => handleCheck(index, mail.id)}
 								/>
 							</td>
