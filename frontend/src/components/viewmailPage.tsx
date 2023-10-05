@@ -115,6 +115,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 							<Dropdown.Menu>
 								{mailboxes.map((mailbox) => (
 									<Dropdown.Item
+										key={`#/action-${mailbox}`}
 										id={`#/action-${mailbox}`}
 										onClick={() => moveSlip(mailbox, [props.id], user)}
 									>
