@@ -71,7 +71,7 @@ export default function MailboxDisplay() {
 
 	return (
 		<div>
-			<Navbar>
+			<Navbar className="mailActionBar">
 				<FormCheck
 					id={`checkbox-all`}
 					value="all"
