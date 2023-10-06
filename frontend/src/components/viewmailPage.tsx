@@ -1,61 +1,9 @@
-import { tokenType, mailType } from './lib/SharedContext';
-import { callServer } from './lib/apiCom';
-import { moveSlip } from './lib/moveSlip';
+import { mailType } from './lib/SharedContext';
+import { moveSlip, getSlip, getBoxes } from './lib/slipFunctions';
 import { useState, useEffect } from 'react';
 import { BoxArrowLeft, Mailbox } from 'react-bootstrap-icons';
 import { Container, Col, Row, Dropdown, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
-// getSlip:
-//
-// API call to retrieve mail content to display
-//
-// setMail 	- Function to change the state of the mail content
-// id		- Message id to retrieve from server
-// user		- user field for verification
-const getSlip = (setMail: Function, id: string, user: tokenType) => {
-	const token = user ? user.token : null;
-	callServer('/mail/' + id, 'GET', null, token)
-		.then((response) => {
-			if (!response.ok) {
-				console.log(response);
-				throw response;
-			}
-			return response.json();
-		})
-		.then((json) => {
-			setMail(json);
-		})
-		.catch((err) => {
-			alert(`Error retrieving message, please try again.\n${err}`);
-			console.log(err);
-		});
-};
-
-// getBoxes:
-//
-// API call to retrieve mail boxes
-//
-// setBoxes	- Function to change the state of the mailbox content
-// user		- user field for verification
-const getBoxes = (setBoxes: Function, user: tokenType) => {
-	const token = user ? user.token : null;
-	callServer('/mailbox', 'GET', null, token)
-		.then((response) => {
-			if (!response.ok) {
-				console.log(response);
-				throw response;
-			}
-			return response.json();
-		})
-		.then((json) => {
-			setBoxes(json);
-		})
-		.catch((err) => {
-			alert(`Error retrieving message, please try again.\n${err}`);
-			console.log(err);
-		});
-};
 
 export interface ViewMailProps {
 	id: string;
@@ -115,7 +63,8 @@ export default function ViewMailPage(props: ViewMailProps) {
 							<Dropdown.Menu>
 								{mailboxes.map((mailbox) => (
 									<Dropdown.Item
-										id={`#/action-${mailbox}`}
+										key={`action-${mailbox}`}
+										id={`action-${mailbox}`}
 										onClick={() => moveSlip(mailbox, [props.id], user)}
 									>
 										{mailbox}
