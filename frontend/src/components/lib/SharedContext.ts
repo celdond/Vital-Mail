@@ -34,6 +34,11 @@ export type tokenType = {
 	token: string;
 };
 
-export type MailListContextType = mailListType[];
+export type MailListContextType = {mail: mailListType[], mailbox: string[]};
 
-export const MailListContext = createContext<MailListContextType>([]);
+const defaultMailListContext = {
+	mail: [],
+	mailbox: []
+};
+
+export const MailListContext = createContext<MailListContextType>(defaultMailListContext);

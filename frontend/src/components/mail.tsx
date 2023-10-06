@@ -5,23 +5,29 @@ import Table from 'react-bootstrap/Table';
 import Navbar from 'react-bootstrap/Navbar';
 import { FormCheck, Dropdown, Button } from 'react-bootstrap';
 import { Trash, Mailbox } from 'react-bootstrap-icons';
+import { moveSlip } from './lib/slipFunctions';
 
 // MailboxDisplay:
 //
 // Table display for the current mailbox
 export default function MailboxDisplay() {
+	const account = localStorage.getItem(`essentialMailToken`);
+	const user = JSON.parse(account);
+
 	const displayList = useContext(MailListContext) as MailListContextType;
 	const navigation = useNavigate();
 
 	const [checked, setCheckedState] = useState(
-		new Array(displayList.length).fill(false),
+		new Array(displayList.mail.length).fill(false),
 	);
-	const [checkedIDs, setIDs] = useState(new Array(displayList.length).fill(''));
+	const [checkedIDs, setIDs] = useState(
+		new Array(displayList.mail.length).fill(''),
+	);
 	const [checkAll, setCheckAll] = useState(false);
 
 	const resetState = () => {
-		setCheckedState(new Array(displayList.length).fill(false));
-		setIDs(new Array(displayList.length).fill(''));
+		setCheckedState(new Array(displayList.mail.length).fill(false));
+		setIDs(new Array(displayList.mail.length).fill(''));
 		setCheckAll(false);
 	};
 
@@ -59,11 +65,11 @@ export default function MailboxDisplay() {
 		setCheckAll(stateAll);
 
 		if (stateAll == false) {
-			setCheckedState(new Array(displayList.length).fill(false));
-			setIDs(new Array(displayList.length).fill(''));
+			setCheckedState(new Array(displayList.mail.length).fill(false));
+			setIDs(new Array(displayList.mail.length).fill(''));
 		} else {
-			setCheckedState(new Array(displayList.length).fill(true));
-			const idArray = displayList.map((item) => item.id);
+			setCheckedState(new Array(displayList.mail.length).fill(true));
+			const idArray = displayList.mail.map((item) => item.id);
 			setIDs(idArray);
 		}
 	};
@@ -77,18 +83,34 @@ export default function MailboxDisplay() {
 					checked={checkAll || false}
 					onChange={() => handleCheckAll()}
 				/>
-				<Button variant="secondary" className="actionFunction" >
+				<Button variant="secondary" className="actionFunction">
 					<Trash />
 				</Button>
 				<Dropdown>
-					<Dropdown.Toggle variant="secondary" className="actionDrop" id="dropdown-basic">
+					<Dropdown.Toggle
+						variant="secondary"
+						className="actionDrop"
+						id="dropdown-basic"
+					>
 						<Mailbox />
 					</Dropdown.Toggle>
+
+					<Dropdown.Menu>
+						{displayList.mailbox.map((box) => (
+							<Dropdown.Item
+								key={`action-${box}`}
+								id={`action-${box}`}
+								onClick={() => moveSlip(box, checkedIDs, user)}
+							>
+								{box}
+							</Dropdown.Item>
+						))}
+					</Dropdown.Menu>
 				</Dropdown>
 			</Navbar>
 			<Table>
 				<tbody>
-					{displayList.map((mail, index) => (
+					{displayList.mail.map((mail, index) => (
 						<tr key={mail.id} onClick={() => navViewMail(mail.id)}>
 							<td>
 								<FormCheck

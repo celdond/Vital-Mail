@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-	MailListContext,
-	MailListContextType,
-	tokenType,
-} from './lib/SharedContext';
+import { MailListContext, tokenType } from './lib/SharedContext';
 import { timeSet } from './lib/timeConvert';
 import MailboxDisplay from './mail';
 import { callServer } from './lib/apiCom';
 import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
+import { getBoxes } from './lib/slipFunctions';
 
 // getMail:
 //
@@ -54,7 +51,7 @@ const emptyMail = {
 	preview: '',
 	time: '',
 	timestamp: '',
-	dateValue: new Date,
+	dateValue: new Date(),
 };
 
 // HomePage:
@@ -64,8 +61,9 @@ export default function HomePage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	let box = searchParams.get('box');
 
+	const [boxes, setBoxes] = useState([]);
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
-	const [maillist, setList] = useState<MailListContextType>([emptyMail]);
+	const [maillist, setList] = useState([emptyMail]);
 	const navigation = useNavigate();
 
 	const account = localStorage.getItem(`essentialMailToken`);
@@ -74,6 +72,10 @@ export default function HomePage() {
 	useEffect(() => {
 		getMail(setList, setSearchParams, mailbox, user);
 	}, [mailbox]);
+
+	useEffect(() => {
+		getBoxes(setBoxes, user);
+	}, []);
 
 	const logout = () => {
 		localStorage.removeItem(`essentialMailToken`);
@@ -147,7 +149,7 @@ export default function HomePage() {
 					{mailboxNav}
 				</Container>
 				<div className="mailplate">
-					<MailListContext.Provider value={maillist}>
+					<MailListContext.Provider value={{ mail: maillist, mailbox: boxes }}>
 						<MailboxDisplay />
 					</MailListContext.Provider>
 				</div>
