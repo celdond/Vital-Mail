@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, Dispatch } from 'react';
 import { MailListContextType, MailListContext } from './lib/SharedContext';
 import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
@@ -7,13 +7,25 @@ import { FormCheck, Dropdown, Button } from 'react-bootstrap';
 import { Trash, Mailbox } from 'react-bootstrap-icons';
 import { moveSlip } from './lib/slipFunctions';
 
+const applyChange = (
+	box: string,
+	ids: string[],
+	user: any,
+	updateFunction: Dispatch<boolean>,
+	update: boolean,
+) => {
+	moveSlip(box, ids, user);
+	updateFunction(!update);
+};
+
+interface DisplayProps {
+	updateFunction: Dispatch<boolean>;
+}
+
 // MailboxDisplay:
 //
 // Table display for the current mailbox
-export default function MailboxDisplay() {
-	const account = localStorage.getItem(`essentialMailToken`);
-	const user = JSON.parse(account);
-
+export default function MailboxDisplay(props: DisplayProps) {
 	const displayList = useContext(MailListContext) as MailListContextType;
 	const navigation = useNavigate();
 
@@ -83,7 +95,19 @@ export default function MailboxDisplay() {
 					checked={checkAll || false}
 					onChange={() => handleCheckAll()}
 				/>
-				<Button variant="secondary" className="actionFunction">
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() =>
+						applyChange(
+							'Trash',
+							checkedIDs,
+							displayList.user,
+							props.updateFunction,
+							displayList.update,
+						)
+					}
+				>
 					<Trash />
 				</Button>
 				<Dropdown>
@@ -100,7 +124,15 @@ export default function MailboxDisplay() {
 							<Dropdown.Item
 								key={`action-${box}`}
 								id={`action-${box}`}
-								onClick={() => moveSlip(box, checkedIDs, user)}
+								onClick={() =>
+									applyChange(
+										box,
+										checkedIDs,
+										displayList.user,
+										props.updateFunction,
+										displayList.update,
+									)
+								}
 							>
 								{box}
 							</Dropdown.Item>

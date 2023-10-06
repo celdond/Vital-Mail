@@ -13,7 +13,6 @@ export const moveSlip = (mailbox: string, id: string[], user: tokenType) => {
 	callServer('/mail?mailbox=' + mailbox, 'PUT', id, token)
 		.then((response) => {
 			if (!response.ok) {
-				console.log(response);
 				throw response;
 			}
 			return;
@@ -39,7 +38,6 @@ export const getSlip = (setMail: Function, id: string, user: tokenType) => {
 	callServer('/mail/' + id, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
-				console.log(response);
 				throw response;
 			}
 			return response.json();
@@ -64,7 +62,6 @@ export const getBoxes = (setBoxes: Function, user: tokenType) => {
 	callServer('/mailbox', 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
-				console.log(response);
 				throw response;
 			}
 			return response.json();

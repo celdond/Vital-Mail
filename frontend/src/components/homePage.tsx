@@ -61,6 +61,7 @@ export default function HomePage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	let box = searchParams.get('box');
 
+	const [update, updateFunction] = useState(false);
 	const [boxes, setBoxes] = useState([]);
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
@@ -71,7 +72,7 @@ export default function HomePage() {
 
 	useEffect(() => {
 		getMail(setList, setSearchParams, mailbox, user);
-	}, [mailbox]);
+	}, [mailbox, update]);
 
 	useEffect(() => {
 		getBoxes(setBoxes, user);
@@ -149,8 +150,8 @@ export default function HomePage() {
 					{mailboxNav}
 				</Container>
 				<div className="mailplate">
-					<MailListContext.Provider value={{ mail: maillist, mailbox: boxes }}>
-						<MailboxDisplay />
+					<MailListContext.Provider value={{ mail: maillist, mailbox: boxes, user: user, update: update}}>
+						<MailboxDisplay updateFunction={updateFunction} />
 					</MailListContext.Provider>
 				</div>
 			</div>
