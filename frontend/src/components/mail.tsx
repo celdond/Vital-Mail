@@ -14,7 +14,15 @@ const applyChange = (
 	updateFunction: Dispatch<boolean>,
 	update: boolean,
 ) => {
-	moveSlip(box, ids, user);
+	const sendIDs: string[] = [];
+
+	for (let index = 0; index < ids.length; index++) {
+		if (ids[index] != "") {
+			sendIDs.push(ids[index]);
+		}
+	}
+
+	moveSlip(box, sendIDs, user);
 	updateFunction(!update);
 };
 
