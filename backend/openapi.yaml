@@ -103,6 +103,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
 
+    post:
+      description: Create a Custom Mailbox
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Name of the Mailbox
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newbox"
+      responses:
+        201:
+          description: Mailbox Created
+        404:
+          description: User does not exist
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
   /mail:
     get:
       description: Return Mail from Specified Mailbox
@@ -366,6 +389,15 @@ components:
         - to
         - subject
         - content
+
+    newbox:
+      type: object
+      properties:
+        boxName:
+          type: string
+      additionalProperties: false
+      required:
+        - boxName
 
     previewmail:
       type: object
