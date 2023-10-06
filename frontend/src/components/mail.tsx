@@ -17,7 +17,7 @@ const applyChange = (
 	const sendIDs: string[] = [];
 
 	for (let index = 0; index < ids.length; index++) {
-		if (ids[index] != "") {
+		if (ids[index] != '') {
 			sendIDs.push(ids[index]);
 		}
 	}

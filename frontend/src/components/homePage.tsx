@@ -150,7 +150,14 @@ export default function HomePage() {
 					{mailboxNav}
 				</Container>
 				<div className="mailplate">
-					<MailListContext.Provider value={{ mail: maillist, mailbox: boxes, user: user, update: update}}>
+					<MailListContext.Provider
+						value={{
+							mail: maillist,
+							mailbox: boxes,
+							user: user,
+							update: update,
+						}}
+					>
 						<MailboxDisplay updateFunction={updateFunction} />
 					</MailListContext.Provider>
 				</div>
