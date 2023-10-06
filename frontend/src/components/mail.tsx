@@ -3,7 +3,7 @@ import { MailListContextType, MailListContext } from './lib/SharedContext';
 import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Navbar from 'react-bootstrap/Navbar';
-import { FormCheck, Dropdown } from 'react-bootstrap';
+import { FormCheck, Dropdown, Button } from 'react-bootstrap';
 import { Trash, Mailbox } from 'react-bootstrap-icons';
 
 // MailboxDisplay:
@@ -77,8 +77,14 @@ export default function MailboxDisplay() {
 					checked={checkAll || false}
 					onChange={() => handleCheckAll()}
 				/>
-				<Mailbox className="actionFunction" />
-				<Trash className="actionFunction" />
+				<Button variant="secondary" className="actionFunction" >
+					<Trash />
+				</Button>
+				<Dropdown>
+					<Dropdown.Toggle variant="secondary" className="actionDrop" id="dropdown-basic">
+						<Mailbox />
+					</Dropdown.Toggle>
+				</Dropdown>
 			</Navbar>
 			<Table>
 				<tbody>
