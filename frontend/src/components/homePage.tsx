@@ -79,7 +79,7 @@ export default function HomePage() {
 
 	const [update, updateFunction] = useState(false);
 	const [boxes, setBoxes] = useState([]);
-	const [customBoxes, setCustomBoxes] = useState([]);
+	const [customBoxes, setCustomBoxes] = useState<string[]>([]);
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const navigation = useNavigate();
@@ -93,6 +93,7 @@ export default function HomePage() {
 
 	useEffect(() => {
 		getBoxes(setBoxes, user);
+		parseBoxes(setCustomBoxes, boxes);
 	}, []);
 
 	const logout = () => {
@@ -122,6 +123,16 @@ export default function HomePage() {
 				</Col>
 				<Col>Trash</Col>
 			</Row>
+			<hr />
+			<Row>
+				<Col>Custom Boxes</Col>
+				<Col>+</Col>
+			</Row>
+			{customBoxes.map((box) => (
+				<Row>
+					<Col> {box}</Col>
+				</Row>
+			))}
 			<hr />
 			<Row onClick={() => navigation('/account')}>
 				<div> Account</div>
