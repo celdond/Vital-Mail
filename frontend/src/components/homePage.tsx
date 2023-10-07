@@ -42,6 +42,22 @@ const getMail = (
 		});
 };
 
+// parseBoxes:
+//
+// parses boxes to find custom boxes
+//
+// setList	- function to set the state of the custom mailboxes
+// boxes	- mailboxes to parse
+const parseBoxes = (setList: Function, boxes: string[]) => {
+	const newCustomBoxList: string[] = [];
+	for (const box in boxes) {
+		if (!(box === "Sent" || box === "Trash" || box === "Inbox")) {
+			newCustomBoxList.push(box);
+		}
+	}
+	setList(newCustomBoxList);
+};
+
 const emptyMail = {
 	id: '',
 	from: {
@@ -63,6 +79,7 @@ export default function HomePage() {
 
 	const [update, updateFunction] = useState(false);
 	const [boxes, setBoxes] = useState([]);
+	const [customBoxes, setCustomBoxes] = useState([]);
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const navigation = useNavigate();
