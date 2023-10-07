@@ -33,7 +33,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -217,7 +217,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
@@ -316,6 +316,24 @@ export async function insertBox(boxName: string, usermail: string) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    const boxcode = boxName + "@" + usermail;
+    const search = `SELECT boxcode, email
+      FROM mailbox WHERE boxcode = $1, email = $2`;
+    const searchQuery = {
+      text: search,
+      values: [boxcode, usermail],
+    };
+    const targetBoxcode = await client.query(searchQuery);
+    if (targetBoxcode.rowCount != 0) {
+      throw 403;
+    }
+    const insert =
+      "INSERT INTO mailbox(boxcode, mailbox, email) VALUES ($1, $2, $3)";
+    const insertQuery = {
+      text: insert,
+      values: [boxcode, boxName, usermail],
+    };
+    await client.query(insertQuery);
     await client.query("COMMIT");
     client.release();
     return 201;
