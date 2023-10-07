@@ -7,6 +7,7 @@ import {
   getID,
   moveMail,
   deleteMail,
+  createBox
 } from "./email";
 import { changeAccount } from "./account";
 
@@ -20,5 +21,5 @@ export default function registerAPIRoutes(app: Express) {
   app.post("/account", check, changeAccount);
   app.put("/mail", check, moveMail);
   app.delete("/mail", check, deleteMail);
-  app.post("/mailbox", check);
+  app.post("/mailbox", check, createBox);
 }

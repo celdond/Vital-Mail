@@ -305,3 +305,27 @@ export async function deleteIDs(ids: string[], usermail: string) {
     }
   }
 }
+
+// insertBox:
+//
+// create custom mailbox
+//
+// boxName  - name of the new custom mailbox
+// usermail - user creating the box
+export async function insertBox(boxName: string, usermail: string) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("COMMIT");
+    client.release();
+    return 201;
+  } catch (e) {
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    } else {
+      return 500;
+    }
+  }
+}
