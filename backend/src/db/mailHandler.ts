@@ -318,10 +318,10 @@ export async function insertBox(boxName: string, usermail: string) {
     await client.query("BEGIN");
     const boxcode = boxName + "@" + usermail;
     const search = `SELECT boxcode, email
-      FROM mailbox WHERE boxcode = $1, email = $2`;
+      FROM mailbox WHERE boxcode = $1`;
     const searchQuery = {
       text: search,
-      values: [boxcode, usermail],
+      values: [boxcode],
     };
     const targetBoxcode = await client.query(searchQuery);
     if (targetBoxcode.rowCount != 0) {
@@ -338,6 +338,7 @@ export async function insertBox(boxName: string, usermail: string) {
     client.release();
     return 201;
   } catch (e) {
+    console.log(e);
     await client.query("ROLLBACK");
     client.release();
     if (typeof e == "number") {
