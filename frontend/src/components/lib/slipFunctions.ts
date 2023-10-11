@@ -83,18 +83,21 @@ export const getBoxes = (setBoxes: Function, user: tokenType) => {
 // newBox	- name of the new mailbox
 export const postBox = (user: tokenType, newBox: string) => {
 	const token = user ? user.token : null;
-	callServer('/mailbox', 'POST', {newBox: newBox}, token)
+	const success = callServer('/mailbox', 'POST', {newBox: newBox}, token)
 		.then((response) => {
 			if (!response.ok) {
 				throw response;
 			}
-			return response.json();
+			return;
 		})
 		.then(() => {
 			alert(`Success!`);
+			return 0;
 		})
 		.catch((err) => {
 			alert(`${err}`);
 			console.log(err);
+			return -1;
 		});
+	return success;
 };

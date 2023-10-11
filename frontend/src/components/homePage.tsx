@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
-import { getBoxes } from './lib/slipFunctions';
+import { getBoxes, postBox } from './lib/slipFunctions';
 
 // getMail:
 //
@@ -91,14 +91,11 @@ export default function HomePage() {
 	const [customBoxes, setCustomBoxes] = useState<string[]>([]);
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
-	const navigation = useNavigate();
 	const [newBox, setBoxName] = useState('');
+	const navigation = useNavigate();
 
 	const [showPostBox, setPostBox] = useState(false);
-	const handleBoxClose = () => {
-		
-		setPostBox(false)
-	};
+	const handleBoxClose = () => setPostBox(false);
 	const handleBoxShow = () => setPostBox(true);
 
 	const account = localStorage.getItem(`essentialMailToken`);
@@ -122,6 +119,18 @@ export default function HomePage() {
 	const handleBoxNameChange = (event: any) => {
 		const { value } = event.target;
 		setBoxName(value);
+	};
+
+	const handleCreateBox = () => {
+		const newCustomBox = newBox;
+		postBox(user, newCustomBox).then((success) => {
+			if (success == 0) {
+				const newCustomBoxes = customBoxes;
+				newCustomBoxes.push(newCustomBox);
+				setCustomBoxes(newCustomBoxes);
+				handleBoxClose();
+			}
+		});
 	};
 
 	const mailboxNav = (
@@ -236,7 +245,7 @@ export default function HomePage() {
 					<Button variant="secondary" onClick={handleBoxClose}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={handleBoxClose}>
+					<Button variant="primary" onClick={handleCreateBox}>
 						Create
 					</Button>
 				</Modal.Footer>
