@@ -4,7 +4,16 @@ import { MailListContext, tokenType } from './lib/SharedContext';
 import { timeSet } from './lib/timeConvert';
 import MailboxDisplay from './mail';
 import { callServer } from './lib/apiCom';
-import { Container, Navbar, Offcanvas, Row, Col } from 'react-bootstrap';
+import {
+	Container,
+	Navbar,
+	Offcanvas,
+	Row,
+	Col,
+	Modal,
+	Form,
+	Button,
+} from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 import { getBoxes } from './lib/slipFunctions';
@@ -51,7 +60,7 @@ const getMail = (
 const parseBoxes = (setList: Function, boxes: string[]) => {
 	const newCustomBoxList: string[] = [];
 	for (const box in boxes) {
-		if (!(box === "Sent" || box === "Trash" || box === "Inbox")) {
+		if (!(box === 'Sent' || box === 'Trash' || box === 'Inbox')) {
 			newCustomBoxList.push(box);
 		}
 	}
@@ -83,6 +92,10 @@ export default function HomePage() {
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const navigation = useNavigate();
+
+	const [showPostBox, setPostBox] = useState(false);
+	const handleBoxClose = () => setPostBox(false);
+	const handleBoxShow = () => setPostBox(true);
 
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
@@ -124,9 +137,9 @@ export default function HomePage() {
 				<Col>Trash</Col>
 			</Row>
 			<hr />
-			<Row>
-				<Col>Custom Boxes</Col>
-				<Col>+</Col>
+			<Row xs="auto">
+				<Col> Custom Boxes</Col>
+				<Col onClick={handleBoxShow}> +</Col>
 			</Row>
 			{customBoxes.map((box) => (
 				<Row>
@@ -144,52 +157,79 @@ export default function HomePage() {
 	);
 
 	return (
-		<div className="backplate">
-			<Navbar className="navbar" expand={'false'}>
-				<Container className="nomargin">
-					<Col xs="auto">
-						<Container className="d-lg-none" fluid>
-							<Navbar.Toggle aria-controls="menu" />
-							<Navbar.Offcanvas
-								backdrop={false}
-								id="menu"
-								aria-labelledby="menu"
-								variant="primary"
-							>
-								<Offcanvas.Header closeButton>
-									<Offcanvas.Title id="menu">V</Offcanvas.Title>
-								</Offcanvas.Header>
-								<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
-							</Navbar.Offcanvas>
-						</Container>
-					</Col>
-					<Col className="colSpacing">
-						<PencilSquare
-							className="emblemSpacing"
-							width="40"
-							height="40"
-							onClick={() => navigation('/compose')}
-						/>
-					</Col>
-				</Container>
-			</Navbar>
-			<div className="dashboard">
-				<Container className="mailNav d-none d-lg-block">
-					{mailboxNav}
-				</Container>
-				<div className="mailplate">
-					<MailListContext.Provider
-						value={{
-							mail: maillist,
-							mailbox: boxes,
-							user: user,
-							update: update,
-						}}
-					>
-						<MailboxDisplay updateFunction={updateFunction} />
-					</MailListContext.Provider>
+		<>
+			<div className="backplate">
+				<Navbar className="navbar" expand={'false'}>
+					<Container className="nomargin">
+						<Col xs="auto">
+							<Container className="d-lg-none" fluid>
+								<Navbar.Toggle aria-controls="menu" />
+								<Navbar.Offcanvas
+									backdrop={false}
+									id="menu"
+									aria-labelledby="menu"
+									variant="primary"
+								>
+									<Offcanvas.Header closeButton>
+										<Offcanvas.Title id="menu">V</Offcanvas.Title>
+									</Offcanvas.Header>
+									<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
+								</Navbar.Offcanvas>
+							</Container>
+						</Col>
+						<Col className="colSpacing">
+							<PencilSquare
+								className="emblemSpacing"
+								width="40"
+								height="40"
+								onClick={() => navigation('/compose')}
+							/>
+						</Col>
+					</Container>
+				</Navbar>
+				<div className="dashboard">
+					<Container className="mailNav d-none d-lg-block">
+						{mailboxNav}
+					</Container>
+					<div className="mailplate">
+						<MailListContext.Provider
+							value={{
+								mail: maillist,
+								mailbox: boxes,
+								user: user,
+								update: update,
+							}}
+						>
+							<MailboxDisplay updateFunction={updateFunction} />
+						</MailListContext.Provider>
+					</div>
 				</div>
 			</div>
-		</div>
+
+			<Modal show={showPostBox} onHide={handleBoxClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create Mailbox</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+							<Form.Label>Mailbox Name</Form.Label>
+							<Form.Control
+								type="text"
+								placeholder="mailbox"
+							/>
+						</Form.Group>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleBoxClose}>
+						Close
+					</Button>
+					<Button variant="primary" onClick={handleBoxClose}>
+						Create
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
 	);
 }
