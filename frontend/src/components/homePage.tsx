@@ -92,9 +92,13 @@ export default function HomePage() {
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const navigation = useNavigate();
+	const [newBox, setBoxName] = useState('');
 
 	const [showPostBox, setPostBox] = useState(false);
-	const handleBoxClose = () => setPostBox(false);
+	const handleBoxClose = () => {
+		
+		setPostBox(false)
+	};
 	const handleBoxShow = () => setPostBox(true);
 
 	const account = localStorage.getItem(`essentialMailToken`);
@@ -113,6 +117,11 @@ export default function HomePage() {
 		localStorage.removeItem(`essentialMailToken`);
 		setList([]);
 		navigation('/');
+	};
+
+	const handleBoxNameChange = (event: any) => {
+		const { value } = event.target;
+		setBoxName(value);
 	};
 
 	const mailboxNav = (
@@ -217,6 +226,8 @@ export default function HomePage() {
 							<Form.Control
 								type="text"
 								placeholder="mailbox"
+								onChange={handleBoxNameChange}
+								required
 							/>
 						</Form.Group>
 					</Form>

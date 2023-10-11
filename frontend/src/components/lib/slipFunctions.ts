@@ -74,3 +74,27 @@ export const getBoxes = (setBoxes: Function, user: tokenType) => {
 			console.log(err);
 		});
 };
+
+// postBox:
+//
+// API call to create a new custom mailbox
+//
+// user		- user field for verification
+// newBox	- name of the new mailbox
+export const postBox = (user: tokenType, newBox: string) => {
+	const token = user ? user.token : null;
+	callServer('/mailbox', 'POST', {newBox: newBox}, token)
+		.then((response) => {
+			if (!response.ok) {
+				throw response;
+			}
+			return response.json();
+		})
+		.then(() => {
+			alert(`Success!`);
+		})
+		.catch((err) => {
+			alert(`${err}`);
+			console.log(err);
+		});
+};
