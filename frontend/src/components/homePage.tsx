@@ -59,7 +59,7 @@ const getMail = (
 // boxes	- mailboxes to parse
 const parseBoxes = (setList: Function, boxes: string[]) => {
 	const newCustomBoxList: string[] = [];
-	for (const box in boxes) {
+	for (const box of boxes) {
 		if (!(box === 'Sent' || box === 'Trash' || box === 'Inbox')) {
 			newCustomBoxList.push(box);
 		}
@@ -106,8 +106,9 @@ export default function HomePage() {
 	}, [mailbox, update]);
 
 	useEffect(() => {
-		getBoxes(setBoxes, user);
-		parseBoxes(setCustomBoxes, boxes);
+		getBoxes(setBoxes, user).then((json) => {
+			parseBoxes(setCustomBoxes, json);
+		});
 	}, []);
 
 	const logout = () => {
@@ -160,7 +161,7 @@ export default function HomePage() {
 				<Col onClick={handleBoxShow}> +</Col>
 			</Row>
 			{customBoxes.map((box) => (
-				<Row>
+				<Row onClick={() => setMailbox(box)}>
 					<Col> {box}</Col>
 				</Row>
 			))}

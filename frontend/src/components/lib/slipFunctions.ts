@@ -59,7 +59,7 @@ export const getSlip = (setMail: Function, id: string, user: tokenType) => {
 // user		- user field for verification
 export const getBoxes = (setBoxes: Function, user: tokenType) => {
 	const token = user ? user.token : null;
-	callServer('/mailbox', 'GET', null, token)
+	const success = callServer('/mailbox', 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				throw response;
@@ -68,11 +68,14 @@ export const getBoxes = (setBoxes: Function, user: tokenType) => {
 		})
 		.then((json) => {
 			setBoxes(json);
+			return json;
 		})
 		.catch((err) => {
 			alert(`Error retrieving message, please try again.\n${err}`);
 			console.log(err);
+			return [];
 		});
+	return success;
 };
 
 // postBox:
@@ -83,7 +86,7 @@ export const getBoxes = (setBoxes: Function, user: tokenType) => {
 // newBox	- name of the new mailbox
 export const postBox = (user: tokenType, newBox: string) => {
 	const token = user ? user.token : null;
-	const success = callServer('/mailbox', 'POST', {newBox: newBox}, token)
+	const success = callServer('/mailbox', 'POST', { boxName: newBox }, token)
 		.then((response) => {
 			if (!response.ok) {
 				throw response;

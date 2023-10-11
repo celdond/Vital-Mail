@@ -7,7 +7,7 @@ import {
   getID,
   moveMail,
   deleteMail,
-  createBox
+  createBox,
 } from "./email";
 import { changeAccount } from "./account";
 
