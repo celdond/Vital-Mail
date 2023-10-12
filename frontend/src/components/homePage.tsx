@@ -132,7 +132,12 @@ export default function HomePage() {
 		deleteBox(user, targetCustomBox).then((success) => {
 			if (success == 0) {
 				const newCustomBoxes = customBoxes.filter((e) => e !== removeBox);
+				const newBoxes = boxes.filter((e) => e !== removeBox);
 				setCustomBoxes(newCustomBoxes);
+				setBoxes(newBoxes);
+				if (mailbox === removeBox) {
+					setMailbox('Inbox');
+				}
 				handleDeleteBoxClose();
 			}
 		});
@@ -143,8 +148,11 @@ export default function HomePage() {
 		postBox(user, newCustomBox).then((success) => {
 			if (success == 0) {
 				const newCustomBoxes = customBoxes;
+				const newBoxes = boxes;
 				newCustomBoxes.push(newCustomBox);
+				newBoxes.push(newCustomBox);
 				setCustomBoxes(newCustomBoxes);
+				setBoxes(newBoxes);
 				handleBoxClose();
 			}
 		});

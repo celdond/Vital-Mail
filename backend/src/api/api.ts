@@ -8,7 +8,7 @@ import {
   moveMail,
   deleteMail,
   createBox,
-  deleteBox
+  deleteBox,
 } from "./email";
 import { changeAccount } from "./account";
 

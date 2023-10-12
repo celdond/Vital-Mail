@@ -113,7 +113,12 @@ export const postBox = (user: tokenType, newBox: string) => {
 // newBox	- name of the new mailbox
 export const deleteBox = (user: tokenType, targetBox: string) => {
 	const token = user ? user.token : null;
-	const success = callServer('/mailbox', 'DELETE', { boxName: targetBox }, token)
+	const success = callServer(
+		'/mailbox',
+		'DELETE',
+		{ boxName: targetBox },
+		token,
+	)
 		.then((response) => {
 			if (!response.ok) {
 				throw response;

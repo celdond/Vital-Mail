@@ -6,7 +6,7 @@ import {
   moveBox,
   deleteIDs,
   insertBox,
-  dbDeleteBox
+  dbDeleteBox,
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
