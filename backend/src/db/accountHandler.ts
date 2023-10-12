@@ -248,3 +248,12 @@ export async function updateAccount(
   client.release();
   return 200;
 }
+
+// deleteEmail:
+//
+// Delete Email from Database to remove account
+//
+// usermail - user asking for the updates
+export async function deleteEmail(usermail: string) {
+  return 200;
+}
