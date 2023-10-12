@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
-import { getBoxes, postBox } from './lib/slipFunctions';
+import { getBoxes, postBox, deleteBox } from './lib/slipFunctions';
 
 // getMail:
 //
@@ -92,11 +92,16 @@ export default function HomePage() {
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const [newBox, setBoxName] = useState('');
+	const [removeBox, setRemoveBox] = useState('');
 	const navigation = useNavigate();
 
 	const [showPostBox, setPostBox] = useState(false);
 	const handleBoxClose = () => setPostBox(false);
 	const handleBoxShow = () => setPostBox(true);
+
+	const [showDeleteBox, setDeleteBox] = useState(false);
+	const handleDeleteBoxClose = () => setDeleteBox(false);
+	const handleDeleteBoxShow = () => setDeleteBox(true);
 
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
@@ -122,13 +127,32 @@ export default function HomePage() {
 		setBoxName(value);
 	};
 
+	const handleDeleteBox = () => {
+		const targetCustomBox = removeBox;
+		deleteBox(user, targetCustomBox).then((success) => {
+			if (success == 0) {
+				const newCustomBoxes = customBoxes.filter((e) => e !== removeBox);
+				const newBoxes = boxes.filter((e) => e !== removeBox);
+				setCustomBoxes(newCustomBoxes);
+				setBoxes(newBoxes);
+				if (mailbox === removeBox) {
+					setMailbox('Inbox');
+				}
+				handleDeleteBoxClose();
+			}
+		});
+	};
+
 	const handleCreateBox = () => {
 		const newCustomBox = newBox;
 		postBox(user, newCustomBox).then((success) => {
 			if (success == 0) {
 				const newCustomBoxes = customBoxes;
+				const newBoxes = boxes;
 				newCustomBoxes.push(newCustomBox);
+				newBoxes.push(newCustomBox);
 				setCustomBoxes(newCustomBoxes);
+				setBoxes(newBoxes);
 				handleBoxClose();
 			}
 		});
@@ -159,6 +183,7 @@ export default function HomePage() {
 			<Row xs="auto">
 				<Col> Custom Boxes</Col>
 				<Col onClick={handleBoxShow}> +</Col>
+				<Col onClick={handleDeleteBoxShow}> -</Col>
 			</Row>
 			{customBoxes.map((box) => (
 				<Row onClick={() => setMailbox(box)}>
@@ -248,6 +273,33 @@ export default function HomePage() {
 					</Button>
 					<Button variant="primary" onClick={handleCreateBox}>
 						Create
+					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			<Modal show={showDeleteBox} onHide={handleDeleteBoxClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Mailbox</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Select
+							value={removeBox}
+							onChange={(e: any) => setRemoveBox(e.currentTarget.value)}
+						>
+							<option>Select a Mailbox</option>
+							{customBoxes.map((box) => (
+								<option value={box}>{box}</option>
+							))}
+						</Form.Select>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleDeleteBoxClose}>
+						Close
+					</Button>
+					<Button variant="primary" onClick={handleDeleteBox}>
+						Delete
 					</Button>
 				</Modal.Footer>
 			</Modal>

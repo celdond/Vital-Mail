@@ -6,6 +6,7 @@ import {
   moveBox,
   deleteIDs,
   insertBox,
+  dbDeleteBox,
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
@@ -102,6 +103,19 @@ export async function createBox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   if (typeof usermail == "string" && req.body.boxName) {
     const status = await insertBox(req.body.boxName, usermail);
+    res.status(status).send();
+  } else {
+    res.status(400).send("Bad Request.");
+  }
+}
+
+// deleteBox:
+//
+// Response control for deleting a custom mailbox
+export async function deleteBox(req: CheckRequest, res: Response) {
+  const usermail = req.usermail;
+  if (typeof usermail == "string" && req.body.boxName) {
+    const status = await dbDeleteBox(req.body.boxName, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");
