@@ -104,3 +104,30 @@ export const postBox = (user: tokenType, newBox: string) => {
 		});
 	return success;
 };
+
+// postBox:
+//
+// API call to create a new custom mailbox
+//
+// user		- user field for verification
+// newBox	- name of the new mailbox
+export const deleteBox = (user: tokenType, targetBox: string) => {
+	const token = user ? user.token : null;
+	const success = callServer('/mailbox', 'DELETE', { boxName: targetBox }, token)
+		.then((response) => {
+			if (!response.ok) {
+				throw response;
+			}
+			return;
+		})
+		.then(() => {
+			alert(`Success!`);
+			return 0;
+		})
+		.catch((err) => {
+			alert(`${err}`);
+			console.log(err);
+			return -1;
+		});
+	return success;
+};

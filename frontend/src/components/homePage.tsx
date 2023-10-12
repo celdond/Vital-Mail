@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap';
 import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
-import { getBoxes, postBox } from './lib/slipFunctions';
+import { getBoxes, postBox, deleteBox } from './lib/slipFunctions';
 
 // getMail:
 //
@@ -92,6 +92,7 @@ export default function HomePage() {
 	const [mailbox, setMailbox] = useState(box ?? 'Inbox');
 	const [maillist, setList] = useState([emptyMail]);
 	const [newBox, setBoxName] = useState('');
+	const [removeBox, setRemoveBox] = useState('');
 	const navigation = useNavigate();
 
 	const [showPostBox, setPostBox] = useState(false);
@@ -124,6 +125,17 @@ export default function HomePage() {
 	const handleBoxNameChange = (event: any) => {
 		const { value } = event.target;
 		setBoxName(value);
+	};
+
+	const handleDeleteBox = () => {
+		const targetCustomBox = removeBox;
+		deleteBox(user, targetCustomBox).then((success) => {
+			if (success == 0) {
+				const newCustomBoxes = customBoxes.filter((e) => e !== removeBox);
+				setCustomBoxes(newCustomBoxes);
+				handleDeleteBoxClose();
+			}
+		});
 	};
 
 	const handleCreateBox = () => {
@@ -262,13 +274,25 @@ export default function HomePage() {
 					<Modal.Title>Delete Mailbox</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Form></Form>
+					<Form>
+						<Form.Select
+							value={removeBox}
+							onChange={(e: any) => setRemoveBox(e.currentTarget.value)}
+						>
+							<option>Select a Mailbox</option>
+							{customBoxes.map((box) => (
+								<option value={box}>{box}</option>
+							))}
+						</Form.Select>
+					</Form>
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleDeleteBoxClose}>
 						Close
 					</Button>
-					<Button variant="primary">Delete</Button>
+					<Button variant="primary" onClick={handleDeleteBox}>
+						Delete
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</>
