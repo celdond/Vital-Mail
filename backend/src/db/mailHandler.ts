@@ -370,6 +370,7 @@ export async function dbDeleteBox(boxName: string, usermail: string) {
     if (targetBoxcode.rowCount == 0) {
       throw 404;
     }
+    const deletionQuery = `DELETE CASCADE`;
     await client.query("COMMIT");
     client.release();
     return 200;

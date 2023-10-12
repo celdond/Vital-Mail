@@ -131,7 +131,7 @@ paths:
       security:
         - bearerAuth: []
       requestBody:
-        description: Name of the Mailbox
+        description: Mailbox Deletion Details
         required: true
         content:
           application/json:
@@ -178,6 +178,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+
     post:
       description: Send New Mail
       security:
@@ -200,6 +201,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+
     put:
       description: Moves messages to specified box
       security:
