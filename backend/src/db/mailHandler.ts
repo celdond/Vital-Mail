@@ -370,7 +370,12 @@ export async function dbDeleteBox(boxName: string, usermail: string) {
     if (targetBoxcode.rowCount == 0) {
       throw 404;
     }
-    const deletionQuery = `DELETE CASCADE`;
+    const deletion = `DELETE FROM mailbox m WHERE m.mailbox = $1`;
+    const deletionQuery = {
+      text: deletion,
+      values: [boxcode],
+    };
+    await client.query(deletionQuery);
     await client.query("COMMIT");
     client.release();
     return 200;
