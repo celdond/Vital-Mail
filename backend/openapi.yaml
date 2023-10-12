@@ -117,8 +117,31 @@ paths:
       responses:
         201:
           description: Mailbox Created
+        403:
+          description: Name Taken
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+    delete:
+      description: Delete a Custom Mailbox
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Name of the Mailbox
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newbox"
+      responses:
+        200:
+          description: Successfully Deleted
         404:
-          description: User does not exist
+          description: Mailbox does not exist
         default:
           description: Unexpected Error
           content:

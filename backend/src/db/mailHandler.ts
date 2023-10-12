@@ -348,3 +348,39 @@ export async function insertBox(boxName: string, usermail: string) {
     }
   }
 }
+
+// dbDeleteBox:
+//
+// delete custom mailbox
+//
+// boxName  - name of the new custom mailbox
+// usermail - user creating the box
+export async function dbDeleteBox(boxName: string, usermail: string) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const boxcode = boxName + "@" + usermail;
+    const search = `SELECT boxcode, email
+      FROM mailbox WHERE boxcode = $1`;
+    const searchQuery = {
+      text: search,
+      values: [boxcode],
+    };
+    const targetBoxcode = await client.query(searchQuery);
+    if (targetBoxcode.rowCount == 0) {
+      throw 404;
+    }
+    await client.query("COMMIT");
+    client.release();
+    return 200;
+  } catch (e) {
+    console.log(e);
+    await client.query("ROLLBACK");
+    client.release();
+    if (typeof e == "number") {
+      return e;
+    } else {
+      return 500;
+    }
+  }
+}
