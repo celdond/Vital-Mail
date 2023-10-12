@@ -3,6 +3,8 @@ import { newmailType, fromType, mailType } from "../appTypes";
 import { PoolClient } from "pg";
 import { pool } from "./pool";
 
+const staticBoxes = ["Inbox", "Trash", "Sent"];
+
 // accessBoxes:
 //
 // Retrieve all mailboxes for a user
@@ -33,7 +35,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -217,7 +219,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
@@ -356,9 +358,17 @@ export async function insertBox(boxName: string, usermail: string) {
 // boxName  - name of the new custom mailbox
 // usermail - user creating the box
 export async function dbDeleteBox(boxName: string, usermail: string) {
+  for (const b of staticBoxes) {
+    if (boxName == b) {
+      return 403;
+    }
+  }
+
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+
+    // Search to ensure box exists
     const boxcode = boxName + "@" + usermail;
     const search = `SELECT boxcode, email
       FROM mailbox WHERE boxcode = $1`;
@@ -370,7 +380,9 @@ export async function dbDeleteBox(boxName: string, usermail: string) {
     if (targetBoxcode.rowCount == 0) {
       throw 404;
     }
-    const deletion = `DELETE FROM mailbox m WHERE m.mailbox = $1`;
+
+    // Query to Delete Box
+    const deletion = `DELETE FROM mailbox m WHERE m.boxcode = $1`;
     const deletionQuery = {
       text: deletion,
       values: [boxcode],
