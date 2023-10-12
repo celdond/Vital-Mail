@@ -98,6 +98,10 @@ export default function HomePage() {
 	const handleBoxClose = () => setPostBox(false);
 	const handleBoxShow = () => setPostBox(true);
 
+	const [showDeleteBox, setDeleteBox] = useState(false);
+	const handleDeleteBoxClose = () => setDeleteBox(false);
+	const handleDeleteBoxShow = () => setDeleteBox(true);
+
 	const account = localStorage.getItem(`essentialMailToken`);
 	const user = JSON.parse(account);
 
@@ -159,6 +163,7 @@ export default function HomePage() {
 			<Row xs="auto">
 				<Col> Custom Boxes</Col>
 				<Col onClick={handleBoxShow}> +</Col>
+				<Col onClick={handleDeleteBoxShow}> -</Col>
 			</Row>
 			{customBoxes.map((box) => (
 				<Row onClick={() => setMailbox(box)}>
@@ -249,6 +254,21 @@ export default function HomePage() {
 					<Button variant="primary" onClick={handleCreateBox}>
 						Create
 					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			<Modal show={showDeleteBox} onHide={handleDeleteBoxClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Mailbox</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form></Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleDeleteBoxClose}>
+						Close
+					</Button>
+					<Button variant="primary">Delete</Button>
 				</Modal.Footer>
 			</Modal>
 		</>
