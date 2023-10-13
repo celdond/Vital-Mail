@@ -58,7 +58,7 @@ test("Successful Register", async () => {
 
 const newAccount = {
   email: "wakka",
-  password: "wakkawakka"
+  password: "wakkawakka",
 };
 
 let token = "";

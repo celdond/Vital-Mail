@@ -122,10 +122,7 @@ export default function AccountPage() {
 								Submit
 							</Button>
 							<hr />
-							<Button
-								className="accountSubmit"
-								onClick={handleOpen}
-							>
+							<Button className="accountSubmit" onClick={handleOpen}>
 								Delete Account
 							</Button>
 						</Form>
@@ -145,7 +142,10 @@ export default function AccountPage() {
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					<Button variant="primary" onClick={() => deleteAccount(user, navigation)}>
+					<Button
+						variant="primary"
+						onClick={() => deleteAccount(user, navigation)}
+					>
 						Delete
 					</Button>
 				</Modal.Footer>
