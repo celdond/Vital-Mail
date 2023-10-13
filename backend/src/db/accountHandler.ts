@@ -255,7 +255,7 @@ export async function updateAccount(
 //
 // usermail - user asking for the updates
 export async function deleteEmail(usermail: string) {
-  const deleteStatement = `DELETE FROM usermail u WHERE m.email = $1`;
+  const deleteStatement = `DELETE FROM usermail u WHERE u.email = $1`;
   const deleteQuery = {
     text: deleteStatement,
     values: [usermail],
