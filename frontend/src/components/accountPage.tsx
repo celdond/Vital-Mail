@@ -5,7 +5,7 @@ import { callServer } from './lib/apiCom';
 import { tokenType } from './lib/SharedContext';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 
-// sendMail;
+// sendMail:
 //
 // Function to send desired changes to API
 //
@@ -14,6 +14,29 @@ import { BoxArrowLeft } from 'react-bootstrap-icons';
 const sendChanges = (changes: any, user: tokenType) => {
 	const token = user ? user.token : null;
 	callServer('/account', 'POST', changes, token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return;
+		})
+		.then(() => {
+			alert('Success!');
+		})
+		.catch((err) => {
+			alert(`(${err}), please try again`);
+		});
+};
+
+// deleteAccount:
+//
+// Function to send request to delete account
+//
+// user		- user desiring deletion of their account
+const deleteAccount = (user: tokenType) => {
+	const token = user ? user.token : null;
+	callServer('/account', 'DELETE', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -93,6 +116,13 @@ export default function AccountPage() {
 								onClick={() => sendChanges(changes, user)}
 							>
 								Submit
+							</Button>
+							<hr />
+							<Button
+								className="accountSubmit"
+								onClick={() => deleteAccount(user)}
+							>
+								Delete Account
 							</Button>
 						</Form>
 					</div>
