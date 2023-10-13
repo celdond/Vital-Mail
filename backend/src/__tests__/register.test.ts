@@ -52,6 +52,39 @@ const correct = {
 };
 
 // Successful Register
-test("FAIL - Empty Password", async () => {
+test("Successful Register", async () => {
   await request.post("/register").send(correct).expect(201);
+});
+
+const newAccount = {
+  email: "wakka",
+  password: "wakkawakka",
+};
+
+let token = "";
+// Login Set-Up
+test("Login to New Account", async () => {
+  await request
+    .post("/login")
+    .send(newAccount)
+    .expect(200)
+    .then((data) => {
+      expect(data).toBeDefined();
+      expect(data.body).toBeDefined();
+      expect(data.body.token).toBeDefined();
+      token = data.body.token;
+    });
+});
+
+// Successful Deletion
+test("Successful Account Deletion", async () => {
+  await request
+    .delete("/account")
+    .set({ authorization: "Bearer " + token })
+    .expect(200);
+});
+
+// Check to Make Sure Account is Gone
+test("Login Attempt to Deleted Account", async () => {
+  await request.post("/login").send(newAccount).expect(401);
 });

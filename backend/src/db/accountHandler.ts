@@ -248,3 +248,18 @@ export async function updateAccount(
   client.release();
   return 200;
 }
+
+// deleteEmail:
+//
+// Delete Email from Database to remove account
+//
+// usermail - user asking for the updates
+export async function deleteEmail(usermail: string) {
+  const deleteStatement = `DELETE FROM usermail u WHERE u.email = $1`;
+  const deleteQuery = {
+    text: deleteStatement,
+    values: [usermail],
+  };
+  await pool.query(deleteQuery);
+  return 200;
+}

@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavigateFunction } from 'react-router-dom';
 import { useState } from 'react';
-import { Container, Col, Form, Button } from 'react-bootstrap';
+import { Container, Col, Form, Button, Modal } from 'react-bootstrap';
 import { callServer } from './lib/apiCom';
 import { tokenType } from './lib/SharedContext';
 import { BoxArrowLeft } from 'react-bootstrap-icons';
 
-// sendMail;
+// sendMail:
 //
 // Function to send desired changes to API
 //
@@ -29,6 +29,29 @@ const sendChanges = (changes: any, user: tokenType) => {
 		});
 };
 
+// deleteAccount:
+//
+// Function to send request to delete account
+//
+// user		- user desiring deletion of their account
+const deleteAccount = (user: tokenType, nav: NavigateFunction) => {
+	const token = user ? user.token : null;
+	callServer('/account', 'DELETE', null, token)
+		.then((response) => {
+			if (!response.ok) {
+				console.log(response);
+				throw response;
+			}
+			return;
+		})
+		.then(() => {
+			nav('/');
+		})
+		.catch((err) => {
+			alert(`(${err}), please try again`);
+		});
+};
+
 // AccountPage:
 //
 // Page for updating account information
@@ -46,6 +69,10 @@ export default function AccountPage() {
 		u[name] = value;
 		setChanges(u);
 	};
+
+	const [showDeleteBox, setDeleteBox] = useState(false);
+	const handleClose = () => setDeleteBox(false);
+	const handleOpen = () => setDeleteBox(true);
 
 	const user = JSON.parse(account);
 	const navigation = useNavigate();
@@ -94,10 +121,35 @@ export default function AccountPage() {
 							>
 								Submit
 							</Button>
+							<hr />
+							<Button className="accountSubmit" onClick={handleOpen}>
+								Delete Account
+							</Button>
 						</Form>
 					</div>
 				</Col>
 			</Container>
+
+			<Modal show={showDeleteBox} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Account</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>Are you sure you want to delete your account?</p>
+					<p>This is PERMANENT.</p>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+					<Button
+						variant="primary"
+						onClick={() => deleteAccount(user, navigation)}
+					>
+						Delete
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</main>
 	);
 }
