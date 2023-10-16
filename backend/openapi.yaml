@@ -249,6 +249,36 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
 
+  /search:
+    get:
+      description: Search in all Mailboxes
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: List of Messages to Move
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/search"
+      responses:
+        200:
+          description: Successful Return
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/mailbox"
+        401:
+          description: Unauthorised Attempt
+        404:
+          description: Not Found
+        default:
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
     delete:
       description: Delete set of messages
       security:
@@ -493,6 +523,17 @@ components:
         password:
           type: string
       additionalProperties: false
+
+    search:
+      type: object
+      properties:
+        query:
+          type: string
+        mailbox:
+          type: string
+      additionalProperties: false
+      required:
+        - query
 
   securitySchemes:
     bearerAuth:

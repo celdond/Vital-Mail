@@ -9,6 +9,7 @@ import {
   deleteMail,
   createBox,
   deleteBox,
+  searchMail
 } from "./email";
 import { changeAccount, deleteAccount } from "./account";
 
@@ -25,4 +26,5 @@ export default function registerAPIRoutes(app: Express) {
   app.delete("/mailbox", check, deleteBox);
   app.post("/account", check, changeAccount);
   app.delete("/account", check, deleteAccount);
+  app.get("/search", check, searchMail);
 }

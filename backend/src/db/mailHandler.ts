@@ -402,3 +402,44 @@ export async function dbDeleteBox(boxName: string, usermail: string) {
     }
   }
 }
+
+// search:
+//
+// retrieves matching mails with the query
+//
+// query    - requested search query
+// mailbox  - name of the mailbox if a specific mailbox is required
+// usermail - user requesting the search
+export async function search(query: string, mailbox: string, usermail: string) {
+  const client = await pool.connect();
+  const boxcode = mailbox + "@" + usermail;
+  const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
+  const querySearch = {
+    text: search,
+    values: [boxcode],
+  };
+  const receivedMail = [];
+  try {
+    await client.query("BEGIN");
+    const mailboxCheck = await checkBox(client, usermail, mailbox);
+    if (mailboxCheck != 0) {
+      throw 404;
+    }
+    const queryMail = await pool.query(querySearch);
+    if (queryMail.rows[0]) {
+      for (const row of queryMail.rows) {
+        row.mail.id = row.mid;
+        row.mail.preview = row.mail.content.slice(0, 18) + "...";
+        delete row.mail.content;
+        receivedMail.push(row.mail);
+      }
+    }
+    await client.query("COMMIT");
+  } catch {
+    await client.query("ROLLBACK");
+    client.release();
+    return 404;
+  }
+  client.release();
+  return receivedMail;
+}
