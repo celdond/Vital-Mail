@@ -7,7 +7,6 @@ import {
   deleteIDs,
   insertBox,
   dbDeleteBox,
-  search,
 } from "../db/mailHandler";
 import { CheckRequest } from "../appTypes";
 import { Response } from "express";
@@ -43,10 +42,11 @@ export async function getID(req: CheckRequest, res: Response) {
 
 // getMailbox:
 //
-// Response control for retrieving all mailbox content
+// Response control for retrieving mailbox content
 export async function getMailbox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   const mailbox = req.query.mailbox as string;
+  const query = req.body.query as string;
   if (usermail && mailbox) {
     const mail = await accessMailbox(usermail, mailbox);
     if (typeof mail == "number") {
@@ -118,19 +118,6 @@ export async function deleteBox(req: CheckRequest, res: Response) {
   if (typeof usermail == "string" && req.body.boxName) {
     const status = await dbDeleteBox(req.body.boxName, usermail);
     res.status(status).send();
-  } else {
-    res.status(400).send("Bad Request.");
-  }
-}
-
-// searchMail:
-//
-// Response control for searching through mail
-export async function searchMail(req: CheckRequest, res: Response) {
-  const usermail = req.usermail;
-  if (typeof usermail == "string" && req.body) {
-    const mail = await search(req.body.query, req.body.mailbox, usermail);
-    res.status(200).send(mail);
   } else {
     res.status(400).send("Bad Request.");
   }

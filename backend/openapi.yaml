@@ -176,6 +176,13 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        description: Query
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/query"
       responses:
         200:
           description: Successful Return
@@ -244,36 +251,6 @@ paths:
           description: Cannot move into sent mailbox
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-
-  /search:
-    get:
-      description: Search in all Mailboxes
-      security:
-        - bearerAuth: []
-      requestBody:
-        description: List of Messages to Move
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/search"
-      responses:
-        200:
-          description: Successful Return
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mailbox"
-        401:
-          description: Unauthorised Attempt
-        404:
-          description: Not Found
-        default:
-          description: Unexpected Error
           content:
             application/json:
               schema:
@@ -524,16 +501,8 @@ components:
           type: string
       additionalProperties: false
 
-    search:
-      type: object
-      properties:
-        query:
-          type: string
-        mailbox:
-          type: string
-      additionalProperties: false
-      required:
-        - query
+    query:
+      type: string
 
   securitySchemes:
     bearerAuth:
