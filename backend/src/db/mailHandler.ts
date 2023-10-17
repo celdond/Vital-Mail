@@ -85,7 +85,7 @@ export async function accessMailbox(usermail: string, mailbox: string, searchQue
   const boxcode = mailbox + "@" + usermail;
   let search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
   if (searchQuery) {
-    search += "AND (mail -> 'from' ->> 'name' LIKE $2 OR mail -> 'from' ->> 'email' LIKE $2 OR mail -> )";
+    search += "AND (mail -> 'from' ->> 'name' LIKE $2 OR mail -> 'from' ->> 'email' LIKE $2 OR mail ->> 'subject' LIKE $2 OR mail ->> 'content' LIKE $2)";
   }
   const query = {
     text: search,
