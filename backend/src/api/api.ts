@@ -9,7 +9,6 @@ import {
   deleteMail,
   createBox,
   deleteBox,
-  searchMail
 } from "./email";
 import { changeAccount, deleteAccount } from "./account";
 

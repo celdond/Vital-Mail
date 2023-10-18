@@ -176,13 +176,12 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        description: Query
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/query"
+        - in: query
+          description: Query
+          name: query
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: Successful Return

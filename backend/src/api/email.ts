@@ -46,7 +46,7 @@ export async function getID(req: CheckRequest, res: Response) {
 export async function getMailbox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   const mailbox = req.query.mailbox as string;
-  const query = req.body.query as string;
+  const query = req.query.query as string;
   if (usermail && mailbox) {
     const mail = await accessMailbox(usermail, mailbox, query ?? null);
     if (typeof mail == "number") {
