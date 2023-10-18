@@ -14,7 +14,13 @@ import {
 	Form,
 	Button,
 } from 'react-bootstrap';
-import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
+import {
+	InboxFill,
+	Inbox,
+	Trash,
+	PencilSquare,
+	Search,
+} from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 import { getBoxes, postBox, deleteBox } from './lib/slipFunctions';
 
@@ -31,9 +37,13 @@ const getMail = (
 	setQuery: Function,
 	mailbox: string,
 	user: tokenType,
+	query: string,
 ) => {
+	const endpoint = '/mail?mailbox=' + mailbox;
+	if (query) {
+	}
 	const token = user ? user.token : null;
-	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
+	callServer(endpoint, null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -107,7 +117,7 @@ export default function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
-		getMail(setList, setSearchParams, mailbox, user);
+		getMail(setList, setSearchParams, mailbox, user, null);
 	}, [mailbox, update]);
 
 	useEffect(() => {
@@ -227,6 +237,15 @@ export default function HomePage() {
 								width="40"
 								height="40"
 								onClick={() => navigation('/compose')}
+							/>
+						</Col>
+						<Col className="colSpacing">
+							<Search className="emblemSpacing" width="40" height="40" />
+						</Col>
+						<Col className="colSpacing">
+							<Form.Control
+								type="text"
+								aria-label="Disabled input example"
 							/>
 						</Col>
 					</Container>
