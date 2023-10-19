@@ -39,11 +39,12 @@ const getMail = (
 	user: tokenType,
 	query: string,
 ) => {
-	const endpoint = '/mail?mailbox=' + mailbox;
+	let endpoint = '/mail?mailbox=' + mailbox;
 	if (query) {
+		endpoint += '&query=' + query;
 	}
 	const token = user ? user.token : null;
-	callServer(endpoint, null, token)
+	callServer(endpoint, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -103,6 +104,7 @@ export default function HomePage() {
 	const [maillist, setList] = useState([emptyMail]);
 	const [newBox, setBoxName] = useState('');
 	const [removeBox, setRemoveBox] = useState('');
+	const [search, setSearch] = useState('');
 	const navigation = useNavigate();
 
 	const [showPostBox, setPostBox] = useState(false);
@@ -166,6 +168,11 @@ export default function HomePage() {
 				handleBoxClose();
 			}
 		});
+	};
+
+	const handleQueryChange = (event: any) => {
+		const { value } = event.target;
+		setSearch(value);
 	};
 
 	const mailboxNav = (
@@ -239,14 +246,11 @@ export default function HomePage() {
 								onClick={() => navigation('/compose')}
 							/>
 						</Col>
-						<Col className="colSpacing">
-							<Search className="emblemSpacing" width="40" height="40" />
+						<Col xs="auto">
+							<Search className="emblemSpacing" width="40" height="40" onClick={() => getMail(setList, setSearchParams, mailbox, user, search)} />
 						</Col>
-						<Col className="colSpacing">
-							<Form.Control
-								type="text"
-								aria-label="Disabled input example"
-							/>
+						<Col xs="auto">
+							<Form.Control type="text" onChange={handleQueryChange} />
 						</Col>
 					</Container>
 				</Navbar>

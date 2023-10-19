@@ -53,7 +53,7 @@ export default function ComposePage() {
 			<Container className="mailpage">
 				<Col className="full">
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation(-1)} />
+						<BoxArrowLeft onClick={() => navigation('/mail')} />
 						<EnvelopeFill onClick={() => sendMail(message, navigation, user)} />
 					</div>
 					<div className="mailview">

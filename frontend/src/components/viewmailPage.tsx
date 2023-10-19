@@ -53,7 +53,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 				<Col>
 					<div className="simpleBar">
 						<Button className="simpleBarButton">
-							<BoxArrowLeft size={28} onClick={() => navigation(-1)} />
+							<BoxArrowLeft size={28} onClick={() => navigation('/mail')} />
 						</Button>
 						<Dropdown>
 							<Dropdown.Toggle className="simpleBarButton" id="dropdown-basic">
