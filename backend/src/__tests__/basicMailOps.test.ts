@@ -82,6 +82,20 @@ test("GET ID", async () => {
     });
 });
 
+// Search Mail
+test("GET Inbox Mailbox", async () => {
+  await request
+    .get("/mail?mailbox=Inbox&query=banana")
+    .set({ authorization: "Bearer " + token })
+    .expect(200)
+    .expect("Content-Type", /json/)
+    .then((data) => {
+      expect(data).toBeDefined();
+      expect(data.body).toBeDefined();
+      expect(data.body.length).toStrictEqual(1);
+    });
+});
+
 // Move Mail
 test("Send Nothing", async () => {
   await request

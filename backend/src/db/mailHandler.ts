@@ -80,14 +80,26 @@ export async function accessMail(id: string) {
 //
 // usermail - user requesting the mailbox
 // mailbox  - name of the mailbox
-export async function accessMailbox(usermail: string, mailbox: string) {
+export async function accessMailbox(
+  usermail: string,
+  mailbox: string,
+  searchQuery: string,
+) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
-  const search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
+  let search = "SELECT mid, mail FROM mail WHERE boxcode = $1";
+  if (searchQuery) {
+    search +=
+      " AND (mail -> 'from' ->> 'name' iLIKE $2 OR mail -> 'from' ->> 'email' iLIKE $2 OR mail ->> 'subject' iLIKE $2 OR mail ->> 'content' iLIKE $2)";
+  }
   const query = {
     text: search,
     values: [boxcode],
   };
+  if (searchQuery) {
+    const modifiedQuery = "%" + searchQuery + "%";
+    query.values.push(modifiedQuery);
+  }
   const receivedMail = [];
   try {
     await client.query("BEGIN");

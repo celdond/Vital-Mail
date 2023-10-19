@@ -14,7 +14,13 @@ import {
 	Form,
 	Button,
 } from 'react-bootstrap';
-import { InboxFill, Inbox, Trash, PencilSquare } from 'react-bootstrap-icons';
+import {
+	InboxFill,
+	Inbox,
+	Trash,
+	PencilSquare,
+	Search,
+} from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 import { getBoxes, postBox, deleteBox } from './lib/slipFunctions';
 
@@ -31,9 +37,14 @@ const getMail = (
 	setQuery: Function,
 	mailbox: string,
 	user: tokenType,
+	query: string,
 ) => {
+	let endpoint = '/mail?mailbox=' + mailbox;
+	if (query) {
+		endpoint += '&query=' + query;
+	}
 	const token = user ? user.token : null;
-	callServer('/mail?mailbox=' + mailbox, 'GET', null, token)
+	callServer(endpoint, 'GET', null, token)
 		.then((response) => {
 			if (!response.ok) {
 				console.log(response);
@@ -43,7 +54,11 @@ const getMail = (
 		})
 		.then((json) => {
 			const organizedList = timeSet(json);
-			setQuery({ box: mailbox });
+			if (!query) {
+				setQuery({ box: mailbox });
+			} else {
+				setQuery({});
+			}
 			setList(organizedList);
 		})
 		.catch((err) => {
@@ -93,6 +108,7 @@ export default function HomePage() {
 	const [maillist, setList] = useState([emptyMail]);
 	const [newBox, setBoxName] = useState('');
 	const [removeBox, setRemoveBox] = useState('');
+	const [search, setSearch] = useState('');
 	const navigation = useNavigate();
 
 	const [showPostBox, setPostBox] = useState(false);
@@ -107,7 +123,8 @@ export default function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
-		getMail(setList, setSearchParams, mailbox, user);
+		setSearch('');
+		getMail(setList, setSearchParams, mailbox, user, null);
 	}, [mailbox, update]);
 
 	useEffect(() => {
@@ -125,6 +142,14 @@ export default function HomePage() {
 	const handleBoxNameChange = (event: any) => {
 		const { value } = event.target;
 		setBoxName(value);
+	};
+
+	const handleBoxSwap = (box: string) => {
+		if (mailbox === box) {
+			updateFunction(!update);
+		} else {
+			setMailbox(box);
+		}
 	};
 
 	const handleDeleteBox = () => {
@@ -158,22 +183,27 @@ export default function HomePage() {
 		});
 	};
 
+	const handleQueryChange = (event: any) => {
+		const { value } = event.target;
+		setSearch(value);
+	};
+
 	const mailboxNav = (
 		<Container>
 			<hr />
-			<Row xs="auto" onClick={() => setMailbox('Inbox')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Inbox')}>
 				<Col>
 					<InboxFill />
 				</Col>
 				<Col>Inbox</Col>
 			</Row>
-			<Row xs="auto" onClick={() => setMailbox('Sent')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Sent')}>
 				<Col>
 					<Inbox />
 				</Col>
 				<Col>Sent</Col>
 			</Row>
-			<Row xs="auto" onClick={() => setMailbox('Trash')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Trash')}>
 				<Col>
 					<Trash />
 				</Col>
@@ -186,7 +216,7 @@ export default function HomePage() {
 				<Col onClick={handleDeleteBoxShow}> -</Col>
 			</Row>
 			{customBoxes.map((box) => (
-				<Row onClick={() => setMailbox(box)}>
+				<Row onClick={() => handleBoxSwap(box)}>
 					<Col> {box}</Col>
 				</Row>
 			))}
@@ -205,30 +235,49 @@ export default function HomePage() {
 			<div className="backplate">
 				<Navbar className="navbar" expand={'false'}>
 					<Container className="nomargin">
-						<Col xs="auto">
-							<Container className="d-lg-none" fluid>
-								<Navbar.Toggle aria-controls="menu" />
-								<Navbar.Offcanvas
-									backdrop={false}
-									id="menu"
-									aria-labelledby="menu"
-									variant="primary"
-								>
-									<Offcanvas.Header closeButton>
-										<Offcanvas.Title id="menu">V</Offcanvas.Title>
-									</Offcanvas.Header>
-									<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
-								</Navbar.Offcanvas>
-							</Container>
-						</Col>
-						<Col className="colSpacing">
-							<PencilSquare
-								className="emblemSpacing"
-								width="40"
-								height="40"
-								onClick={() => navigation('/compose')}
-							/>
-						</Col>
+						<Row xs="auto">
+							<Col>
+								<Container className="d-lg-none" fluid>
+									<Navbar.Toggle aria-controls="menu" />
+									<Navbar.Offcanvas
+										backdrop={false}
+										id="menu"
+										aria-labelledby="menu"
+										variant="primary"
+									>
+										<Offcanvas.Header closeButton>
+											<Offcanvas.Title id="menu">V</Offcanvas.Title>
+										</Offcanvas.Header>
+										<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
+									</Navbar.Offcanvas>
+								</Container>
+							</Col>
+							<Col>
+								<PencilSquare
+									className="emblemSpacing"
+									width="40"
+									height="40"
+									onClick={() => navigation('/compose')}
+								/>
+							</Col>
+							<Col>
+								<Search
+									className="emblemSpacing"
+									width="40"
+									height="40"
+									onClick={() =>
+										getMail(setList, setSearchParams, mailbox, user, search)
+									}
+								/>
+							</Col>
+							<Col>
+								<Form.Control
+									type="text"
+									onChange={handleQueryChange}
+									value={search}
+								/>
+							</Col>
+						</Row>
 					</Container>
 				</Navbar>
 				<div className="dashboard">
