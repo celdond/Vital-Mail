@@ -235,47 +235,49 @@ export default function HomePage() {
 			<div className="backplate">
 				<Navbar className="navbar" expand={'false'}>
 					<Container className="nomargin">
-						<Col xs="auto">
-							<Container className="d-lg-none" fluid>
-								<Navbar.Toggle aria-controls="menu" />
-								<Navbar.Offcanvas
-									backdrop={false}
-									id="menu"
-									aria-labelledby="menu"
-									variant="primary"
-								>
-									<Offcanvas.Header closeButton>
-										<Offcanvas.Title id="menu">V</Offcanvas.Title>
-									</Offcanvas.Header>
-									<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
-								</Navbar.Offcanvas>
-							</Container>
-						</Col>
-						<Col className="colSpacing">
-							<PencilSquare
-								className="emblemSpacing"
-								width="40"
-								height="40"
-								onClick={() => navigation('/compose')}
-							/>
-						</Col>
-						<Col xs="auto">
-							<Search
-								className="emblemSpacing"
-								width="40"
-								height="40"
-								onClick={() =>
-									getMail(setList, setSearchParams, mailbox, user, search)
-								}
-							/>
-						</Col>
-						<Col xs="auto">
-							<Form.Control
-								type="text"
-								onChange={handleQueryChange}
-								value={search}
-							/>
-						</Col>
+						<Row xs="auto">
+							<Col>
+								<Container className="d-lg-none" fluid>
+									<Navbar.Toggle aria-controls="menu" />
+									<Navbar.Offcanvas
+										backdrop={false}
+										id="menu"
+										aria-labelledby="menu"
+										variant="primary"
+									>
+										<Offcanvas.Header closeButton>
+											<Offcanvas.Title id="menu">V</Offcanvas.Title>
+										</Offcanvas.Header>
+										<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
+									</Navbar.Offcanvas>
+								</Container>
+							</Col>
+							<Col>
+								<PencilSquare
+									className="emblemSpacing"
+									width="40"
+									height="40"
+									onClick={() => navigation('/compose')}
+								/>
+							</Col>
+							<Col>
+								<Search
+									className="emblemSpacing"
+									width="40"
+									height="40"
+									onClick={() =>
+										getMail(setList, setSearchParams, mailbox, user, search)
+									}
+								/>
+							</Col>
+							<Col>
+								<Form.Control
+									type="text"
+									onChange={handleQueryChange}
+									value={search}
+								/>
+							</Col>
+						</Row>
 					</Container>
 				</Navbar>
 				<div className="dashboard">
