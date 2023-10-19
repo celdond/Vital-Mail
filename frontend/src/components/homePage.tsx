@@ -54,7 +54,11 @@ const getMail = (
 		})
 		.then((json) => {
 			const organizedList = timeSet(json);
-			setQuery({ box: mailbox });
+			if (!query) {
+				setQuery({ box: mailbox });
+			} else {
+				setQuery({});
+			}
 			setList(organizedList);
 		})
 		.catch((err) => {
@@ -119,6 +123,7 @@ export default function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
+		setSearch('');
 		getMail(setList, setSearchParams, mailbox, user, null);
 	}, [mailbox, update]);
 
@@ -137,6 +142,14 @@ export default function HomePage() {
 	const handleBoxNameChange = (event: any) => {
 		const { value } = event.target;
 		setBoxName(value);
+	};
+
+	const handleBoxSwap = (box: string) => {
+		if (mailbox === box) {
+			updateFunction(!update);
+		} else {
+			setMailbox(box);
+		}
 	};
 
 	const handleDeleteBox = () => {
@@ -178,19 +191,19 @@ export default function HomePage() {
 	const mailboxNav = (
 		<Container>
 			<hr />
-			<Row xs="auto" onClick={() => setMailbox('Inbox')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Inbox')}>
 				<Col>
 					<InboxFill />
 				</Col>
 				<Col>Inbox</Col>
 			</Row>
-			<Row xs="auto" onClick={() => setMailbox('Sent')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Sent')}>
 				<Col>
 					<Inbox />
 				</Col>
 				<Col>Sent</Col>
 			</Row>
-			<Row xs="auto" onClick={() => setMailbox('Trash')}>
+			<Row xs="auto" onClick={() => handleBoxSwap('Trash')}>
 				<Col>
 					<Trash />
 				</Col>
@@ -203,7 +216,7 @@ export default function HomePage() {
 				<Col onClick={handleDeleteBoxShow}> -</Col>
 			</Row>
 			{customBoxes.map((box) => (
-				<Row onClick={() => setMailbox(box)}>
+				<Row onClick={() => handleBoxSwap(box)}>
 					<Col> {box}</Col>
 				</Row>
 			))}
@@ -247,10 +260,21 @@ export default function HomePage() {
 							/>
 						</Col>
 						<Col xs="auto">
-							<Search className="emblemSpacing" width="40" height="40" onClick={() => getMail(setList, setSearchParams, mailbox, user, search)} />
+							<Search
+								className="emblemSpacing"
+								width="40"
+								height="40"
+								onClick={() =>
+									getMail(setList, setSearchParams, mailbox, user, search)
+								}
+							/>
 						</Col>
 						<Col xs="auto">
-							<Form.Control type="text" onChange={handleQueryChange} />
+							<Form.Control
+								type="text"
+								onChange={handleQueryChange}
+								value={search}
+							/>
 						</Col>
 					</Container>
 				</Navbar>
