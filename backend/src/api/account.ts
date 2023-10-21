@@ -9,8 +9,9 @@ import { updateAccount, deleteEmail } from "../db/accountHandler";
 // otherwise no changes go through
 export async function changeAccount(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (usermail && req.body) {
-    const result = await updateAccount(req.body, usermail);
+  const changes = req.body;
+  if (usermail && changes) {
+    const result = await updateAccount(changes, usermail);
     if (result != 200) {
       res.status(result).send();
       return;
