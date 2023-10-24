@@ -58,7 +58,36 @@ const correct = {
   password: "abi123",
 };
 
+let token = "";
 // Successful Login
 test("Successful Login", async () => {
-  await request.post("/login").send(correct).expect(200);
+  await request
+    .post("/login")
+    .send(correct)
+    .expect(200)
+    .then((data) => {
+      expect(data).toBeDefined();
+      expect(data.body).toBeDefined();
+      expect(data.body.token).toBeDefined();
+      token = data.body.token;
+    });
+});
+
+// Change Account
+test("Send Nothing", async () => {
+  await request
+    .post("/account")
+    .set({ authorization: "Bearer " + token })
+    .send({})
+    .expect(400);
+});
+
+const oneChange = { name: "Abibaba" };
+
+test("Send Just One Change", async () => {
+  await request
+    .post("/account")
+    .set({ authorization: "Bearer " + token })
+    .send(oneChange)
+    .expect(200);
 });
