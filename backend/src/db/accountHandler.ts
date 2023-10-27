@@ -207,7 +207,7 @@ export async function updateAccount(
         FROM usermail WHERE email = $1`;
       const registerSearch = {
         text: search,
-        values: [usermail],
+        values: [updates.email],
       };
       const query = await client.query(registerSearch);
       if (query.rows[0]) {

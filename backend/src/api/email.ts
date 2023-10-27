@@ -76,8 +76,10 @@ export async function sendMail(req: CheckRequest, res: Response) {
 // Response control for changing the mailbox of a message
 export async function moveMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (typeof req.query.mailbox == "string" && usermail && req.body) {
-    const status = await moveBox(req.body, usermail, req.query.mailbox);
+  const ids = req.body;
+  const mailbox = req.query.mailbox;
+  if (typeof mailbox == "string" && usermail && ids) {
+    const status = await moveBox(ids, usermail, mailbox);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");
@@ -89,8 +91,9 @@ export async function moveMail(req: CheckRequest, res: Response) {
 // Response control for changing the mailbox of a message
 export async function deleteMail(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (typeof usermail == "string" && req.body) {
-    const status = await deleteIDs(req.body, usermail);
+  const ids = req.body;
+  if (typeof usermail == "string" && ids) {
+    const status = await deleteIDs(ids, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");
@@ -102,8 +105,9 @@ export async function deleteMail(req: CheckRequest, res: Response) {
 // Response control for creating a custom mailbox
 export async function createBox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (typeof usermail == "string" && req.body.boxName) {
-    const status = await insertBox(req.body.boxName, usermail);
+  const boxName = req.body.boxName;
+  if (typeof usermail == "string" && boxName) {
+    const status = await insertBox(boxName, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");
@@ -115,8 +119,9 @@ export async function createBox(req: CheckRequest, res: Response) {
 // Response control for deleting a custom mailbox
 export async function deleteBox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
-  if (typeof usermail == "string" && req.body.boxName) {
-    const status = await dbDeleteBox(req.body.boxName, usermail);
+  const boxName = req.body.boxName;
+  if (typeof usermail == "string" && boxName) {
+    const status = await dbDeleteBox(boxName, usermail);
     res.status(status).send();
   } else {
     res.status(400).send("Bad Request.");

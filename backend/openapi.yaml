@@ -28,8 +28,12 @@ paths:
       responses:
         200:
           description: Changes were Successful
+        400:
+          description: Bad Request
         401:
           description: Unauthorised Attempt
+        403:
+          description: Forbidden
         default:
           description: Unexpected Error
           content:
@@ -44,6 +48,12 @@ paths:
       responses:
         200:
           description: Account was Deleted
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         default:
           description: Unexpected Error
           content:
@@ -68,6 +78,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         default:
           description: Unexpected Error
           content:
@@ -88,6 +104,12 @@ paths:
       responses:
         200:
           description: Account Created
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         default:
           description: Unexpected Error
           content:
@@ -107,8 +129,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/mailboxes"
+        400:
+          description: Bad Request
         401:
           description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: Not Found
         default:
@@ -132,6 +158,10 @@ paths:
       responses:
         201:
           description: Mailbox Created
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
         403:
           description: Name Taken
         default:
@@ -155,6 +185,12 @@ paths:
       responses:
         200:
           description: Successfully Deleted
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: Mailbox does not exist
         default:
@@ -189,8 +225,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/mailbox"
+        400:
+          description: Bad Request
         401:
           description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: Not Found
         default:
@@ -214,6 +254,12 @@ paths:
       responses:
         201:
           description: Mail Sent Successfully
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: User does not exist
         default:
@@ -244,6 +290,12 @@ paths:
       responses:
         200:
           description: Email was moved to the same box
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: Email not found
         409:
@@ -269,6 +321,12 @@ paths:
       responses:
         200:
           description: Messages were successfully deleted
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         default:
           description: Unexpected error
           content:
@@ -296,6 +354,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/mail"
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorised Attempt
+        403:
+          description: Forbidden
         404:
           description: Not Found
         default:
