@@ -37,9 +37,15 @@ export default function RegisterPage() {
 	return (
 		<main className="background">
 			<Container className="centerpiece">
+				<h1>Create Account</h1>
 				<Form>
 					<Form.Group>
 						<Form.Label>Name</Form.Label>
+						<p className="description" >
+							Set a name to be referred to as.
+							<br />
+							Do not worry, it does not have to be unique!
+						</p>
 						<Form.Control
 							type="name"
 							placeholder="Username"
@@ -49,6 +55,10 @@ export default function RegisterPage() {
 					</Form.Group>
 					<Form.Group>
 						<Form.Label>Username</Form.Label>
+						<p className="description" >
+							Set an account name!
+							<br /> This one must be unique, but we can tell you if it is not.
+						</p>
 						<Form.Control
 							type="text"
 							placeholder="Username"
@@ -66,7 +76,6 @@ export default function RegisterPage() {
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPassword">
-						<Form.Label>Password Confirmation</Form.Label>
 						<Form.Control
 							type="password"
 							placeholder="Confirm Password"
