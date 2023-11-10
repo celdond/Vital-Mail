@@ -2,5 +2,6 @@ node_modules
 dist
 coverage
 .next
+__pycache__
 
 next-env.d.ts
