@@ -33,6 +33,20 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
   }
 }
 
+// validateUsername:
+//
+// function to check if username is valid
+export async function validateUsername(name: string) {
+  return (/^([a-z])$/.test(name));
+}
+
+// validateName:
+//
+// function to check if name is valid
+export async function validateName(name: string) {
+  return (/^([a-z])$/.test(name));
+}
+
 // login:
 //
 // function to handle login and token distribution
