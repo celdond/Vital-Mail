@@ -41,7 +41,7 @@ export default function RegisterPage() {
 				<Form>
 					<Form.Group>
 						<Form.Label>Name</Form.Label>
-						<p className="description" >
+						<p className="description">
 							Set a name to be referred to as.
 							<br />
 							Do not worry, it does not have to be unique!
@@ -55,7 +55,7 @@ export default function RegisterPage() {
 					</Form.Group>
 					<Form.Group>
 						<Form.Label>Username</Form.Label>
-						<p className="description" >
+						<p className="description">
 							Set an account name!
 							<br /> This one must be unique, but we can tell you if it is not.
 						</p>
