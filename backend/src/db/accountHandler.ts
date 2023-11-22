@@ -97,6 +97,13 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
+  if (!validateName(username)) {
+    res.status(400).send("Username includes banned characters.");
+    return;
+  } else if (!validatePassword(password)) {
+    res.status(400).send("Password includes banned characters.");
+  }
+
   const client = await pool.connect();
 
   try {
