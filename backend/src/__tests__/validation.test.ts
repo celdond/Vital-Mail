@@ -5,7 +5,7 @@ test("Validation Name - Success", async () => {
     expect(name).toBe(true);
 });
 
-test("Validation Name - Success", async () => {
+test("Validation Name - Fail Special Characters", async () => {
     const name = await validateName("Hello66!");
     expect(name).toBe(false);
 });
@@ -15,7 +15,17 @@ test("Validation Password - Success", async () => {
     expect(password).toBe(true);
 });
 
-test("Validation Password - Special Characters", async () => {
+test("Validation Password - Fail @", async () => {
+    const password = await validatePassword("H@@66");
+    expect(password).toBe(false);
+});
+
+test("Validation Password - Success Special Characters", async () => {
+    const password = await validatePassword("!!Hell!?o66");
+    expect(password).toBe(true);
+});
+
+test("Validation Password - Only Special Characters", async () => {
     const password = await validatePassword("!#%$");
     expect(password).toBe(true);
 });
