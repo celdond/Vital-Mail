@@ -23,7 +23,7 @@ afterAll((done) => {
 
 const user = {
   email: "Abigail",
-  password: "abi123",
+  password: "abigail123",
 };
 
 let token = "";

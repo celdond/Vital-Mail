@@ -41,12 +41,12 @@ const zeroLength = {
 };
 
 test("FAIL - Send Object with empty strings", async () => {
-  await request.post("/login").send(zeroLength).expect(401);
+  await request.post("/login").send(zeroLength).expect(400);
 });
 
 const wrongPassword = {
   email: "Abigail",
-  password: "baba",
+  password: "babababa",
 };
 
 test("FAIL - Send the wrong password", async () => {
@@ -55,7 +55,7 @@ test("FAIL - Send the wrong password", async () => {
 
 const correct = {
   email: "Abigail",
-  password: "abi123",
+  password: "abigail123",
 };
 
 let token = "";

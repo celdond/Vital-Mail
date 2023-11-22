@@ -1,8 +1,8 @@
 
 DELETE FROM usermail;
 
-INSERT INTO usermail(username, email, credword) VALUES ('Abby', 'Abigail', '$2a$10$dReGvO.BCuPiYfwMY722C.gQHQugLjGJJ8YlzthxJoNlo3yWtfGWS');
-INSERT INTO usermail(username, email, credword) VALUES ('Anny', 'anny55', '$2a$10$dklvFSEUgpFsYAOOfsrvv.SLofEUkcao9uet.7XIHj6ipclEvOafK');
+INSERT INTO usermail(username, email, credword) VALUES ('Abby', 'Abigail', '$2a$10$EPqtzN6SWuqb1p5hWDHMHe.Oyq3o.1ofCLpJ0fMMctANXjUbN.k8e');
+INSERT INTO usermail(username, email, credword) VALUES ('Anny', 'anny55', '$2a$10$T.PqbjsUiJZE3tmayGwOvefW.e1ECP8y/M0RR3SiD5b8yOSUEN662');
 INSERT INTO mailbox(boxcode, mailbox, email) VALUES ('Inbox@Abigail', 'Inbox', 'Abigail');
 INSERT INTO mailbox(boxcode, mailbox, email) VALUES ('Sent@Abigail', 'Sent', 'Abigail');
 INSERT INTO mailbox(boxcode, mailbox, email) VALUES ('Trash@Abigail', 'Trash', 'Abigail');
