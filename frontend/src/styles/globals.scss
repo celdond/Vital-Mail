@@ -2,6 +2,7 @@
 @import '~bootstrap/scss/bootstrap';
 @import './sheets/home';
 @import './sheets/mail';
+@import './sheets/login';
 
 .bold {
 	font-weight: 600;
@@ -19,6 +20,11 @@ button[type='submit'] {
 .nomargin {
 	margin: 0;
 	padding: 0;
+}
+
+.centerObject {
+	display: block;
+	margin: auto;
 }
 
 .accountSubmit {

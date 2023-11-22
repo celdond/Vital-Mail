@@ -36,6 +36,11 @@ export default function LoginPage() {
 	return (
 		<main className="background">
 			<Container className="centerpiece">
+				<img
+					className="centerObject"
+					src="../../public/vitalv.png"
+					height="150"
+				/>
 				<Col>
 					<Form>
 						<Form.Group>

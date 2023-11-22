@@ -33,6 +33,20 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
   }
 }
 
+// validatePassword:
+//
+// function to check if password is valid
+export async function validatePassword(password: string) {
+  return /^[a-zA-Z0-9!?#$%&_]+$/.test(password);
+}
+
+// validateName:
+//
+// function to check if name is valid
+export async function validateName(name: string) {
+  return /^[a-zA-Z0-9_]+$/.test(name);
+}
+
 // login:
 //
 // function to handle login and token distribution
@@ -80,6 +94,17 @@ export async function register(req: Request, res: Response) {
     return;
   } else if (password.length == 0) {
     res.status(400).send("No Password Entered.");
+    return;
+  }
+
+  if (!validateName(username)) {
+    res.status(400).send("Name includes banned characters.");
+    return;
+  } else if (!validatePassword(password)) {
+    res.status(400).send("Password includes banned characters.");
+    return;
+  } else if (!validateName(email)) {
+    res.status(400).send("Username includes banned characters.");
     return;
   }
 
@@ -137,7 +162,7 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-// setPassword:
+// enactAccountChanges:
 //
 // Changes the input email's password in the database
 //
@@ -198,10 +223,16 @@ export async function updateAccount(
 
     // Add values and fields to arrays if they are present
     if (updates.name) {
+      if (!validateName(updates.name)) {
+        throw 400;
+      }
       dataChanges.push(updates.name);
       fieldChanges.push("username");
     }
     if (updates.email) {
+      if (!validateName(updates.email)) {
+        throw 400;
+      }
       // Check if Email is Taken
       const search = `SELECT username, email, credword
         FROM usermail WHERE email = $1`;
@@ -217,6 +248,9 @@ export async function updateAccount(
       fieldChanges.push("email");
     }
     if (updates.password) {
+      if (!validatePassword(updates.password)) {
+        throw 400;
+      }
       const hashedPassword = bcrypt.hashSync(updates.password, 10);
       dataChanges.push(hashedPassword);
       fieldChanges.push("credword");
