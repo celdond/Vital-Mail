@@ -2,14 +2,14 @@ import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
+import { ExclamationDiamondFill } from 'react-bootstrap-icons';
 
 // LoginPage:
 //
 // Page for users to login to the site
 export default function LoginPage() {
 	const [form, setForm] = useState({ email: '', passcode: '' });
-	const [validated, setValidated] = useState(false);
-	const [errors, setErrors] = useState({ email: '', passcode: '' });
+	const [errors, setErrors] = useState({ error: 0, email: '', passcode: '' });
 
 	const navigation = useNavigate();
 
@@ -30,12 +30,33 @@ export default function LoginPage() {
 		}
 	};
 
+	const validateForm = (email: string, passcode: string) => {
+		const newErrors = { error: 0, email: '', passcode: '' };
+
+		if (email.length === 0) {
+			newErrors.email = 'Enter your username';
+			newErrors.error = 1;
+		}
+
+		if (passcode.length === 0) {
+			newErrors.passcode = 'Enter your password';
+			newErrors.error = 1;
+		}
+
+		return newErrors;
+	};
+
 	// submitLogin:
 	//
 	// API call to attempt a login
 	// Success moves the user to the home page
 	const submitLogin = () => {
 		const loginInfo = form;
+		const formErrors = validateForm(loginInfo.email, loginInfo.passcode);
+		if (formErrors.error) {
+			setErrors(formErrors);
+			return;
+		}
 		callServer('/login', 'POST', loginInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -57,11 +78,7 @@ export default function LoginPage() {
 			<Container className="centerpiece">
 				<img className="centerObject" src="/vitalv.png" height="150" />
 				<Col>
-					<Form
-						noValidate
-						validated={validated}
-						onSubmit={(e) => e.preventDefault()}
-					>
+					<Form onSubmit={(e) => e.preventDefault()}>
 						<Form.Group>
 							<Form.Label>Username</Form.Label>
 							<Form.Control
@@ -69,9 +86,11 @@ export default function LoginPage() {
 								placeholder="Username"
 								value={form.email}
 								onChange={(e) => setFormField('email', e.target.value)}
-								required
+								isInvalid={!!errors.email}
 							/>
-							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.email}
+							</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">
 							<Form.Label>Password</Form.Label>
@@ -80,8 +99,11 @@ export default function LoginPage() {
 								placeholder="Password"
 								value={form.passcode}
 								onChange={(e) => setFormField('passcode', e.target.value)}
+								isInvalid={!!errors.passcode}
 							/>
-							<Form.Control.Feedback type="invalid">{}</Form.Control.Feedback>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.passcode}
+							</Form.Control.Feedback>
 						</Form.Group>
 						<Col>
 							<Button variant="primary" type="submit" onClick={submitLogin}>
