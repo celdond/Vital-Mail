@@ -7,16 +7,35 @@ import { callServer } from './lib/apiCom';
 //
 // Page for users to login to the site
 export default function LoginPage() {
-	const [email, setEmail] = useState('');
-	const [passcode, setCode] = useState('');
+	const [form, setForm] = useState({ email: '', passcode: '' });
+	const [validated, setValidated] = useState(false);
+	const [errors, setErrors] = useState({ email: '', passcode: '' });
+
 	const navigation = useNavigate();
+
+	// setFormField
+	//
+	// Function to alter fields as entered
+	// field	- field in form being changed
+	// value	- value to make field
+	const setFormField = (field: string, value: string) => {
+		const newForm = form;
+		newForm[field] = value;
+		setForm(newForm);
+
+		if (!!errors[field]) {
+			const newErrors = errors;
+			newErrors[field] = '';
+			setErrors(newErrors);
+		}
+	};
 
 	// submitLogin:
 	//
 	// API call to attempt a login
 	// Success moves the user to the home page
-	async function submitLogin() {
-		const loginInfo = { email: email, password: passcode };
+	const submitLogin = () => {
+		const loginInfo = form;
 		callServer('/login', 'POST', loginInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -31,46 +50,48 @@ export default function LoginPage() {
 			.catch(() => {
 				alert(`Error logging in, please try again.`);
 			});
-	}
+	};
 
 	return (
 		<main className="background">
 			<Container className="centerpiece">
-				<img
-					className="centerObject"
-					src="../../public/vitalv.png"
-					height="150"
-				/>
+				<img className="centerObject" src="/vitalv.png" height="150" />
 				<Col>
-					<Form>
+					<Form
+						noValidate
+						validated={validated}
+						onSubmit={(e) => e.preventDefault()}
+					>
 						<Form.Group>
 							<Form.Label>Username</Form.Label>
 							<Form.Control
 								type="text"
 								placeholder="Username"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
+								value={form.email}
+								onChange={(e) => setFormField('email', e.target.value)}
 								required
 							/>
+							<Form.Control.Feedback>Looks Good!</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">
 							<Form.Label>Password</Form.Label>
 							<Form.Control
 								type="password"
 								placeholder="Password"
-								value={passcode}
-								onChange={(e) => setCode(e.target.value)}
+								value={form.passcode}
+								onChange={(e) => setFormField('passcode', e.target.value)}
 							/>
+							<Form.Control.Feedback type="invalid">{}</Form.Control.Feedback>
 						</Form.Group>
+						<Col>
+							<Button variant="primary" type="submit" onClick={submitLogin}>
+								Submit
+							</Button>
+							<div>
+								<Link to="/register">Register a new account</Link>
+							</div>
+						</Col>
 					</Form>
-					<Col>
-						<Button variant="primary" type="submit" onClick={submitLogin}>
-							Submit
-						</Button>
-						<div>
-							<Link to="/register">Register a new account</Link>
-						</div>
-					</Col>
 				</Col>
 			</Container>
 		</main>
