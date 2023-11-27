@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 import { ExclamationDiamondFill } from 'react-bootstrap-icons';
+import { validatePassword, validateName } from './lib/validators';
 
 // LoginPage:
 //
