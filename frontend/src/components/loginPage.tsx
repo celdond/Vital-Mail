@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 import { ExclamationDiamondFill } from 'react-bootstrap-icons';
-import { validatePassword, validateName } from './lib/validators';
+// import { validatePassword, validateName } from './lib/validators';
 
 // LoginPage:
 //
 // Page for users to login to the site
 export default function LoginPage() {
 	const [form, setForm] = useState({ email: '', passcode: '' });
-	const [errors, setErrors] = useState({ error: 0, email: '', passcode: '' });
+	const [errors, setErrors] = useState({ error: 0, email: null, passcode: null });
 
 	const navigation = useNavigate();
 
@@ -20,17 +20,21 @@ export default function LoginPage() {
 	// field	- field in form being changed
 	// value	- value to make field
 	const setFormField = (field: string, value: string) => {
-		const newForm = form;
+		const newForm = {...form};
 		newForm[field] = value;
 		setForm(newForm);
 
 		if (!!errors[field]) {
-			const newErrors = errors;
-			newErrors[field] = '';
+			const newErrors = {...errors};
+			newErrors[field] = null;
 			setErrors(newErrors);
+			console.log(!!errors.passcode);
 		}
 	};
 
+	// validateForm
+	//
+	// Function to check credentials for validity
 	const validateForm = (email: string, passcode: string) => {
 		const newErrors = { error: 0, email: '', passcode: '' };
 
@@ -54,8 +58,8 @@ export default function LoginPage() {
 	const submitLogin = () => {
 		const loginInfo = form;
 		const formErrors = validateForm(loginInfo.email, loginInfo.passcode);
+		setErrors(formErrors);
 		if (formErrors.error) {
-			setErrors(formErrors);
 			return;
 		}
 		callServer('/login', 'POST', loginInfo)
@@ -85,7 +89,6 @@ export default function LoginPage() {
 							<Form.Control
 								type="text"
 								placeholder="Username"
-								value={form.email}
 								onChange={(e) => setFormField('email', e.target.value)}
 								isInvalid={!!errors.email}
 							/>
@@ -98,7 +101,6 @@ export default function LoginPage() {
 							<Form.Control
 								type="password"
 								placeholder="Password"
-								value={form.passcode}
 								onChange={(e) => setFormField('passcode', e.target.value)}
 								isInvalid={!!errors.passcode}
 							/>
