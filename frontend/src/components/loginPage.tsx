@@ -3,14 +3,19 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
 import { ExclamationDiamondFill } from 'react-bootstrap-icons';
-// import { validatePassword, validateName } from './lib/validators';
+import { validatePassword, validateName } from './lib/validators';
 
 // LoginPage:
 //
 // Page for users to login to the site
 export default function LoginPage() {
 	const [form, setForm] = useState({ email: '', passcode: '' });
-	const [errors, setErrors] = useState({ error: 0, email: null, passcode: null });
+	const [errors, setErrors] = useState({
+		error: 0,
+		email: null,
+		passcode: null,
+		login: null,
+	});
 
 	const navigation = useNavigate();
 
@@ -20,12 +25,12 @@ export default function LoginPage() {
 	// field	- field in form being changed
 	// value	- value to make field
 	const setFormField = (field: string, value: string) => {
-		const newForm = {...form};
+		const newForm = { ...form };
 		newForm[field] = value;
 		setForm(newForm);
 
 		if (!!errors[field]) {
-			const newErrors = {...errors};
+			const newErrors = { ...errors };
 			newErrors[field] = null;
 			setErrors(newErrors);
 			console.log(!!errors.passcode);
@@ -36,15 +41,21 @@ export default function LoginPage() {
 	//
 	// Function to check credentials for validity
 	const validateForm = (email: string, passcode: string) => {
-		const newErrors = { error: 0, email: '', passcode: '' };
+		const newErrors = { error: 0, email: null, passcode: null, login: null };
 
 		if (email.length === 0) {
 			newErrors.email = 'Enter your username';
+			newErrors.error = 1;
+		} else if (!validateName(email)) {
+			newErrors.email = 'Username includes invalid characters.';
 			newErrors.error = 1;
 		}
 
 		if (passcode.length === 0) {
 			newErrors.passcode = 'Enter your password';
+			newErrors.error = 1;
+		} else if (!validatePassword(passcode)) {
+			newErrors.passcode = 'Passcode includes invalid characters.';
 			newErrors.error = 1;
 		}
 
@@ -74,7 +85,9 @@ export default function LoginPage() {
 				navigation('/mail');
 			})
 			.catch(() => {
-				alert(`Error logging in, please try again.`);
+				const loginFail = { ...formErrors };
+				loginFail.login = 'Login Failed.';
+				setErrors(loginFail);
 			});
 	};
 
@@ -109,6 +122,7 @@ export default function LoginPage() {
 							</Form.Control.Feedback>
 						</Form.Group>
 						<Col>
+							<div className="customFeedback">{errors.login}</div>
 							<Button variant="primary" type="submit" onClick={submitLogin}>
 								Submit
 							</Button>
