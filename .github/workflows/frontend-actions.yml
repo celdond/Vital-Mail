@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  backend-compiles:
+  frontend-compiles:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,3 +19,4 @@ jobs:
           node-version: '18.x'
       - run: npm ci
       - run: npm run check-format
+      - run: npm run test
