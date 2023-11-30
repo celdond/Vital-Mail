@@ -36,6 +36,39 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+test('Submission Blocked - Nothing Entered', async () => {
+	render(
+		<BrowserRouter>
+			<Login />
+		</BrowserRouter>,
+	);
+	fireEvent.click(screen.getByText('Submit'));
+	await waitFor(() => {
+		expect(screen.getByText('Enter your username')).not.toBe(null);
+	});
+});
+
+test('Submission Blocked - Characters', async () => {
+	render(
+		<BrowserRouter>
+			<Login />
+		</BrowserRouter>,
+	);
+	const email = screen.getByLabelText('Username');
+	await userEvent.type(email, '@@@@@@');
+	const passwd = screen.getByLabelText('Password');
+	await userEvent.type(passwd, '@@@@@@@@@@@@@@');
+	fireEvent.click(screen.getByText('Submit'));
+	await waitFor(() => {
+		expect(screen.getByText('Username includes invalid characters.')).not.toBe(
+			null,
+		);
+		expect(screen.getByText('Passcode includes invalid characters.')).not.toBe(
+			null,
+		);
+	});
+});
+
 test('Login Fail', async () => {
 	render(
 		<BrowserRouter>
