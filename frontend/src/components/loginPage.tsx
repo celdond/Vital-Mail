@@ -2,21 +2,77 @@ import { Button, Container, Form, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
+import { ExclamationDiamondFill } from 'react-bootstrap-icons';
+import { validatePassword, validateName } from './lib/validators';
 
 // LoginPage:
 //
 // Page for users to login to the site
 export default function LoginPage() {
-	const [email, setEmail] = useState('');
-	const [passcode, setCode] = useState('');
+	const [form, setForm] = useState({ email: '', passcode: '' });
+	const [errors, setErrors] = useState({
+		error: 0,
+		email: null,
+		passcode: null,
+		login: null,
+	});
+
 	const navigation = useNavigate();
+
+	// setFormField
+	//
+	// Function to alter fields as entered
+	// field	- field in form being changed
+	// value	- value to make field
+	const setFormField = (field: string, value: string) => {
+		const newForm = { ...form };
+		newForm[field] = value;
+		setForm(newForm);
+
+		if (!!errors[field]) {
+			const newErrors = { ...errors };
+			newErrors[field] = null;
+			setErrors(newErrors);
+			console.log(!!errors.passcode);
+		}
+	};
+
+	// validateForm
+	//
+	// Function to check credentials for validity
+	const validateForm = (email: string, passcode: string) => {
+		const newErrors = { error: 0, email: null, passcode: null, login: null };
+
+		if (email.length === 0) {
+			newErrors.email = 'Enter your username';
+			newErrors.error = 1;
+		} else if (!validateName(email)) {
+			newErrors.email = 'Username includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		if (passcode.length === 0) {
+			newErrors.passcode = 'Enter your password';
+			newErrors.error = 1;
+		} else if (!validatePassword(passcode)) {
+			newErrors.passcode = 'Passcode includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		return newErrors;
+	};
 
 	// submitLogin:
 	//
 	// API call to attempt a login
 	// Success moves the user to the home page
-	async function submitLogin() {
-		const loginInfo = { email: email, password: passcode };
+	const submitLogin = () => {
+		const loginInfo = form;
+		const formErrors = validateForm(loginInfo.email, loginInfo.passcode);
+		setErrors(formErrors);
+		if (formErrors.error) {
+			return;
+		}
 		callServer('/login', 'POST', loginInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -29,48 +85,54 @@ export default function LoginPage() {
 				navigation('/mail');
 			})
 			.catch(() => {
-				alert(`Error logging in, please try again.`);
+				const loginFail = { ...formErrors };
+				loginFail.login = 'Login Failed.';
+				setErrors(loginFail);
 			});
-	}
+	};
 
 	return (
 		<main className="background">
 			<Container className="centerpiece">
-				<img
-					className="centerObject"
-					src="../../public/vitalv.png"
-					height="150"
-				/>
+				<img className="centerObject" src="/vitalv.png" height="150" />
 				<Col>
-					<Form>
+					<Form onSubmit={(e) => e.preventDefault()}>
 						<Form.Group>
-							<Form.Label>Username</Form.Label>
+							<Form.Label for="username">Username</Form.Label>
 							<Form.Control
 								type="text"
+								id="username"
 								placeholder="Username"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								required
+								onChange={(e) => setFormField('email', e.target.value)}
+								isInvalid={!!errors.email}
 							/>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.email}
+							</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">
-							<Form.Label>Password</Form.Label>
+							<Form.Label for="password">Password</Form.Label>
 							<Form.Control
 								type="password"
+								id="password"
 								placeholder="Password"
-								value={passcode}
-								onChange={(e) => setCode(e.target.value)}
+								onChange={(e) => setFormField('passcode', e.target.value)}
+								isInvalid={!!errors.passcode}
 							/>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.passcode}
+							</Form.Control.Feedback>
 						</Form.Group>
+						<Col>
+							<div className="customFeedback">{errors.login}</div>
+							<Button variant="primary" type="submit" onClick={submitLogin}>
+								Submit
+							</Button>
+							<div>
+								<Link to="/register">Register a new account</Link>
+							</div>
+						</Col>
 					</Form>
-					<Col>
-						<Button variant="primary" type="submit" onClick={submitLogin}>
-							Submit
-						</Button>
-						<div>
-							<Link to="/register">Register a new account</Link>
-						</div>
-					</Col>
 				</Col>
 			</Container>
 		</main>
