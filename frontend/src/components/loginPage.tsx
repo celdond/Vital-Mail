@@ -98,9 +98,10 @@ export default function LoginPage() {
 				<Col>
 					<Form onSubmit={(e) => e.preventDefault()}>
 						<Form.Group>
-							<Form.Label>Username</Form.Label>
+							<Form.Label for="username">Username</Form.Label>
 							<Form.Control
 								type="text"
+								id="username"
 								placeholder="Username"
 								onChange={(e) => setFormField('email', e.target.value)}
 								isInvalid={!!errors.email}
@@ -110,9 +111,10 @@ export default function LoginPage() {
 							</Form.Control.Feedback>
 						</Form.Group>
 						<Form.Group className="mb-3" controlId="formBasicPassword">
-							<Form.Label>Password</Form.Label>
+							<Form.Label for="password">Password</Form.Label>
 							<Form.Control
 								type="password"
+								id="password"
 								placeholder="Password"
 								onChange={(e) => setFormField('passcode', e.target.value)}
 								isInvalid={!!errors.passcode}

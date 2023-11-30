@@ -46,9 +46,9 @@ test('Login Fail', async () => {
 	await userEvent.type(email, 'bababababa');
 	const passwd = screen.getByLabelText('Password');
 	await userEvent.type(passwd, 'abigail123');
-	fireEvent.click(screen.getByText('Log In'));
+	fireEvent.click(screen.getByText('Submit'));
 	await waitFor(() => {
-		expect(screen.getByText('Login Failed')).not.toBe(null);
+		expect(screen.getByText('Login Failed.')).not.toBe(null);
 	});
 });
 
@@ -62,7 +62,7 @@ test('Login Success', async () => {
 	await userEvent.type(email, 'Abigail');
 	const passwd = screen.getByLabelText('Password');
 	await userEvent.type(passwd, 'abigail123');
-	fireEvent.click(screen.getByText('Log In'));
+	fireEvent.click(screen.getByText('Submit'));
 	await waitFor(() => {
 		expect(localStorage.getItem('essentialMailToken')).not.toBe(null);
 	});
