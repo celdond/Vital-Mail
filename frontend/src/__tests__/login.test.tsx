@@ -1,6 +1,7 @@
 import { render, fireEvent } from '@testing-library/react';
 import { screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import '@testing-library/jest-dom';
@@ -13,19 +14,34 @@ const server = setupServer(
 	http.post(URLLogin, async ({ request }) => {
 		const user = await request.json();
 		if (user['email'] === 'Abigail' && user['passcode'] === 'abigail123') {
-			return HttpResponse.json({name: 'Abby', accessToken: 'some-old-jwt', email: 'Abigail'});
+			return HttpResponse.json({
+				name: 'Abby',
+				accessToken: 'some-old-jwt',
+				email: 'Abigail',
+			});
 		} else {
-			return new HttpResponse(null, {status: 400});
+			return new HttpResponse(null, { status: 400 });
 		}
 	}),
 );
+
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+	...(jest.requireActual('react-router-dom') as any),
+	useNavigate: () => mockedUsedNavigate,
+}));
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('Login Fail', async () => {
-	render(<Login />);
+	render(
+		<BrowserRouter>
+			<Login />
+		</BrowserRouter>,
+	);
 	const email = screen.getByLabelText('Username');
 	await userEvent.type(email, 'bababababa');
 	const passwd = screen.getByLabelText('Password');
@@ -37,7 +53,11 @@ test('Login Fail', async () => {
 });
 
 test('Login Success', async () => {
-	render(<Login />);
+	render(
+		<BrowserRouter>
+			<Login />
+		</BrowserRouter>,
+	);
 	const email = screen.getByLabelText('Username');
 	await userEvent.type(email, 'Abigail');
 	const passwd = screen.getByLabelText('Password');
