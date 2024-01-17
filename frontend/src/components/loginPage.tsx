@@ -9,11 +9,11 @@ import { validatePassword, validateName } from './lib/validators';
 //
 // Page for users to login to the site
 export default function LoginPage() {
-	const [form, setForm] = useState({ email: '', passcode: '' });
+	const [form, setForm] = useState({ email: '', password: '' });
 	const [errors, setErrors] = useState({
 		error: 0,
 		email: null,
-		passcode: null,
+		password: null,
 		login: null,
 	});
 
@@ -33,15 +33,15 @@ export default function LoginPage() {
 			const newErrors = { ...errors };
 			newErrors[field] = null;
 			setErrors(newErrors);
-			console.log(!!errors.passcode);
+			console.log(!!errors.password);
 		}
 	};
 
 	// validateForm
 	//
 	// Function to check credentials for validity
-	const validateForm = (email: string, passcode: string) => {
-		const newErrors = { error: 0, email: null, passcode: null, login: null };
+	const validateForm = (email: string, password: string) => {
+		const newErrors = { error: 0, email: null, password: null, login: null };
 
 		if (email.length === 0) {
 			newErrors.email = 'Enter your username';
@@ -51,11 +51,11 @@ export default function LoginPage() {
 			newErrors.error = 1;
 		}
 
-		if (passcode.length === 0) {
-			newErrors.passcode = 'Enter your password';
+		if (password.length === 0) {
+			newErrors.password = 'Enter your password';
 			newErrors.error = 1;
-		} else if (!validatePassword(passcode)) {
-			newErrors.passcode = 'Passcode includes invalid characters.';
+		} else if (!validatePassword(password)) {
+			newErrors.password = 'Passcode includes invalid characters.';
 			newErrors.error = 1;
 		}
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
 	// Success moves the user to the home page
 	const submitLogin = () => {
 		const loginInfo = form;
-		const formErrors = validateForm(loginInfo.email, loginInfo.passcode);
+		const formErrors = validateForm(loginInfo.email, loginInfo.password);
 		setErrors(formErrors);
 		if (formErrors.error) {
 			return;
@@ -84,10 +84,11 @@ export default function LoginPage() {
 				localStorage.setItem(`essentialMailToken`, JSON.stringify(json));
 				navigation('/mail');
 			})
-			.catch(() => {
+			.catch((e) => {
 				const loginFail = { ...formErrors };
 				loginFail.login = 'Login Failed.';
 				setErrors(loginFail);
+				console.log(e);
 			});
 	};
 
@@ -98,7 +99,7 @@ export default function LoginPage() {
 				<Col>
 					<Form onSubmit={(e) => e.preventDefault()}>
 						<Form.Group>
-							<Form.Label for="username">Username</Form.Label>
+							<Form.Label htmlFor="username">Username</Form.Label>
 							<Form.Control
 								type="text"
 								id="username"
@@ -110,17 +111,17 @@ export default function LoginPage() {
 								<ExclamationDiamondFill /> {errors.email}
 							</Form.Control.Feedback>
 						</Form.Group>
-						<Form.Group className="mb-3" controlId="formBasicPassword">
-							<Form.Label for="password">Password</Form.Label>
+						<Form.Group className="mb-3">
+							<Form.Label htmlFor="password">Password</Form.Label>
 							<Form.Control
 								type="password"
 								id="password"
 								placeholder="Password"
-								onChange={(e) => setFormField('passcode', e.target.value)}
-								isInvalid={!!errors.passcode}
+								onChange={(e) => setFormField('password', e.target.value)}
+								isInvalid={!!errors.password}
 							/>
 							<Form.Control.Feedback type="invalid">
-								<ExclamationDiamondFill /> {errors.passcode}
+								<ExclamationDiamondFill /> {errors.password}
 							</Form.Control.Feedback>
 						</Form.Group>
 						<Col>
