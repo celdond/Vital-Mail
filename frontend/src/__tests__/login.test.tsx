@@ -13,7 +13,7 @@ const URLLogin = 'http://localhost:3010/login';
 const server = setupServer(
 	http.post(URLLogin, async ({ request }) => {
 		const user = await request.json();
-		if (user['email'] === 'Abigail' && user['passcode'] === 'abigail123') {
+		if (user['email'] === 'Abigail' && user['password'] === 'abigail123') {
 			return HttpResponse.json({
 				name: 'Abby',
 				accessToken: 'some-old-jwt',
