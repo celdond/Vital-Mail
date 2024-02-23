@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
 
 // RegisterPage:
@@ -46,12 +46,15 @@ export default function RegisterPage() {
 							<br />
 							Do not worry, it does not have to be unique!
 						</p>
-						<Form.Control
-							type="name"
-							placeholder="Username"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
+						<InputGroup>
+							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							<Form.Control
+								type="name"
+								placeholder="Username"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+						</InputGroup>
 					</Form.Group>
 					<Form.Group>
 						<Form.Label>Username</Form.Label>
@@ -59,12 +62,15 @@ export default function RegisterPage() {
 							Set an account name!
 							<br /> This one must be unique, but we can tell you if it is not.
 						</p>
-						<Form.Control
-							type="text"
-							placeholder="Username"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
+						<InputGroup>
+							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							<Form.Control
+								type="text"
+								placeholder="Username"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</InputGroup>
 					</Form.Group>
 					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password</Form.Label>
