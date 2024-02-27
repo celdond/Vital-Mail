@@ -36,59 +36,54 @@ export default function RegisterPage() {
 
 	return (
 		<main className="background">
-			<Container className="centerpiece">
+			<Container className="centerpiece centerpadding">
 				<h1>Create Account</h1>
 				<Form>
-					<Form.Group>
+					<Form.Group className="field-wrapper">
 						<Form.Label>Name</Form.Label>
-						<p className="description">
-							Set a name to be referred to as.
-							<br />
-							Do not worry, it does not have to be unique!
-						</p>
 						<InputGroup>
-							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 							<Form.Control
 								type="name"
-								placeholder="Username"
+								placeholder="Name"
+								aria-describedby="basic-addon2"
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
+							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 						</InputGroup>
 					</Form.Group>
-					<Form.Group>
+					<Form.Group className="field-wrapper">
 						<Form.Label>Username</Form.Label>
-						<p className="description">
-							Set an account name!
-							<br /> This one must be unique, but we can tell you if it is not.
-						</p>
 						<InputGroup>
-							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 							<Form.Control
 								type="text"
 								placeholder="Username"
+								aria-describedby="basic-addon2"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
+							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 						</InputGroup>
 					</Form.Group>
-					<Form.Group controlId="formBasicPassword">
-						<Form.Label>Password</Form.Label>
-						<Form.Control
-							type="password"
-							placeholder="Password"
-							value={passcode}
-							onChange={(e) => setCode(e.target.value)}
-						/>
-					</Form.Group>
-					<Form.Group controlId="formBasicPassword">
-						<Form.Control
-							type="password"
-							placeholder="Confirm Password"
-							value={confirmcode}
-							onChange={(e) => setConfirm(e.target.value)}
-						/>
-					</Form.Group>
+					<div className="field-wrapper">
+						<Form.Group controlId="formBasicPassword">
+							<Form.Label>Password</Form.Label>
+							<Form.Control
+								type="password"
+								placeholder="Password"
+								value={passcode}
+								onChange={(e) => setCode(e.target.value)}
+							/>
+						</Form.Group>
+						<Form.Group controlId="formBasicPassword">
+							<Form.Control
+								type="password"
+								placeholder="Confirm Password"
+								value={confirmcode}
+								onChange={(e) => setConfirm(e.target.value)}
+							/>
+						</Form.Group>
+					</div>
 				</Form>
 				<Button variant="primary" type="submit" onClick={submitRegister}>
 					Register
