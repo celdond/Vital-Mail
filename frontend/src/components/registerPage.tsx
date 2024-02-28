@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 // RegisterPage:
 //
@@ -49,7 +51,16 @@ export default function RegisterPage() {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
-							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							<OverlayTrigger
+								placement='top'
+								overlay={
+									<Tooltip id={`tooltip-name`}>
+										Tool Tip.
+									</Tooltip>
+								}
+							>
+								<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							</OverlayTrigger>
 						</InputGroup>
 					</Form.Group>
 					<Form.Group className="field-wrapper">
@@ -62,7 +73,16 @@ export default function RegisterPage() {
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
-							<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							<OverlayTrigger
+								placement='top'
+								overlay={
+									<Tooltip id={`tooltip-username`}>
+										Tool Tip.
+									</Tooltip>
+								}
+							>
+								<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+							</OverlayTrigger>
 						</InputGroup>
 					</Form.Group>
 					<div className="field-wrapper">
