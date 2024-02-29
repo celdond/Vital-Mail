@@ -42,7 +42,6 @@ export default function RegisterPage() {
 				<h1>Create Account</h1>
 				<Form>
 					<Form.Group className="field-wrapper">
-						<Form.Label>Name</Form.Label>
 						<InputGroup>
 							<Form.Control
 								type="name"
@@ -52,10 +51,10 @@ export default function RegisterPage() {
 								onChange={(e) => setName(e.target.value)}
 							/>
 							<OverlayTrigger
-								placement='top'
+								placement="top"
 								overlay={
 									<Tooltip id={`tooltip-name`}>
-										Tool Tip.
+										Limited to only alphanumeric characters: a-z and 0-9
 									</Tooltip>
 								}
 							>
@@ -64,7 +63,6 @@ export default function RegisterPage() {
 						</InputGroup>
 					</Form.Group>
 					<Form.Group className="field-wrapper">
-						<Form.Label>Username</Form.Label>
 						<InputGroup>
 							<Form.Control
 								type="text"
@@ -74,10 +72,10 @@ export default function RegisterPage() {
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 							<OverlayTrigger
-								placement='top'
+								placement="top"
 								overlay={
 									<Tooltip id={`tooltip-username`}>
-										Tool Tip.
+										Must be unique, we will tell you if it is not
 									</Tooltip>
 								}
 							>
@@ -87,14 +85,26 @@ export default function RegisterPage() {
 					</Form.Group>
 					<div className="field-wrapper">
 						<Form.Group controlId="formBasicPassword">
-							<Form.Label>Password</Form.Label>
-							<Form.Control
-								type="password"
-								placeholder="Password"
-								value={passcode}
-								onChange={(e) => setCode(e.target.value)}
-							/>
+							<InputGroup>
+								<Form.Control
+									type="password"
+									placeholder="Password"
+									value={passcode}
+									onChange={(e) => setCode(e.target.value)}
+								/>
+								<OverlayTrigger
+									placement="top"
+									overlay={
+										<Tooltip id={`tooltip-password`}>
+											Must be at least 8 characters long
+										</Tooltip>
+									}
+								>
+									<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
+								</OverlayTrigger>
+							</InputGroup>
 						</Form.Group>
+						<div className="field-wrapper" />
 						<Form.Group controlId="formBasicPassword">
 							<Form.Control
 								type="password"
