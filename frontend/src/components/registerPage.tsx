@@ -54,7 +54,7 @@ export default function RegisterPage() {
 								placement="top"
 								overlay={
 									<Tooltip id={`tooltip-name`}>
-										Limited to only alphanumeric characters: a-z and 0-9
+										Limited to only alphanumeric characters: a-z, 0-9, and _
 									</Tooltip>
 								}
 							>
@@ -75,7 +75,7 @@ export default function RegisterPage() {
 								placement="top"
 								overlay={
 									<Tooltip id={`tooltip-username`}>
-										Must be unique, we will tell you if it is not
+										Must be unique! Alphanumeric and special characters !?#$%&_
 									</Tooltip>
 								}
 							>

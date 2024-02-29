@@ -4,6 +4,10 @@
 @import './sheets/mail';
 @import './sheets/login';
 
+body {
+	font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 .bold {
 	font-weight: 600;
 }
