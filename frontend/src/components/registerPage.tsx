@@ -4,6 +4,7 @@ import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { callServer } from '../components/lib/apiCom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { validatePassword, validateName } from './lib/validators';
 
 // RegisterPage:
 //
@@ -17,7 +18,7 @@ export default function RegisterPage() {
 		name: null,
 		email: null,
 		password: null,
-		confirmation: null,
+		confirmcode: null,
 		register: null,
 	});
 
@@ -38,12 +39,44 @@ export default function RegisterPage() {
 		}
 	};
 
+	// validateForm
+	//
+	// Function to check credentials for validity
+	const validateForm = () => {
+		const newErrors = { error: 0, email: null, password: null, login: null, confirmcode: null, register: null };
+
+		if (form.email.length === 0) {
+			newErrors.email = 'Enter your username';
+			newErrors.error = 1;
+		} else if (!validateName(form.email)) {
+			newErrors.email = 'Username includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		if (form.password.length === 0) {
+			newErrors.password = 'Enter your password';
+			newErrors.error = 1;
+		} else if (!validatePassword(form.password)) {
+			newErrors.password = 'Passcode includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		return newErrors;
+	};
+
 	// submitRegister:
 	//
 	// API call to register a new account
 	async function submitRegister() {
 		if (form.password != form.confirmcode) {
 			alert('Passwords do not match.');
+			return;
+		}
+
+		validateForm();
+
+		if (!errors.error) {
+			return;
 		}
 
 		const registerInfo = {
