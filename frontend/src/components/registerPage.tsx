@@ -9,20 +9,48 @@ import Tooltip from 'react-bootstrap/Tooltip';
 //
 // Page for creating a new account
 export default function RegisterPage() {
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const [passcode, setCode] = useState('');
-	const [confirmcode, setConfirm] = useState('');
+	const [form, setForm] = useState({ username: '', email: '', password: '', confirmcode: '' });
 	const navigation = useNavigate();
+
+	const [errors, setErrors] = useState({
+		error: 0,
+		name: null,
+		email: null,
+		password: null,
+		confirmation: null,
+		register: null,
+	});
+
+	// setFormField
+	//
+	// Function to alter fields as entered
+	// field	- field in form being changed
+	// value	- value to make field
+	const setFormField = (field: string, value: string) => {
+		const newForm = { ...form };
+		newForm[field] = value;
+		setForm(newForm);
+
+		if (!!errors[field]) {
+			const newErrors = { ...errors };
+			newErrors[field] = null;
+			setErrors(newErrors);
+		}
+	};
 
 	// submitRegister:
 	//
 	// API call to register a new account
 	async function submitRegister() {
-		if (passcode != confirmcode) {
+		if (form.password != form.confirmcode) {
 			alert('Passwords do not match.');
 		}
-		const registerInfo = { username: name, email: email, password: passcode };
+
+		const registerInfo = {
+			username: form.username,
+			email: form.email,
+			password: form.password,
+		};
 		callServer('/register', 'POST', registerInfo)
 			.then((response) => {
 				if (!response.ok) {
@@ -32,7 +60,11 @@ export default function RegisterPage() {
 				return;
 			})
 			.catch((err) => {
-				alert(`Error registering, please try again.\n${err}`);
+				console.log(err);
+				switch (err.status) {
+					default:
+						alert(`Error registering, please try again.\n${err}`);
+				}
 			});
 	}
 
@@ -47,8 +79,8 @@ export default function RegisterPage() {
 								type="name"
 								placeholder="Name"
 								aria-describedby="basic-addon2"
-								value={name}
-								onChange={(e) => setName(e.target.value)}
+								value={form.username}
+								onChange={(e) => setFormField("username", e.target.value)}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -68,8 +100,8 @@ export default function RegisterPage() {
 								type="text"
 								placeholder="Username"
 								aria-describedby="basic-addon2"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
+								value={form.email}
+								onChange={(e) => setFormField("email", e.target.value)}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -89,8 +121,8 @@ export default function RegisterPage() {
 								<Form.Control
 									type="password"
 									placeholder="Password"
-									value={passcode}
-									onChange={(e) => setCode(e.target.value)}
+									value={form.password}
+									onChange={(e) => setFormField("password", e.target.value)}
 								/>
 								<OverlayTrigger
 									placement="top"
@@ -109,8 +141,8 @@ export default function RegisterPage() {
 							<Form.Control
 								type="password"
 								placeholder="Confirm Password"
-								value={confirmcode}
-								onChange={(e) => setConfirm(e.target.value)}
+								value={form.confirmcode}
+								onChange={(e) => setFormField("confirmcode", e.target.value)}
 							/>
 						</Form.Group>
 					</div>

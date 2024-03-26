@@ -33,7 +33,6 @@ export default function LoginPage() {
 			const newErrors = { ...errors };
 			newErrors[field] = null;
 			setErrors(newErrors);
-			console.log(!!errors.password);
 		}
 	};
 
