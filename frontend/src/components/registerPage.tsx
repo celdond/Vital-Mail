@@ -5,6 +5,7 @@ import { callServer } from '../components/lib/apiCom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { validatePassword, validateName } from './lib/validators';
+import { ExclamationDiamondFill } from 'react-bootstrap-icons';
 
 // RegisterPage:
 //
@@ -67,10 +68,10 @@ export default function RegisterPage() {
 		}
 
 		if (form.username.length === 0) {
-			newErrors.email = 'Enter your name';
+			newErrors.username = 'Enter your name';
 			newErrors.error = 1;
-		} else if (!validateName(form.email)) {
-			newErrors.email = 'Name includes invalid characters.';
+		} else if (!validateName(form.username)) {
+			newErrors.username = 'Name includes invalid characters.';
 			newErrors.error = 1;
 		}
 
@@ -136,6 +137,7 @@ export default function RegisterPage() {
 								aria-describedby="basic-addon2"
 								value={form.username}
 								onChange={(e) => setFormField('username', e.target.value)}
+								isInvalid={!!errors.email}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -157,6 +159,7 @@ export default function RegisterPage() {
 								aria-describedby="basic-addon2"
 								value={form.email}
 								onChange={(e) => setFormField('email', e.target.value)}
+								isInvalid={!!errors.username}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -178,6 +181,7 @@ export default function RegisterPage() {
 									placeholder="Password"
 									value={form.password}
 									onChange={(e) => setFormField('password', e.target.value)}
+									isInvalid={!!errors.password}
 								/>
 								<OverlayTrigger
 									placement="top"
@@ -189,6 +193,9 @@ export default function RegisterPage() {
 								>
 									<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 								</OverlayTrigger>
+								<Form.Control.Feedback type="invalid">
+									<ExclamationDiamondFill /> {errors.password}
+								</Form.Control.Feedback>
 							</InputGroup>
 						</Form.Group>
 						<div className="field-wrapper" />
