@@ -10,12 +10,17 @@ import { validatePassword, validateName } from './lib/validators';
 //
 // Page for creating a new account
 export default function RegisterPage() {
-	const [form, setForm] = useState({ username: '', email: '', password: '', confirmcode: '' });
+	const [form, setForm] = useState({
+		username: '',
+		email: '',
+		password: '',
+		confirmcode: '',
+	});
 	const navigation = useNavigate();
 
 	const [errors, setErrors] = useState({
 		error: 0,
-		name: null,
+		username: null,
 		email: null,
 		password: null,
 		confirmcode: null,
@@ -43,13 +48,29 @@ export default function RegisterPage() {
 	//
 	// Function to check credentials for validity
 	const validateForm = () => {
-		const newErrors = { error: 0, email: null, password: null, login: null, confirmcode: null, register: null };
+		const newErrors = {
+			error: 0,
+			email: null,
+			username: null,
+			password: null,
+			login: null,
+			confirmcode: null,
+			register: null,
+		};
 
 		if (form.email.length === 0) {
 			newErrors.email = 'Enter your username';
 			newErrors.error = 1;
 		} else if (!validateName(form.email)) {
 			newErrors.email = 'Username includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		if (form.username.length === 0) {
+			newErrors.email = 'Enter your name';
+			newErrors.error = 1;
+		} else if (!validateName(form.email)) {
+			newErrors.email = 'Name includes invalid characters.';
 			newErrors.error = 1;
 		}
 
@@ -73,7 +94,8 @@ export default function RegisterPage() {
 			return;
 		}
 
-		validateForm();
+		const formErrors = validateForm();
+		setErrors(formErrors);
 
 		if (!errors.error) {
 			return;
@@ -113,7 +135,7 @@ export default function RegisterPage() {
 								placeholder="Name"
 								aria-describedby="basic-addon2"
 								value={form.username}
-								onChange={(e) => setFormField("username", e.target.value)}
+								onChange={(e) => setFormField('username', e.target.value)}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -134,7 +156,7 @@ export default function RegisterPage() {
 								placeholder="Username"
 								aria-describedby="basic-addon2"
 								value={form.email}
-								onChange={(e) => setFormField("email", e.target.value)}
+								onChange={(e) => setFormField('email', e.target.value)}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -155,7 +177,7 @@ export default function RegisterPage() {
 									type="password"
 									placeholder="Password"
 									value={form.password}
-									onChange={(e) => setFormField("password", e.target.value)}
+									onChange={(e) => setFormField('password', e.target.value)}
 								/>
 								<OverlayTrigger
 									placement="top"
@@ -175,7 +197,7 @@ export default function RegisterPage() {
 								type="password"
 								placeholder="Confirm Password"
 								value={form.confirmcode}
-								onChange={(e) => setFormField("confirmcode", e.target.value)}
+								onChange={(e) => setFormField('confirmcode', e.target.value)}
 							/>
 						</Form.Group>
 					</div>
