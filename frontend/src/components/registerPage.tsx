@@ -130,14 +130,14 @@ export default function RegisterPage() {
 				<h1>Create Account</h1>
 				<Form>
 					<Form.Group className="field-wrapper">
-						<InputGroup>
+						<InputGroup hasValidation>
 							<Form.Control
 								type="name"
 								placeholder="Name"
 								aria-describedby="basic-addon2"
 								value={form.username}
 								onChange={(e) => setFormField('username', e.target.value)}
-								isInvalid={!!errors.email}
+								isInvalid={!!errors.username}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -149,17 +149,20 @@ export default function RegisterPage() {
 							>
 								<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 							</OverlayTrigger>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.username}
+							</Form.Control.Feedback>
 						</InputGroup>
 					</Form.Group>
 					<Form.Group className="field-wrapper">
-						<InputGroup>
+						<InputGroup hasValidation>
 							<Form.Control
 								type="text"
 								placeholder="Username"
 								aria-describedby="basic-addon2"
 								value={form.email}
 								onChange={(e) => setFormField('email', e.target.value)}
-								isInvalid={!!errors.username}
+								isInvalid={!!errors.email}
 							/>
 							<OverlayTrigger
 								placement="top"
@@ -171,6 +174,9 @@ export default function RegisterPage() {
 							>
 								<InputGroup.Text id="basic-addon2">?</InputGroup.Text>
 							</OverlayTrigger>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.email}
+							</Form.Control.Feedback>
 						</InputGroup>
 					</Form.Group>
 					<div className="field-wrapper">
