@@ -175,7 +175,7 @@ export default function RegisterPage() {
 					</Form.Group>
 					<div className="field-wrapper">
 						<Form.Group controlId="formBasicPassword">
-							<InputGroup>
+							<InputGroup hasValidation>
 								<Form.Control
 									type="password"
 									placeholder="Password"
@@ -205,7 +205,11 @@ export default function RegisterPage() {
 								placeholder="Confirm Password"
 								value={form.confirmcode}
 								onChange={(e) => setFormField('confirmcode', e.target.value)}
+								isInvalid={!!errors.confirmcode}
 							/>
+							<Form.Control.Feedback type="invalid">
+								<ExclamationDiamondFill /> {errors.confirmcode}
+							</Form.Control.Feedback>
 						</Form.Group>
 					</div>
 				</Form>
