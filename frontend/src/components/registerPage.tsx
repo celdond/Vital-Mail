@@ -123,11 +123,12 @@ export default function RegisterPage() {
 				return;
 			})
 			.catch((err) => {
-				console.log(err);
+				const registerFail = { ...formErrors };
 				switch (err.status) {
 					default:
-						alert(`Error registering, please try again.\n${err}`);
+						registerFail.register = `Error registering, please try again later.`
 				}
+				setErrors(registerFail);
 			});
 	}
 
@@ -226,6 +227,7 @@ export default function RegisterPage() {
 						</Form.Group>
 					</div>
 				</Form>
+				<div className="customFeedback">{errors.register}</div>
 				<Button variant="primary" type="submit" onClick={submitRegister}>
 					Register
 				</Button>
