@@ -78,8 +78,19 @@ export default function RegisterPage() {
 		if (form.password.length === 0) {
 			newErrors.password = 'Enter your password';
 			newErrors.error = 1;
+		} else if (form.password.length < 8) {
+			newErrors.password = 'Password needs to be at least 8 characters long.';
+			newErrors.error = 1;
 		} else if (!validatePassword(form.password)) {
-			newErrors.password = 'Passcode includes invalid characters.';
+			newErrors.password = 'Password includes invalid characters.';
+			newErrors.error = 1;
+		}
+
+		if (form.confirmcode.length === 0) {
+			newErrors.confirmcode = 'Confirm your password.';
+			newErrors.error = 1;
+		} else if (newErrors.confirmcode != newErrors.password) {
+			newErrors.confirmcode = 'Passwords do not match.';
 			newErrors.error = 1;
 		}
 
@@ -90,10 +101,6 @@ export default function RegisterPage() {
 	//
 	// API call to register a new account
 	async function submitRegister() {
-		if (form.password != form.confirmcode) {
-			alert('Passwords do not match.');
-			return;
-		}
 
 		const formErrors = validateForm();
 		setErrors(formErrors);
