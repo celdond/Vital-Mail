@@ -60,15 +60,15 @@ export default function RegisterPage() {
 		};
 
 		if (form.email.length === 0) {
-			newErrors.email = 'Enter your username';
+			newErrors.email = 'Enter a username';
 			newErrors.error = 1;
-		} else if (!validateName(form.email)) {
+		} else if (!validatePassword(form.email)) {
 			newErrors.email = 'Username includes invalid characters.';
 			newErrors.error = 1;
 		}
 
 		if (form.username.length === 0) {
-			newErrors.username = 'Enter your name';
+			newErrors.username = 'Enter a name';
 			newErrors.error = 1;
 		} else if (!validateName(form.username)) {
 			newErrors.username = 'Name includes invalid characters.';
@@ -76,7 +76,7 @@ export default function RegisterPage() {
 		}
 
 		if (form.password.length === 0) {
-			newErrors.password = 'Enter your password';
+			newErrors.password = 'Enter a password';
 			newErrors.error = 1;
 		} else if (form.password.length < 8) {
 			newErrors.password = 'Password needs to be at least 8 characters long.';
@@ -87,7 +87,7 @@ export default function RegisterPage() {
 		}
 
 		if (form.confirmcode.length === 0) {
-			newErrors.confirmcode = 'Confirm your password.';
+			newErrors.confirmcode = 'Confirm a password.';
 			newErrors.error = 1;
 		} else if (newErrors.confirmcode != newErrors.password) {
 			newErrors.confirmcode = 'Passwords do not match.';
@@ -105,7 +105,7 @@ export default function RegisterPage() {
 		const formErrors = validateForm();
 		setErrors(formErrors);
 
-		if (!errors.error) {
+		if (errors.error) {
 			return;
 		}
 
@@ -124,6 +124,7 @@ export default function RegisterPage() {
 			})
 			.catch((err) => {
 				const registerFail = { ...formErrors };
+				console.log(err);
 				switch (err.status) {
 					default:
 						registerFail.register = `Error registering, please try again later.`

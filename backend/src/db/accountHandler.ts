@@ -103,7 +103,7 @@ export async function register(req: Request, res: Response) {
   } else if (!validatePassword(password)) {
     res.status(400).send("Password includes banned characters.");
     return;
-  } else if (!validateName(email)) {
+  } else if (!validatePassword(email)) {
     res.status(400).send("Username includes banned characters.");
     return;
   }
