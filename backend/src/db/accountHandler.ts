@@ -97,13 +97,16 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
-  if (!validateName(username)) {
+  const validName = await validateName(username);
+  const validPassword = await validateName(password);
+  const validEmail = await validateName(email);
+  if (!validName) {
     res.status(400).send("Name includes banned characters.");
     return;
-  } else if (!validatePassword(password)) {
+  } else if (!validPassword) {
     res.status(400).send("Password includes banned characters.");
     return;
-  } else if (!validatePassword(email)) {
+  } else if (!validEmail) {
     res.status(400).send("Username includes banned characters.");
     return;
   }

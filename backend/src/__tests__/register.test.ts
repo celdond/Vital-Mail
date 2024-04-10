@@ -46,7 +46,7 @@ test("FAIL - Empty Password", async () => {
 });
 
 const specialName = {
-  username: "str@ing@@",
+  username: "str!ing!!",
   email: "wadda",
   password: "passwordyay",
 };

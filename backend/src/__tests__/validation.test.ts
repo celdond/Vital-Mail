@@ -10,6 +10,11 @@ test("Validation Name - Fail Special Characters", async () => {
   expect(name).toBe(false);
 });
 
+test("Validation Name - Fail Special @", async () => {
+  const name = await validateName("str@ing@@");
+  expect(name).toBe(false);
+});
+
 test("Validation Password - Success", async () => {
   const password = await validatePassword("Hello66");
   expect(password).toBe(true);
