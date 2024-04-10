@@ -28,7 +28,7 @@ test("FAIL - Send Nothing", async () => {
 
 const missingField = {
   username: "string",
-  email: "wakka",
+  email: "wacca",
 };
 
 test("FAIL - Missing One Field", async () => {
@@ -37,12 +37,22 @@ test("FAIL - Missing One Field", async () => {
 
 const passwordEmpty = {
   username: "string",
-  email: "wakka",
+  email: "warra",
   password: "",
 };
 
 test("FAIL - Empty Password", async () => {
   await request.post("/register").send(passwordEmpty).expect(400);
+});
+
+const specialName = {
+  username: "str@ing@@",
+  email: "wadda",
+  password: "passwordyay",
+};
+
+test("FAIL - Special Character in Name", async () => {
+  await request.post("/register").send(specialName).expect(400);
 });
 
 const correct = {
