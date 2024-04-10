@@ -101,7 +101,6 @@ export default function RegisterPage() {
 	//
 	// API call to register a new account
 	async function submitRegister() {
-
 		const formErrors = validateForm();
 		setErrors(formErrors);
 
@@ -127,7 +126,7 @@ export default function RegisterPage() {
 				console.log(err);
 				switch (err.status) {
 					default:
-						registerFail.register = `Error registering, please try again later.`
+						registerFail.register = `Error registering, please try again later.`;
 				}
 				setErrors(registerFail);
 			});
