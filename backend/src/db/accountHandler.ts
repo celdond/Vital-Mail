@@ -36,14 +36,14 @@ export function check(req: CheckRequest, res: Response, next: NextFunction) {
 // validatePassword:
 //
 // function to check if password is valid
-export async function validatePassword(password: string) {
+export function validatePassword(password: string) {
   return /^[a-zA-Z0-9!?#$%&_]+$/.test(password);
 }
 
 // validateName:
 //
 // function to check if name is valid
-export async function validateName(name: string) {
+export function validateName(name: string) {
   return /^[a-zA-Z0-9_]+$/.test(name);
 }
 
@@ -97,13 +97,16 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
-  if (!validateName(username)) {
+  const validName = validateName(username);
+  const validPassword = validateName(password);
+  const validEmail = validateName(email);
+  if (!validName) {
     res.status(400).send("Name includes banned characters.");
     return;
-  } else if (!validatePassword(password)) {
+  } else if (!validPassword) {
     res.status(400).send("Password includes banned characters.");
     return;
-  } else if (!validateName(email)) {
+  } else if (!validEmail) {
     res.status(400).send("Username includes banned characters.");
     return;
   }
