@@ -104,7 +104,7 @@ export default function RegisterPage() {
 		const formErrors = validateForm();
 		setErrors(formErrors);
 
-		if (errors.error) {
+		if (formErrors.error) {
 			return;
 		}
 
