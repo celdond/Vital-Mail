@@ -13,7 +13,7 @@ const URLRegister = 'http://localhost:3010/register';
 const server = setupServer(
 	http.post(URLRegister, async ({ request }) => {
 		const user = await request.json();
-		if (user['email']) {
+		if (user['email'] === "Tested") {
 			return HttpResponse.json(null, { status: 201 });
 		} else {
 			return new HttpResponse(null, { status: 400 });
@@ -31,3 +31,59 @@ jest.mock('react-router-dom', () => ({
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+test('Register Blocked - Nothing Entered', async () => {
+	render(
+		<BrowserRouter>
+			<Register />
+		</BrowserRouter>,
+	);
+	fireEvent.click(screen.getByText('Register'));
+	await waitFor(() => {
+		expect(screen.getByText('Enter a username')).not.toBe(null);
+	});
+});
+
+test('Register Blocked - Passwords Do Not Match', async () => {
+	render(
+		<BrowserRouter>
+			<Register />
+		</BrowserRouter>,
+	);
+	const name = screen.getByPlaceholderText('Name');
+	await userEvent.type(name, 'Tested');
+    const email = screen.getByPlaceholderText('Username');
+	await userEvent.type(email, 'NotTested');
+	const passwd = screen.getByPlaceholderText('Password');
+	await userEvent.type(passwd, 'mememememe123');
+    const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
+	await userEvent.type(confirmPasswd, 'mememememe12');
+	fireEvent.click(screen.getByText('Register'));
+	await waitFor(() => {
+		expect(screen.getByText('Passwords do not match.')).not.toBe(
+			null,
+		);
+	});
+});
+
+test('Register Success', async () => {
+	render(
+		<BrowserRouter>
+			<Register />
+		</BrowserRouter>,
+	);
+	const name = screen.getByPlaceholderText('Name');
+	await userEvent.type(name, 'Tested');
+    const email = screen.getByPlaceholderText('Username');
+	await userEvent.type(email, 'Tested');
+	const passwd = screen.getByPlaceholderText('Password');
+	await userEvent.type(passwd, 'mememememe123');
+    const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
+	await userEvent.type(confirmPasswd, 'mememememe123');
+	fireEvent.click(screen.getByText('Register'));
+	await waitFor(() => {
+		expect(screen.getByText('Register a new account')).not.toBe(
+			null,
+		);
+	});
+});
