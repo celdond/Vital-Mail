@@ -29,6 +29,7 @@ button[type='submit'] {
 .centerObject {
 	display: block;
 	margin: auto;
+	text-align: center;
 }
 
 .accountSubmit {
@@ -40,4 +41,8 @@ button[type='submit'] {
 	margin-top: 0.25rem;
 	font-size: 0.875em;
 	color: var(--bs-form-invalid-color);
+}
+
+.fullButton {
+	width: 100%;
 }

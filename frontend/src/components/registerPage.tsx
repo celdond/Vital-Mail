@@ -135,7 +135,7 @@ export default function RegisterPage() {
 	return (
 		<main className="background">
 			<Container className="centerpiece centerpadding">
-				<h1>Create Account</h1>
+				<h1 className="centerObject">Create Account</h1>
 				<Form>
 					<Form.Group className="field-wrapper">
 						<InputGroup hasValidation>
@@ -228,7 +228,12 @@ export default function RegisterPage() {
 					</div>
 				</Form>
 				<div className="customFeedback">{errors.register}</div>
-				<Button variant="primary" type="submit" onClick={submitRegister}>
+				<Button
+					className="fullButton"
+					variant="primary"
+					type="submit"
+					onClick={submitRegister}
+				>
 					Register
 				</Button>
 			</Container>

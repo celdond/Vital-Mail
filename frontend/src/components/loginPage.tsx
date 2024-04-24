@@ -125,7 +125,12 @@ export default function LoginPage() {
 						</Form.Group>
 						<Col>
 							<div className="customFeedback">{errors.login}</div>
-							<Button variant="primary" type="submit" onClick={submitLogin}>
+							<Button
+								className="fullButton"
+								variant="primary"
+								type="submit"
+								onClick={submitLogin}
+							>
 								Submit
 							</Button>
 							<div>
