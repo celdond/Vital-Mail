@@ -13,7 +13,7 @@ const URLRegister = 'http://localhost:3010/register';
 const server = setupServer(
 	http.post(URLRegister, async ({ request }) => {
 		const user = await request.json();
-		if (user['email'] === "Tested") {
+		if (user['email'] === 'Tested') {
 			return HttpResponse.json(null, { status: 201 });
 		} else {
 			return new HttpResponse(null, { status: 400 });
@@ -52,17 +52,15 @@ test('Register Blocked - Passwords Do Not Match', async () => {
 	);
 	const name = screen.getByPlaceholderText('Name');
 	await userEvent.type(name, 'Tested');
-    const email = screen.getByPlaceholderText('Username');
+	const email = screen.getByPlaceholderText('Username');
 	await userEvent.type(email, 'NotTested');
 	const passwd = screen.getByPlaceholderText('Password');
 	await userEvent.type(passwd, 'mememememe123');
-    const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
+	const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
 	await userEvent.type(confirmPasswd, 'mememememe12');
 	fireEvent.click(screen.getByText('Register'));
 	await waitFor(() => {
-		expect(screen.getByText('Passwords do not match.')).not.toBe(
-			null,
-		);
+		expect(screen.getByText('Passwords do not match.')).not.toBe(null);
 	});
 });
 
@@ -74,16 +72,14 @@ test('Register Success', async () => {
 	);
 	const name = screen.getByPlaceholderText('Name');
 	await userEvent.type(name, 'Tested');
-    const email = screen.getByPlaceholderText('Username');
+	const email = screen.getByPlaceholderText('Username');
 	await userEvent.type(email, 'Tested');
 	const passwd = screen.getByPlaceholderText('Password');
 	await userEvent.type(passwd, 'mememememe123');
-    const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
+	const confirmPasswd = screen.getByPlaceholderText('Confirm Password');
 	await userEvent.type(confirmPasswd, 'mememememe123');
 	fireEvent.click(screen.getByText('Register'));
 	await waitFor(() => {
-		expect(screen.getByText('Register a new account')).not.toBe(
-			null,
-		);
+		expect(mockedUsedNavigate.mock.lastCall).not.toBe(undefined);
 	});
 });
