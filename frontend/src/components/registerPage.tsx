@@ -89,7 +89,7 @@ export default function RegisterPage() {
 		if (form.confirmcode.length === 0) {
 			newErrors.confirmcode = 'Confirm a password.';
 			newErrors.error = 1;
-		} else if (newErrors.confirmcode != newErrors.password) {
+		} else if (form.confirmcode !== form.password) {
 			newErrors.confirmcode = 'Passwords do not match.';
 			newErrors.error = 1;
 		}
@@ -104,7 +104,7 @@ export default function RegisterPage() {
 		const formErrors = validateForm();
 		setErrors(formErrors);
 
-		if (errors.error) {
+		if (formErrors.error) {
 			return;
 		}
 
@@ -135,7 +135,7 @@ export default function RegisterPage() {
 	return (
 		<main className="background">
 			<Container className="centerpiece centerpadding">
-				<h1>Create Account</h1>
+				<h1 className="centerObject">Create Account</h1>
 				<Form>
 					<Form.Group className="field-wrapper">
 						<InputGroup hasValidation>
@@ -228,7 +228,12 @@ export default function RegisterPage() {
 					</div>
 				</Form>
 				<div className="customFeedback">{errors.register}</div>
-				<Button variant="primary" type="submit" onClick={submitRegister}>
+				<Button
+					className="fullButton"
+					variant="primary"
+					type="submit"
+					onClick={submitRegister}
+				>
 					Register
 				</Button>
 			</Container>
