@@ -86,11 +86,10 @@ export default function RegisterPage() {
 			newErrors.error = 1;
 		}
 
-		console.log(newErrors.confirmcode !== newErrors.password);
 		if (form.confirmcode.length === 0) {
 			newErrors.confirmcode = 'Confirm a password.';
 			newErrors.error = 1;
-		} else if (newErrors.confirmcode !== newErrors.password) {
+		} else if (form.confirmcode !== form.password) {
 			newErrors.confirmcode = 'Passwords do not match.';
 			newErrors.error = 1;
 		}
