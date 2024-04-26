@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { BoxArrowLeft, Mailbox } from 'react-bootstrap-icons';
 import { Container, Col, Row, Dropdown, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { timeSetSingle } from './lib/timeConvert';
 
 export interface ViewMailProps {
 	id: string;
@@ -50,7 +51,7 @@ export default function ViewMailPage(props: ViewMailProps) {
 	return (
 		<main className="backplate">
 			<Container className="mailpage">
-				<Col>
+				<Col className="full">
 					<div className="simpleBar">
 						<Button className="simpleBarButton">
 							<BoxArrowLeft size={28} onClick={() => navigation('/mail')} />
@@ -75,18 +76,20 @@ export default function ViewMailPage(props: ViewMailProps) {
 					</div>
 					<div className="mailview">
 						<h1>{mail.subject}</h1>
-						<Row xs="auto">
+						<Row xs="auto" className="justify-content-between">
 							<Col>
-								<span className="bold">{mail.from.name}</span>
+								<Row>
+									<span className="bold">{mail.from.name}</span>
+								</Row>
+								<Row>
+									<span>{mail.from.email}</span>
+								</Row>
 							</Col>
+							<Col></Col>
 							<Col>
-								<span>{mail.from.email}</span>
-							</Col>
-							<Col>
-								<span>{mail.timestamp}</span>
+								<span>{mail.time}</span>
 							</Col>
 						</Row>
-						<hr />
 						<div className="content">
 							<p>{mail.content}</p>
 						</div>

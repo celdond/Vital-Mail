@@ -20,7 +20,7 @@ const months = [
 // Set an individual entry's time based on its timestamp
 //
 // entry - the mail with a timestamp to translate
-export function timeTranslate(entry: any, today: Date, yearFromNow: Date) {
+function timeTranslate(entry: any, today: Date, yearFromNow: Date) {
 	const r = new Date(entry.timestamp);
 	entry.dateValue = r;
 	if (r.getTime() < yearFromNow.getTime()) {
