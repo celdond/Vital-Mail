@@ -1,5 +1,6 @@
 import { callServer } from './apiCom';
 import { tokenType } from './SharedContext';
+import { timeSetSingle } from './timeConvert';
 
 // moveSlip:
 //
@@ -43,7 +44,8 @@ export const getSlip = (setMail: Function, id: string, user: tokenType) => {
 			return response.json();
 		})
 		.then((json) => {
-			setMail(json);
+			let mail = timeSetSingle(json);
+			setMail(mail);
 		})
 		.catch((err) => {
 			alert(`Error retrieving message, please try again.\n${err}`);

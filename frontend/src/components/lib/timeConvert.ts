@@ -26,6 +26,7 @@ function timeTranslate(entry: any, today: Date, yearFromNow: Date) {
 	if (r.getTime() < yearFromNow.getTime()) {
 		entry.time = '' + r.getFullYear();
 	} else if (r.getTime() >= today.getTime()) {
+		// Set Hours
 		if (r.getMinutes() < 10) {
 			entry.time = (r.getHours() % 12) + ':0' + r.getMinutes();
 		} else {
