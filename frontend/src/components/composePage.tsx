@@ -1,5 +1,5 @@
 import { tokenType } from './lib/SharedContext';
-import { Container, Col, Form } from 'react-bootstrap';
+import { Container, Col, Form, Button } from 'react-bootstrap';
 import { BoxArrowLeft, EnvelopeFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
@@ -53,8 +53,15 @@ export default function ComposePage() {
 			<Container className="mailpage">
 				<Col className="full">
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation('/mail')} />
-						<EnvelopeFill onClick={() => sendMail(message, navigation, user)} />
+						<Button className="simpleBarButton">
+							<BoxArrowLeft size={28} onClick={() => navigation('/mail')} />
+						</Button>
+						<Button className="simpleBarButton">
+							<EnvelopeFill
+								size={28}
+								onClick={() => sendMail(message, navigation, user)}
+							/>
+						</Button>
 					</div>
 					<div className="mailview">
 						<Form className="full">
