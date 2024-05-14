@@ -59,7 +59,7 @@ export default function ComposePage() {
 						<Button className="simpleBarButton">
 							<BoxArrowLeft size={28} onClick={() => navigation('/mail')} />
 						</Button>
-						<Button className="simpleBarButton">
+						<Button aria-label="submit" className="simpleBarButton">
 							<EnvelopeFill
 								size={28}
 								onClick={() => sendMail(message, navigation, user)}
