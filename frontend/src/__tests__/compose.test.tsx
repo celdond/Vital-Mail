@@ -36,13 +36,13 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('Submission Blocked - Nothing Entered', async () => {
-    const mockedAlert = jest.spyOn(window,'alert').mockImplementation();
+	const mockedAlert = jest.spyOn(window, 'alert').mockImplementation();
 	render(
 		<BrowserRouter>
 			<Compose />
 		</BrowserRouter>,
 	);
-	fireEvent.click(screen.getByRole('button', {name: "submit"}));
+	fireEvent.click(screen.getByRole('button', { name: 'submit' }));
 	await waitFor(() => {
 		expect(mockedAlert).toHaveBeenCalledTimes(0);
 	});

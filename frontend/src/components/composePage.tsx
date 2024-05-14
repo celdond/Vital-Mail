@@ -10,9 +10,17 @@ import { useState } from 'react';
 // API Call to send a message
 // Navigates back to the previous page if successful
 // Alerts the user if unsuccessful
-const sendMail = (message: composeType, navigation: Function, user: tokenType) => {
+const sendMail = (
+	message: composeType,
+	navigation: Function,
+	user: tokenType,
+) => {
 	const token = user ? user.token : null;
-	if (message.to.length == 0 || message.subject.length == 0 || message.content.length == 0) {
+	if (
+		message.to.length == 0 ||
+		message.subject.length == 0 ||
+		message.content.length == 0
+	) {
 		return;
 	}
 	callServer('/mail', 'POST', message, token)
