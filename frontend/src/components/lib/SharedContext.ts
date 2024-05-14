@@ -28,6 +28,12 @@ export type mailType = {
 	timestamp: string;
 };
 
+export type composeType = {
+	to: string;
+	subject: string;
+	content: string;
+};
+
 export type tokenType = {
 	name: string;
 	email: string;

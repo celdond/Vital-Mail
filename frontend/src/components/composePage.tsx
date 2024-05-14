@@ -1,4 +1,4 @@
-import { tokenType } from './lib/SharedContext';
+import { tokenType, composeType } from './lib/SharedContext';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { BoxArrowLeft, EnvelopeFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +10,11 @@ import { useState } from 'react';
 // API Call to send a message
 // Navigates back to the previous page if successful
 // Alerts the user if unsuccessful
-const sendMail = (message: any, navigation: Function, user: tokenType) => {
+const sendMail = (message: composeType, navigation: Function, user: tokenType) => {
 	const token = user ? user.token : null;
+	if (message.to.length == 0 || message.subject.length == 0 || message.content.length == 0) {
+		return;
+	}
 	callServer('/mail', 'POST', message, token)
 		.then((response) => {
 			if (!response.ok) {
@@ -24,7 +27,7 @@ const sendMail = (message: any, navigation: Function, user: tokenType) => {
 			navigation(-1);
 		})
 		.catch((err) => {
-			alert(`(${err}), please try again`);
+			alert(`${err}, please try again`);
 		});
 };
 
