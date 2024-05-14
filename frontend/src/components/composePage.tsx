@@ -1,5 +1,5 @@
-import { tokenType } from './lib/SharedContext';
-import { Container, Col, Form } from 'react-bootstrap';
+import { tokenType, composeType } from './lib/SharedContext';
+import { Container, Col, Form, Button } from 'react-bootstrap';
 import { BoxArrowLeft, EnvelopeFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { callServer } from './lib/apiCom';
@@ -10,8 +10,19 @@ import { useState } from 'react';
 // API Call to send a message
 // Navigates back to the previous page if successful
 // Alerts the user if unsuccessful
-const sendMail = (message: any, navigation: Function, user: tokenType) => {
+const sendMail = (
+	message: composeType,
+	navigation: Function,
+	user: tokenType,
+) => {
 	const token = user ? user.token : null;
+	if (
+		message.to.length == 0 ||
+		message.subject.length == 0 ||
+		message.content.length == 0
+	) {
+		return;
+	}
 	callServer('/mail', 'POST', message, token)
 		.then((response) => {
 			if (!response.ok) {
@@ -24,7 +35,7 @@ const sendMail = (message: any, navigation: Function, user: tokenType) => {
 			navigation(-1);
 		})
 		.catch((err) => {
-			alert(`(${err}), please try again`);
+			alert(`${err}, please try again`);
 		});
 };
 
@@ -53,8 +64,15 @@ export default function ComposePage() {
 			<Container className="mailpage">
 				<Col className="full">
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation('/mail')} />
-						<EnvelopeFill onClick={() => sendMail(message, navigation, user)} />
+						<Button className="simpleBarButton">
+							<BoxArrowLeft size={28} onClick={() => navigation('/mail')} />
+						</Button>
+						<Button aria-label="submit" className="simpleBarButton">
+							<EnvelopeFill
+								size={28}
+								onClick={() => sendMail(message, navigation, user)}
+							/>
+						</Button>
 					</div>
 					<div className="mailview">
 						<Form className="full">
