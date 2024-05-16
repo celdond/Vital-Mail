@@ -81,10 +81,13 @@ export default function AccountPage() {
 			<Container className="mailpage">
 				<Col className="full">
 					<div className="simpleBar">
-						<BoxArrowLeft onClick={() => navigation(-1)} />
+						<Button className="simpleBarButton">
+							<BoxArrowLeft size={28} onClick={() => navigation(-1)} />
+						</Button>
 					</div>
 					<div className="mailview">
 						<Form className="full">
+							<h2>Change Account</h2>
 							<Form.Group controlId="name">
 								<Form.Label>Name</Form.Label>
 								<Form.Control
@@ -122,6 +125,7 @@ export default function AccountPage() {
 								Submit
 							</Button>
 							<hr />
+							<h2>Delete Account</h2>
 							<Button className="accountSubmit" onClick={handleOpen}>
 								Delete Account
 							</Button>
