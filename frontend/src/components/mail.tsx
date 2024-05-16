@@ -97,56 +97,58 @@ export default function MailboxDisplay(props: DisplayProps) {
 	return (
 		<div>
 			<Navbar className="mailActionBar">
-				<FormCheck
-					id={`checkbox-all`}
-					value="all"
-					checked={checkAll || false}
-					onChange={() => handleCheckAll()}
-				/>
-				<Button
-					variant="secondary"
-					className="actionFunction"
-					onClick={() =>
-						applyChange(
-							'Trash',
-							checkedIDs,
-							displayList.user,
-							props.updateFunction,
-							displayList.update,
-						)
-					}
-				>
-					<Trash />
-				</Button>
-				<Dropdown>
-					<Dropdown.Toggle
+					<FormCheck
+						id={`checkbox-all`}
+						value="all"
+						checked={checkAll || false}
+						onChange={() => handleCheckAll()}
+					/>
+					<Button
 						variant="secondary"
-						className="actionDrop"
-						id="dropdown-basic"
+						className="actionFunction"
+						onClick={() =>
+							applyChange(
+								'Trash',
+								checkedIDs,
+								displayList.user,
+								props.updateFunction,
+								displayList.update,
+							)
+						}
 					>
-						<Mailbox />
-					</Dropdown.Toggle>
+						<Trash />
+					</Button>
+					<Dropdown>
+						<Dropdown.Toggle
+							variant="secondary"
+							className="actionDrop"
+							id="dropdown-basic"
+						>
+							<Mailbox />
+						</Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						{displayList.mailbox.map((box) => (
-							<Dropdown.Item
-								key={`action-${box}`}
-								id={`action-${box}`}
-								onClick={() =>
-									applyChange(
-										box,
-										checkedIDs,
-										displayList.user,
-										props.updateFunction,
-										displayList.update,
-									)
-								}
-							>
-								{box}
-							</Dropdown.Item>
-						))}
-					</Dropdown.Menu>
-				</Dropdown>
+						<Dropdown.Menu>
+							{displayList.mailbox.map((box) => (
+								<Dropdown.Item
+									key={`action-${box}`}
+									id={`action-${box}`}
+									onClick={() =>
+										applyChange(
+											box,
+											checkedIDs,
+											displayList.user,
+											props.updateFunction,
+											displayList.update,
+										)
+									}
+								>
+									{box}
+								</Dropdown.Item>
+							))}
+						</Dropdown.Menu>
+					</Dropdown>
+					<div>
+					</div>
 			</Navbar>
 			<Table>
 				<tbody>
