@@ -218,6 +218,12 @@ paths:
           required: false
           schema:
             type: string
+        - in: query
+          description: Page
+          name: page
+          required: false
+          schema:
+            type: number
       responses:
         200:
           description: Successful Return
