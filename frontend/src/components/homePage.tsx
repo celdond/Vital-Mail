@@ -38,10 +38,14 @@ const getMail = (
 	mailbox: string,
 	user: tokenType,
 	query: string,
+	page: number,
 ) => {
 	let endpoint = '/mail?mailbox=' + mailbox;
 	if (query) {
 		endpoint += '&query=' + query;
+	}
+	if (page && page != 0) {
+		endpoint += '&page=' + page;
 	}
 	const token = user ? user.token : null;
 	callServer(endpoint, 'GET', null, token)
@@ -101,6 +105,7 @@ export default function HomePage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	let box = searchParams.get('box');
 
+	const [page, pageFunction] = useState(0);
 	const [update, updateFunction] = useState(false);
 	const [boxes, setBoxes] = useState([]);
 	const [customBoxes, setCustomBoxes] = useState<string[]>([]);
@@ -124,7 +129,7 @@ export default function HomePage() {
 
 	useEffect(() => {
 		setSearch('');
-		getMail(setList, setSearchParams, mailbox, user, null);
+		getMail(setList, setSearchParams, mailbox, user, null, page);
 	}, [mailbox, update]);
 
 	useEffect(() => {
@@ -266,7 +271,7 @@ export default function HomePage() {
 									width="40"
 									height="40"
 									onClick={() =>
-										getMail(setList, setSearchParams, mailbox, user, search)
+										getMail(setList, setSearchParams, mailbox, user, search, page)
 									}
 								/>
 							</Col>
@@ -293,7 +298,7 @@ export default function HomePage() {
 								update: update,
 							}}
 						>
-							<MailboxDisplay updateFunction={updateFunction} />
+							<MailboxDisplay updateFunction={updateFunction} pageFunction={pageFunction} />
 						</MailListContext.Provider>
 					</div>
 				</div>

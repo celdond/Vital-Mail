@@ -28,6 +28,7 @@ const applyChange = (
 
 interface DisplayProps {
 	updateFunction: Dispatch<boolean>;
+	pageFunction: Dispatch<number>;
 }
 
 // MailboxDisplay:
