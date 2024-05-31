@@ -35,7 +35,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -84,7 +84,7 @@ export async function accessMailbox(
   usermail: string,
   mailbox: string,
   searchQuery: string,
-  page?: number,
+  page?: number
 ) {
   const offset = (page ?? 0) * 25;
   let offset_variable = "$2";
@@ -96,7 +96,12 @@ export async function accessMailbox(
       " AND (mail -> 'from' ->> 'name' iLIKE $2 OR mail -> 'from' ->> 'email' iLIKE $2 OR mail ->> 'subject' iLIKE $2 OR mail ->> 'content' iLIKE $2)";
     offset_variable = "$3";
   }
-  search += " ORDER BY mail->>'timestamp' LIMIT 25 OFFSET " + offset_variable;
+
+  search += " ORDER BY mail->>'timestamp' LIMIT 25";
+  if (page) {
+    search += " OFFSET " + offset_variable;
+  }
+
   const query = {
     text: search,
     values: [boxcode],
@@ -105,8 +110,12 @@ export async function accessMailbox(
     const modifiedQuery = "%" + searchQuery + "%";
     query.values.push(modifiedQuery);
   }
-  query.values.push(offset.toString());
+
+  if (page) {
+    query.values.push(offset.toString());
+  }
   const receivedMail = [];
+  console.log(query);
   try {
     await client.query("BEGIN");
     const mailboxCheck = await checkBox(client, usermail, mailbox);
@@ -237,7 +246,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string,
+  mailbox: string
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
