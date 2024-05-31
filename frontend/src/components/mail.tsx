@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Navbar from 'react-bootstrap/Navbar';
 import { FormCheck, Dropdown, Button } from 'react-bootstrap';
-import { Trash, Mailbox } from 'react-bootstrap-icons';
+import {
+	Trash,
+	Mailbox,
+	ChevronRight,
+	ChevronLeft,
+} from 'react-bootstrap-icons';
 import { moveSlip } from './lib/slipFunctions';
 
 const applyChange = (
@@ -24,6 +29,14 @@ const applyChange = (
 
 	moveSlip(box, sendIDs, user);
 	updateFunction(!update);
+};
+
+const pageChange = (
+	page: number,
+	direction: number,
+	pageFunction: Dispatch<number>,
+) => {
+	pageFunction(page + direction);
 };
 
 interface DisplayProps {
@@ -98,58 +111,80 @@ export default function MailboxDisplay(props: DisplayProps) {
 	return (
 		<div>
 			<Navbar className="mailActionBar">
-					<FormCheck
-						id={`checkbox-all`}
-						value="all"
-						checked={checkAll || false}
-						onChange={() => handleCheckAll()}
-					/>
-					<Button
+				<FormCheck
+					id={`checkbox-all`}
+					value="all"
+					checked={checkAll || false}
+					onChange={() => handleCheckAll()}
+				/>
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() =>
+						applyChange(
+							'Trash',
+							checkedIDs,
+							displayList.user,
+							props.updateFunction,
+							displayList.update,
+						)
+					}
+				>
+					<Trash />
+				</Button>
+				<Dropdown>
+					<Dropdown.Toggle
 						variant="secondary"
-						className="actionFunction"
-						onClick={() =>
-							applyChange(
-								'Trash',
-								checkedIDs,
-								displayList.user,
-								props.updateFunction,
-								displayList.update,
-							)
-						}
+						className="actionDrop"
+						id="dropdown-basic"
 					>
-						<Trash />
-					</Button>
-					<Dropdown>
-						<Dropdown.Toggle
-							variant="secondary"
-							className="actionDrop"
-							id="dropdown-basic"
-						>
-							<Mailbox />
-						</Dropdown.Toggle>
+						<Mailbox />
+					</Dropdown.Toggle>
 
-						<Dropdown.Menu>
-							{displayList.mailbox.map((box) => (
-								<Dropdown.Item
-									key={`action-${box}`}
-									id={`action-${box}`}
-									onClick={() =>
-										applyChange(
-											box,
-											checkedIDs,
-											displayList.user,
-											props.updateFunction,
-											displayList.update,
-										)
-									}
-								>
-									{box}
-								</Dropdown.Item>
-							))}
-						</Dropdown.Menu>
-					</Dropdown>
-					<div>
-					</div>
+					<Dropdown.Menu>
+						{displayList.mailbox.map((box) => (
+							<Dropdown.Item
+								key={`action-${box}`}
+								id={`action-${box}`}
+								onClick={() =>
+									applyChange(
+										box,
+										checkedIDs,
+										displayList.user,
+										props.updateFunction,
+										displayList.update,
+									)
+								}
+							>
+								{box}
+							</Dropdown.Item>
+						))}
+					</Dropdown.Menu>
+				</Dropdown>
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() =>
+						props.pageFunction((displayList.page ?? 0))
+					}
+				>
+					<ChevronLeft />
+				</Button>
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() =>
+						applyChange(
+							'Trash',
+							checkedIDs,
+							displayList.user,
+							props.updateFunction,
+							displayList.update,
+						)
+					}
+				>
+					<ChevronRight />
+				</Button>
 			</Navbar>
 			<Table>
 				<tbody>

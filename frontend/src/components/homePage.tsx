@@ -296,6 +296,7 @@ export default function HomePage() {
 								mailbox: boxes,
 								user: user,
 								update: update,
+								page: page
 							}}
 						>
 							<MailboxDisplay updateFunction={updateFunction} pageFunction={pageFunction} />
