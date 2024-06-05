@@ -128,9 +128,15 @@ export default function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
+		pageFunction(0)
+		setSearch('');
+		getMail(setList, setSearchParams, mailbox, user, null, 0);
+	}, [mailbox]);
+
+	useEffect(() => {
 		setSearch('');
 		getMail(setList, setSearchParams, mailbox, user, null, page);
-	}, [mailbox, update]);
+	}, [update, page]);
 
 	useEffect(() => {
 		getBoxes(setBoxes, user).then((json) => {

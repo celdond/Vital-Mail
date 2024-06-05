@@ -36,7 +36,9 @@ const pageChange = (
 	direction: number,
 	pageFunction: Dispatch<number>,
 ) => {
-	pageFunction(page + direction);
+	if (!(page == 0 && direction < 0)) {
+		pageFunction(page + direction);
+	}
 };
 
 interface DisplayProps {
@@ -165,7 +167,7 @@ export default function MailboxDisplay(props: DisplayProps) {
 					variant="secondary"
 					className="actionFunction"
 					onClick={() =>
-						props.pageFunction((displayList.page ?? 0))
+						pageChange(displayList.page, -1, props.pageFunction)
 					}
 				>
 					<ChevronLeft />
@@ -174,13 +176,7 @@ export default function MailboxDisplay(props: DisplayProps) {
 					variant="secondary"
 					className="actionFunction"
 					onClick={() =>
-						applyChange(
-							'Trash',
-							checkedIDs,
-							displayList.user,
-							props.updateFunction,
-							displayList.update,
-						)
+						pageChange(displayList.page, 1, props.pageFunction)
 					}
 				>
 					<ChevronRight />
