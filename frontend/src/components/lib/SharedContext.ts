@@ -45,6 +45,7 @@ export type MailListContextType = {
 	mailbox: string[];
 	user: tokenType;
 	update: boolean;
+	page: number;
 };
 
 const defaultMailListContext = {
@@ -56,6 +57,7 @@ const defaultMailListContext = {
 		token: '',
 	},
 	update: false,
+	page: 0,
 };
 
 export const MailListContext = createContext<MailListContextType>(

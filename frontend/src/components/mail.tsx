@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Navbar from 'react-bootstrap/Navbar';
 import { FormCheck, Dropdown, Button } from 'react-bootstrap';
-import { Trash, Mailbox } from 'react-bootstrap-icons';
+import {
+	Trash,
+	Mailbox,
+	ChevronRight,
+	ChevronLeft,
+} from 'react-bootstrap-icons';
 import { moveSlip } from './lib/slipFunctions';
 
 const applyChange = (
@@ -26,8 +31,19 @@ const applyChange = (
 	updateFunction(!update);
 };
 
+const pageChange = (
+	page: number,
+	direction: number,
+	pageFunction: Dispatch<number>,
+) => {
+	if (!(page == 0 && direction < 0)) {
+		pageFunction(page + direction);
+	}
+};
+
 interface DisplayProps {
 	updateFunction: Dispatch<boolean>;
+	pageFunction: Dispatch<number>;
 }
 
 // MailboxDisplay:
@@ -147,6 +163,20 @@ export default function MailboxDisplay(props: DisplayProps) {
 						))}
 					</Dropdown.Menu>
 				</Dropdown>
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() => pageChange(displayList.page, -1, props.pageFunction)}
+				>
+					<ChevronLeft />
+				</Button>
+				<Button
+					variant="secondary"
+					className="actionFunction"
+					onClick={() => pageChange(displayList.page, 1, props.pageFunction)}
+				>
+					<ChevronRight />
+				</Button>
 			</Navbar>
 			<Table>
 				<tbody>

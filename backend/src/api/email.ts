@@ -47,8 +47,14 @@ export async function getMailbox(req: CheckRequest, res: Response) {
   const usermail = req.usermail;
   const mailbox = req.query.mailbox as string;
   const query = req.query.query as string;
+  const page = req.query.page as string;
   if (usermail && mailbox) {
-    const mail = await accessMailbox(usermail, mailbox, query ?? null);
+    const mail = await accessMailbox(
+      usermail,
+      mailbox,
+      query ?? null,
+      +page ?? null,
+    );
     if (typeof mail == "number") {
       res.status(404).send("Mailbox not found.");
       return;
