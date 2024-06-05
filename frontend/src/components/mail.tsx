@@ -166,18 +166,14 @@ export default function MailboxDisplay(props: DisplayProps) {
 				<Button
 					variant="secondary"
 					className="actionFunction"
-					onClick={() =>
-						pageChange(displayList.page, -1, props.pageFunction)
-					}
+					onClick={() => pageChange(displayList.page, -1, props.pageFunction)}
 				>
 					<ChevronLeft />
 				</Button>
 				<Button
 					variant="secondary"
 					className="actionFunction"
-					onClick={() =>
-						pageChange(displayList.page, 1, props.pageFunction)
-					}
+					onClick={() => pageChange(displayList.page, 1, props.pageFunction)}
 				>
 					<ChevronRight />
 				</Button>

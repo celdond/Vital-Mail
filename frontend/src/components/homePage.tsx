@@ -128,7 +128,7 @@ export default function HomePage() {
 	const user = JSON.parse(account);
 
 	useEffect(() => {
-		pageFunction(0)
+		pageFunction(0);
 		setSearch('');
 		getMail(setList, setSearchParams, mailbox, user, null, 0);
 	}, [mailbox]);
@@ -277,7 +277,14 @@ export default function HomePage() {
 									width="40"
 									height="40"
 									onClick={() =>
-										getMail(setList, setSearchParams, mailbox, user, search, page)
+										getMail(
+											setList,
+											setSearchParams,
+											mailbox,
+											user,
+											search,
+											page,
+										)
 									}
 								/>
 							</Col>
@@ -302,10 +309,13 @@ export default function HomePage() {
 								mailbox: boxes,
 								user: user,
 								update: update,
-								page: page
+								page: page,
 							}}
 						>
-							<MailboxDisplay updateFunction={updateFunction} pageFunction={pageFunction} />
+							<MailboxDisplay
+								updateFunction={updateFunction}
+								pageFunction={pageFunction}
+							/>
 						</MailListContext.Provider>
 					</div>
 				</div>

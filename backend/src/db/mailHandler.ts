@@ -35,7 +35,7 @@ export async function accessBoxes(usermail: string) {
 export async function checkBox(
   client: PoolClient,
   usermail: string,
-  mailbox: string
+  mailbox: string,
 ) {
   const boxcode = mailbox + "@" + usermail;
   const search = "SELECT * FROM mailbox WHERE boxcode = $1";
@@ -84,7 +84,7 @@ export async function accessMailbox(
   usermail: string,
   mailbox: string,
   searchQuery: string,
-  page?: number
+  page?: number,
 ) {
   const offset = (page ?? 0) * 25;
   let offset_variable = "$2";
@@ -246,7 +246,7 @@ async function changeBox(client: PoolClient, id: string, boxcode: string) {
 export async function moveBox(
   ids: string[],
   usermail: string,
-  mailbox: string
+  mailbox: string,
 ) {
   const client = await pool.connect();
   const boxcode = mailbox + "@" + usermail;
