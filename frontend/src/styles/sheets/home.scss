@@ -75,7 +75,15 @@
 }
 
 .mailActionBar {
-	padding: 4px 8px;
+	padding: 2px 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.subBar {
+	display: flex;
+	align-items: center;
 }
 
 .actionDrop {
