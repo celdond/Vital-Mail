@@ -13,6 +13,7 @@ import {
 	Modal,
 	Form,
 	Button,
+	InputGroup,
 } from 'react-bootstrap';
 import {
 	InboxFill,
@@ -272,28 +273,30 @@ export default function HomePage() {
 								/>
 							</Col>
 							<Col>
-								<Search
-									className="emblemSpacing"
-									width="40"
-									height="40"
-									onClick={() =>
-										getMail(
-											setList,
-											setSearchParams,
-											mailbox,
-											user,
-											search,
-											page,
-										)
-									}
-								/>
-							</Col>
-							<Col>
-								<Form.Control
-									type="text"
-									onChange={handleQueryChange}
-									value={search}
-								/>
+								<InputGroup>
+									<InputGroup.Text id="basic-addon1">
+										<Search
+											className="emblemSpacing"
+											width="25"
+											height="25"
+											onClick={() =>
+												getMail(
+													setList,
+													setSearchParams,
+													mailbox,
+													user,
+													search,
+													page,
+												)
+											}
+										/>
+									</InputGroup.Text>
+									<Form.Control
+										type="text"
+										onChange={handleQueryChange}
+										value={search}
+									/>
+								</InputGroup>
 							</Col>
 						</Row>
 					</Container>
