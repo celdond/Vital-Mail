@@ -257,8 +257,12 @@ export default function HomePage() {
 										aria-labelledby="menu"
 										variant="primary"
 									>
-										<Offcanvas.Header closeButton>
-											<Offcanvas.Title id="menu">V</Offcanvas.Title>
+										<Offcanvas.Header className="headerCanvas" closeButton>
+												<img
+													className="centerObject"
+													src="/vitalv.png"
+													height="40"
+												/>
 										</Offcanvas.Header>
 										<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
 									</Navbar.Offcanvas>
