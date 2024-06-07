@@ -247,7 +247,7 @@ export default function HomePage() {
 			<div className="backplate">
 				<Navbar className="navbar" expand={'false'}>
 					<Container className="nomargin">
-						<Row xs="auto">
+						<Row xs="auto" className="alignCenter">
 							<Col>
 								<Container className="d-lg-none" fluid>
 									<Navbar.Toggle aria-controls="menu" />
@@ -272,7 +272,7 @@ export default function HomePage() {
 									onClick={() => navigation('/compose')}
 								/>
 							</Col>
-							<Col>
+							<Col className="searchField">
 								<InputGroup>
 									<InputGroup.Text id="basic-addon1">
 										<Search
