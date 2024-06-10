@@ -13,6 +13,10 @@ See backend for details.
 
 Vital Mail is a messaging platform modeled after email systems built using Vite and Express with NodeJS.
 
+## Note
+
+This is an example web application project not tested or meant for production use built originally for a college assignment.
+
 # Features
 
 ## Account Creation and Login
