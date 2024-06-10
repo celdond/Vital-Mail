@@ -13,6 +13,7 @@ import {
 	Modal,
 	Form,
 	Button,
+	InputGroup,
 } from 'react-bootstrap';
 import {
 	InboxFill,
@@ -202,19 +203,31 @@ export default function HomePage() {
 	const mailboxNav = (
 		<Container>
 			<hr />
-			<Row xs="auto" onClick={() => handleBoxSwap('Inbox')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Inbox')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<InboxFill />
 				</Col>
 				<Col>Inbox</Col>
 			</Row>
-			<Row xs="auto" onClick={() => handleBoxSwap('Sent')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Sent')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<Inbox />
 				</Col>
 				<Col>Sent</Col>
 			</Row>
-			<Row xs="auto" onClick={() => handleBoxSwap('Trash')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Trash')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<Trash />
 				</Col>
@@ -223,19 +236,25 @@ export default function HomePage() {
 			<hr />
 			<Row xs="auto">
 				<Col> Custom Boxes</Col>
-				<Col onClick={handleBoxShow}> +</Col>
-				<Col onClick={handleDeleteBoxShow}> -</Col>
+				<Col onClick={handleBoxShow} className="offcanvasButton">
+					{' '}
+					+
+				</Col>
+				<Col onClick={handleDeleteBoxShow} className="offcanvasButton">
+					{' '}
+					-
+				</Col>
 			</Row>
 			{customBoxes.map((box) => (
-				<Row onClick={() => handleBoxSwap(box)}>
+				<Row onClick={() => handleBoxSwap(box)} className="offcanvasButton">
 					<Col> {box}</Col>
 				</Row>
 			))}
 			<hr />
-			<Row onClick={() => navigation('/account')}>
+			<Row onClick={() => navigation('/account')} className="offcanvasButton">
 				<div> Account</div>
 			</Row>
-			<Row onClick={logout}>
+			<Row onClick={logout} className="offcanvasButton">
 				<div> Logout</div>
 			</Row>
 		</Container>
@@ -246,7 +265,7 @@ export default function HomePage() {
 			<div className="backplate">
 				<Navbar className="navbar" expand={'false'}>
 					<Container className="nomargin">
-						<Row xs="auto">
+						<Row xs="auto" className="alignCenter">
 							<Col>
 								<Container className="d-lg-none" fluid>
 									<Navbar.Toggle aria-controls="menu" />
@@ -256,8 +275,12 @@ export default function HomePage() {
 										aria-labelledby="menu"
 										variant="primary"
 									>
-										<Offcanvas.Header closeButton>
-											<Offcanvas.Title id="menu">V</Offcanvas.Title>
+										<Offcanvas.Header className="headerCanvas" closeButton>
+											<img
+												className="centerObject"
+												src="/vitalv.png"
+												height="40"
+											/>
 										</Offcanvas.Header>
 										<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
 									</Navbar.Offcanvas>
@@ -265,35 +288,37 @@ export default function HomePage() {
 							</Col>
 							<Col>
 								<PencilSquare
-									className="emblemSpacing"
+									className="emblemSpacing offcanvasButton"
 									width="40"
 									height="40"
 									onClick={() => navigation('/compose')}
 								/>
 							</Col>
-							<Col>
-								<Search
-									className="emblemSpacing"
-									width="40"
-									height="40"
-									onClick={() =>
-										getMail(
-											setList,
-											setSearchParams,
-											mailbox,
-											user,
-											search,
-											page,
-										)
-									}
-								/>
-							</Col>
-							<Col>
-								<Form.Control
-									type="text"
-									onChange={handleQueryChange}
-									value={search}
-								/>
+							<Col className="searchField">
+								<InputGroup>
+									<InputGroup.Text id="basic-addon1">
+										<Search
+											className="emblemSpacing"
+											width="25"
+											height="25"
+											onClick={() =>
+												getMail(
+													setList,
+													setSearchParams,
+													mailbox,
+													user,
+													search,
+													page,
+												)
+											}
+										/>
+									</InputGroup.Text>
+									<Form.Control
+										type="text"
+										onChange={handleQueryChange}
+										value={search}
+									/>
+								</InputGroup>
 							</Col>
 						</Row>
 					</Container>

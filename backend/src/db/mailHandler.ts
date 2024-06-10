@@ -115,7 +115,6 @@ export async function accessMailbox(
     query.values.push(offset.toString());
   }
   const receivedMail = [];
-  console.log(query);
   try {
     await client.query("BEGIN");
     const mailboxCheck = await checkBox(client, usermail, mailbox);
