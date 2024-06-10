@@ -6,6 +6,9 @@ See the respective files for instructions on how to run the backend and frontend
 
 The frontend requires the backend to be running in order to operate.
 
+Note that a PostgreSQL database server needs to be properly configured in order for the backend to set-up properly.
+See backend for details.
+
 ## Overview
 
 Vital Mail is a messaging platform modeled after email systems built using Vite and Express with NodeJS.
@@ -44,3 +47,11 @@ Messages are stored in mailboxes, just like an email, and they can be moved betw
 viewing a message, you may click the move button at the top of the screen to select a new destination.
 
 Messages outside of the Sent mailbox cannot be insert into the Sent mailbox for any user.
+
+## Custom Mailboxes
+
+New mailboxes can be created in the offcanvas menu to the left of the home screen after signing in.
+
+Clicking on the + icon will allow you to create a new box for storing specific mail.
+
+Clicking on the - icon will allow you to delete any custom boxes you have created.
