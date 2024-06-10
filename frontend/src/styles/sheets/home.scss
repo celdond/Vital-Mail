@@ -103,3 +103,9 @@
 .headerCanvas {
 	padding-bottom: 0;
 }
+
+.offcanvasButton:hover {
+	background-color: $offsecondary;
+	cursor: pointer;
+	border-radius: 5px;
+}

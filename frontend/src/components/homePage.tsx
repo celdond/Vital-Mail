@@ -203,19 +203,31 @@ export default function HomePage() {
 	const mailboxNav = (
 		<Container>
 			<hr />
-			<Row xs="auto" onClick={() => handleBoxSwap('Inbox')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Inbox')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<InboxFill />
 				</Col>
 				<Col>Inbox</Col>
 			</Row>
-			<Row xs="auto" onClick={() => handleBoxSwap('Sent')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Sent')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<Inbox />
 				</Col>
 				<Col>Sent</Col>
 			</Row>
-			<Row xs="auto" onClick={() => handleBoxSwap('Trash')}>
+			<Row
+				xs="auto"
+				onClick={() => handleBoxSwap('Trash')}
+				className="offcanvasButton"
+			>
 				<Col>
 					<Trash />
 				</Col>
@@ -224,19 +236,25 @@ export default function HomePage() {
 			<hr />
 			<Row xs="auto">
 				<Col> Custom Boxes</Col>
-				<Col onClick={handleBoxShow}> +</Col>
-				<Col onClick={handleDeleteBoxShow}> -</Col>
+				<Col onClick={handleBoxShow} className="offcanvasButton">
+					{' '}
+					+
+				</Col>
+				<Col onClick={handleDeleteBoxShow} className="offcanvasButton">
+					{' '}
+					-
+				</Col>
 			</Row>
 			{customBoxes.map((box) => (
-				<Row onClick={() => handleBoxSwap(box)}>
+				<Row onClick={() => handleBoxSwap(box)} className="offcanvasButton">
 					<Col> {box}</Col>
 				</Row>
 			))}
 			<hr />
-			<Row onClick={() => navigation('/account')}>
+			<Row onClick={() => navigation('/account')} className="offcanvasButton">
 				<div> Account</div>
 			</Row>
-			<Row onClick={logout}>
+			<Row onClick={logout} className="offcanvasButton">
 				<div> Logout</div>
 			</Row>
 		</Container>
@@ -258,11 +276,11 @@ export default function HomePage() {
 										variant="primary"
 									>
 										<Offcanvas.Header className="headerCanvas" closeButton>
-												<img
-													className="centerObject"
-													src="/vitalv.png"
-													height="40"
-												/>
+											<img
+												className="centerObject"
+												src="/vitalv.png"
+												height="40"
+											/>
 										</Offcanvas.Header>
 										<Offcanvas.Body>{mailboxNav}</Offcanvas.Body>
 									</Navbar.Offcanvas>
@@ -270,7 +288,7 @@ export default function HomePage() {
 							</Col>
 							<Col>
 								<PencilSquare
-									className="emblemSpacing"
+									className="emblemSpacing offcanvasButton"
 									width="40"
 									height="40"
 									onClick={() => navigation('/compose')}
